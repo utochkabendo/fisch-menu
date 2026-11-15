@@ -31,6 +31,7 @@ local ASSET_DATA = {
 	rain = "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAtklEQVR42u3TQQqDQAwF0PxRsQzY5UAZ4gFc9UY9gLfxBr1RVx7AoRRmWyiIOOmm9gZaoXmrrOaHTEKklFLq32EpRAQANgkVEQIgu5nAoa7rk4jYGOOLiNbuDM45C+A1DMMj995z27aXpmnO0zQ953lOa6ZnWWaKoqj6vr91XXfNiYgAGGvtEUCVUiJjzCrhy9uffTPfL2Bmz8yuLMtNtnAcRwkhxBDCfV9nuGnwXs5QKaXUz70Bn0c9xiWF10sAAAAASUVORK5CYII=",
 	ring = "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAC3klEQVR42sWXzUtVYRDGn7n3VlzCRUUmEtLGCKWVmzbtkiioRdQ6gqRFBP4H+ne4iFoKGi37pl0g7RRTaVOLyijBumh+3PtrM4fG13u9x6PhgcP5emfmmXnnPDMjHfBhRQWBLbJmxn8HAJQklSRhZvXkW9n1Ncyssa8A3NtSNOoGO/xxzcxWk/WWB4jlMF7ODAOnJd2UdFHSOUldvqwmaU7SO0mTZjadyhbd57Jfu4GHwDLtjw3gBXAh27Y0X3Zr/DLwpYmhdeCnn7UWQIYLgQjGh5oofg7cAfqAY372ADeAx8BaAAAwBlimczfGB11BpnABuJJDvh945jKrfh31b5W2v5mj7QK+AZuuYAo4HtZUwlrz+3L00j0H+OPXS9HBdt4/cqFN4GMwXskTwaBnImzdPFDNQLdkNs/4GtBwwcG8xptE8iTwA6i7rmsto5AZAIYD6tdtw9YaRKZv1HU1gKc7AcjCNhkA3HZPKgUAZFHoDYn8GahuqyUhmarAnC9eAXpDDShUsIDDwExIyL6os5RUs6qkU/5qRdL3TFfRamtm65K++vMRSd2xDDTzjP0o1zvUnC3OpAA2vLBI0mFJR/domKRqbkr6tQ2AmQGUzOy3pFn/1iFpwJOlyF9gvq2dkvr99ZKkeb9vpBHI7t+Hd7dcSZEcyEBf9UjiJbvmztKs2xFw3gtJw7P27K6Kyb/sLwOHgA+B1O7tSGoBxNvABS8DxZby/noJCdWBJeBESypOAAx4HcgIZCwyXLP6nhFWoPShEEWA+7lYNTDicCAkgHGguwnbbQHjxDOaVMKJXVF6ADGW9ASLwIg3I5VEpge4C0wnMlPetOTvirIa7/cjLdqtWeCNn1Mt2rLx2EcU4fFS6AtnyH8sAg/S3CpKZZWwt9eBJ8Anb0pTo688+TrzNqN5B5NyMpRUJZ1J5oIFM1tuJbPn0Sybjpy6621Gt3reWdH2MJhaIt8oOqAe6PEXrtme0Z1ewWwAAAAASUVORK5CYII=",
 	rod = "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACmElEQVR42t2XP2sUURTFf3d2s8bgvxgECxsbLUwlphREBAvt7QwKGyNapI5a+Q1EYohgLYF0NnapBBGsLPwGIYVRwWiSnd1jkbMwDju7m3F3BR8sd5b33j3nzTvvvDvwvzdJFUnxr8Cj0/NIgNuAkq5IOjZSEpKqjkvab+8knZKUDJ2EpDHHOwbfdbza1sRQBec4I+mHpB1JLUmrkg51Ak8GCR4RTUkzwFvgMFAFAvgYEbt+HjyBDPhZg0869zcPmSiamwwAPDH4JLBqcIB1YNbP6VAISEocp7zyS+7aAm4CG+2hAyfg4xQR0QJeAzNAC/gK3IiIbeB4rzzVvwRvSloBrgF7wDZwPSI+eEzaK1dSErwSES2D1w1eA+oGH48I9ZOvzBZUIyKVtGDwHYPPRcSaXbAxFG/PWGzd7vbL8V7OgtuGdNn9T7L9pdwt8382Z7HL+eQHIdCTkYV2xGPPA0uZPX8ZEfNO3Czzdqu9lA4sAvMGnLDFBrAWEXNebbNAdJGL/RHIWOsi8DTX3QLeA3UbkbooPu3lhIVVjKSjkjYlpf61MvFy0Z5Kqmau5IfWwGrRVdxNAzVgDKjYSrOvc9xE1UEz2dVOOZ4ssuSki8dvAZue1LDwKsB34FNmO/IF6ANJZ7za1oEuI68qsb8vA+ecpOZfA1iIiA1bsXJbcR94DryKiKbzy8T7Mpv2+V3x3qWOzyQ9ljSdvQU7nPtbkho2qNuSPnv+m67lWK6KfZRzuXqnK7hAuKcl7enPti3pojGSwntd0pikF570M2exNas76aM2uCtp3TVhKmm2iHie/WSO+XJp/96fNy3pQl+VcLtedyn9RdJS5kzHQauk7Gq7vbWiBCfyuihbrpUBT0b+Hdftg3IU7TfS9rqmKcc4wgAAAABJRU5ErkJggg==",
+	lock = "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACOklEQVR42u2WsW4TQRCG//8cWxgpQhFVmiAhoZSkIg/AC1DkCXiAPABKhUSDlBdI7yISNRVClIGKNiFVJChAMgFLCXLs+2jm0Mrc2bk70wAjjXZudnZnbvef2ZH+079ObrIIyCRlkkj2yW3nfzxioNNkrvUJAJZk2zmwKWlH0mZMH0t6Yfs4TgfbLPOvnch7wDm/0zmwV7amtXMgA24Dh+EsLwmg0B2GbbaUIICVGHfDwY8Yj4CnwUczc7vp2rYBZMGvgEk4OCixO4i5SdhmgYd2zmPcAC7CwRnQCwe9GfksbC6AO+keVbQoQkdq3ZPUD92J7bHtPMZfsqSTsOlLuhtr5/pYdEe2PQEmie4UWJPUkTQNXSGfSnoYuq7taZPaMHv8j4EPwDSQPgK+Bg+Di+9R2OTAp0hZ186GImrgUUma1aXntatkEsDLcDyeCSRPMqJAfj4T5CT4M7BaVZyqMFCU0ZtRrrOS8t2R9C7kBxUAt6RucKMsmFbokLRve9v2tqT90JXZ58kP1Qbg6+Q4UxwMgW4BsJCHMzap7VrVFTSpVLmkG5K2bBev3lboavcDWcPnuy9pAKwGwAZJoaqVcistuqh126M42vWmHdaiAOaBpwM8SzKiyR4LA+iV3Gt6DU8WdFhECrouBooFb8JmUsJXki6Dr0rmx7HPe0nfgezabVrSBd0C3tKcPgL35z3LnheEbQLlO5I2rgm04i+/SRrY/lLs1aoZbdvUNG7LI4hOQ//TpbbnfyX9BIud+pjnNfhrAAAAAElFTkSuQmCC",
 	head = "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACHUlEQVR42sWXu4oUQRSG/9PTK8iiqKhgsIiRCuoLGAgmJgYiaqYvsMk+gi8gpqZGJsZippFMLHhLzAzEbNnAcbrrMzklRe9YU30ZPVAMXdN1zn9uf5+S/rPY0IPAn7Nmxj8B4EZnkjCzNtmvJFWSgpmFjYQKmHWejwIngOO59yaJADAzsxY4I+mOpHuSLkk6Jmkp6ZOkt5JemNmXmJ4xqVEnvAIeAN/IywJ4vKpOxhp/mhhZAg3QAsFX4/tRXgMnARsMIuYS2EsMt2siEDwKAC+Bqm9NdD2/mHgXKJcI4tGQwky9f55430daX5+9W8pTEV8EzgEHSZ77SuO/t3NRqDJ71yVtSwoDGRNft3ItX2W44VqiaCjLmqSr/hxKAWik4a5kqTkHYDERgKY3AC/EjyO/mDGC85ytVZs4h++O9DzqflWc0qT/7yetNKQNYwu+cQ6oivrfV+0E0gA/OzTbh4iWwI1iJky83+0oew/86gEisuYT11fn7NYr2mUu6aakHUkXJH2VdCDpmaTTBYUZ/7sMbElqp5qI7nbym/si4jR+at1cUP/lS2iJJ+bR+dGzLRcllX8IQHeoTMaxrU0MvFVPSmUAEU0GoHavKAR7pCQKJQCCF9EHSft+L2jcyKrVuN65pH2gGj0dJyPaQ+B7ARfMgfPp2dE3I/ckAGclXcmkopX0zswawCa5G3Qj0ffuOOnl1BWvAxIm9XyT8hvis440IPe4YwAAAABJRU5ErkJggg==",
 	skull = "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACnElEQVR42sWXv24UQQzGP+8d6AQkISflPRANtFDyDihSeirKVKTjFdJen5ZISCRdgIIiCIl0CAhCSEciioSQ7P5oPMha7e2/HDDSaHY9HtvjsT/PSP+5WRdmwCRlvg7vSU6iFWbG3C0FBn+D11ruWmYGkEm6K+mepNuSbjrbsaQ3knYkvTSzIq67zK6z8L0G7NPc9oG1Khm9lANjYDsoKIBz4KLUz30utW1g3MsIwLyPgdcu8BeQt/BA7rz42nGS10V5BlwF9oLyri2t2XNZWSsjUgQD6yVBubs6b9h95Elr11tlR7IQWAGmLqhwobFdVCiv4ilcxhRYiTpSKwdHsvCBpLGkItAPPc0O/T+mFzN45DLGLjPqqHX/JEQ7wBNgwecW/D+5PG/gSdkxaTyGkHq7wZVbVQgHbHXk2a1KyawFQm4CA2BoZjkwdCWbHXkqMyCbofhj6YwvXUpcZj38A0MfV1u6N0V5myNYjTq6pGFVgG1UpOFGTaDOTMM2QHTm42fghY9J8AfgVTC0zHPWCYhqoPi0tNsk+DFwawZcn/aC4ppiFCtfAXwDFp3/Xcj5i4CK3YvRjHL8LIBOAqenwBKwDDwKRib4ft67HFcYcQ04CvcBPLCOvH8vFSSAO41RL2nYbAMmaRRwIV1GxyXeopTjN3xtLZ40usbvdJTWZCVjFG7Lfwxqcx/scjapMu5Lui9pEq7jE6e97XrV72PA1Mx2JB2EuQOnTSveDHMxwDxeCkkDB5RRUDRy2iDEwpW5GOCBdCLpazpnM8uD+y3QUnwUkj6FOOlngAeRmdlPSQ/d7Sc+fSLpyHui/ZD0RdKamb0HMjMr5vEsS0VqCCz598hBaBkYOW0RuN6q6FzmlfRP34Y170QrH1ef9+BvFakQVyxwKl8AAAAASUVORK5CYII=",
 	mask = "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACrElEQVR42sWXv08UURDHv3N7BM6IIRZaWSgJISFYWVmSUBjtSCipLfBP8I8g/AEG/wSimEBiRWlFYqlCoeYwmCjG48ftfmxmk3HZO3bvjvCSze57M2/mu/PjzTzpmocNuhH4b6+ZceUAXGkiCTNLC7TE5aV1wFgNxY2oFGhJGvfpqZl1CmCyKkCsgvKGmWX+fUfSU0nPJD2SNOlsx5I+SHoj6a2ZHRb3Durnhr/HgJdAm8tH23nHooxhlM8Au0HBOdAFUiDzJ/W188C3C8wMBCIonweOguKsggWyAOQImK8FAjAgASaBvaC87sj37LmspJi6vQAk/l53AWfB1HWfM5exHmVXMf0cox9zZa5o9kjL55J+Ser4wSNJmaQ8r3v9SRrkNMJay2W+KKa+9bDElKQzSXfD8oSkMRf8O4CJsm450HNJJ4HWlpSY2XGdDFgHDoFvwA9gB3gMrHqut51+GOarzrPje747fROY8gC3SwsMcBs4LUT0bODbKPHxRqDPlmTOYlkgNvsY48TNjX93CrRu8HlSMHnHnwl3ybi/K50DCdAC3hf+YB9YAdb6RPqa8+wX1r8C94DGhTJ+CZiHYdpyi1UJwm7BYh+L5fsCgLxyAdOSVjwLopCYho0S8AQzxzSUu2BC0msz+xSrZBmA+5I+X1EH9sDMvkQAzdBSZUDiDJuSnniQNYdU2vUgfeeyk17uiHVgwYOnO4IjOJexULcebI8ARL53u3JJzlMFmAZ+hmZjEOWpy5h2mZV7gtwVSyV/U+fPAZYqmb4PiOXQFaV+xKYlSou0I2B5IOUlIGaArZLWKw29YRxboR9MhsqhKABYBF4BByUWOHDaYtneYS8mDb8N4fMbkuYk3XSWP37c/g1V1Ya6E/QpVMmg9JFdTvOrWmE5G/SCeq3jH1Qcd/QvykBnAAAAAElFTkSuQmCC",
@@ -2439,6 +2440,7 @@ local function toggleControl(box, id, text, default, color)
 	rec.base = rec.default
 	functions[id] = rec
 	function rec.get()
+		if rec.locked and rec.locked() then return false end
 		local v = rec.base
 		for _, b in ipairs(rec.binds) do
 			if b.active then v = not b.value end
@@ -2478,7 +2480,13 @@ local function toggleControl(box, id, text, default, color)
 		BorderSizePixel = 0, AnchorPoint = Vector2.new(0, 0.5), Size = UDim2.fromOffset(14, 14), Parent = track,
 	}, { new("UICorner", { CornerRadius = UDim.new(1, 0) }) })
 	local onS = spring(rec.base and 1 or 0, 24)
-	on(r.Activated, function() rec.set(not rec.get()) end)
+	on(r.Activated, function()
+		if rec.locked and rec.locked() then
+			if C.onLocked then C.onLocked(rec) end
+			return
+		end
+		rec.set(not rec.get())
+	end)
 	onFrame(function()
 		onS.t = rec.get() and 1 or 0
 		local a = onS.x
@@ -2696,7 +2704,7 @@ local function submenuRow(box, text, pp)
 end
 
 ---------------------------------------------------- Settings
-local settingsLeft = columns(pages.Settings)
+local settingsLeft, settingsRight = columns(pages.Settings)
 local settingsMenu
 do
 	local left = settingsLeft
@@ -2711,6 +2719,16 @@ end
 -- state shared by the page blocks below (each block is its own function for the register budget)
 local Fisch = { busy = false, cleanups = {}, home = nil }
 env.__FischShared = Fisch -- for live testing
+-- Safe Mode: on by default, remembered in its own file; everything the server can see you do
+-- differently (teleports, fly, speed, water walk, selling via teleport) is locked while it's on.
+Fisch.safe = true
+pcall(function()
+	local t = game:GetService("HttpService"):JSONDecode(readfile("FischMenu/safe.json"))
+	if type(t) == "table" and type(t.on) == "boolean" then Fisch.safe = t.on end
+end)
+function Fisch.isSafe() return Fisch.safe end
+function Fisch.locked() toast("Locked by Safe Mode") end
+C.onLocked = function() Fisch.locked() end
 local choiceControl, infoRow, buttonRow, pickList, rowPanel, dimRows, statsRow
 
 ;(function()
@@ -2780,7 +2798,7 @@ function infoRow(box, text)
 end
 
 -- clickable row with an arrow: runs fn; sub (string or function) is shown dim on the right
-function buttonRow(box, text, fn, sub)
+function buttonRow(box, text, fn, sub, locked)
 	local r, setRight, st = itemRow(box, text)
 	setRight(sub and 150 or 26)
 	local v = sub and label({
@@ -2788,9 +2806,16 @@ function buttonRow(box, text, fn, sub)
 		AnchorPoint = Vector2.new(1, 0.5), Position = UDim2.new(1, -30, 0.5, 0), Size = UDim2.fromOffset(120, 20), Parent = r,
 	})
 	local chev = icon(ICON.chevron, 11, { Position = UDim2.new(1, -16, 0.5, 0), Rotation = -90, ImageColor3 = C.dim, Parent = r })
-	on(r.Activated, function() task.spawn(fn) end)
+	local lock = icon(ICON.lock, 13, { Position = UDim2.new(1, -18, 0.5, 0), ImageColor3 = C.dim, Visible = false, Parent = r })
+	on(r.Activated, function()
+		if locked and locked() then Fisch.locked() return end
+		task.spawn(fn)
+	end)
 	onFrame(function()
 		if not r.Parent then return true end
+		local isLocked = locked ~= nil and locked()
+		chev.Visible, lock.Visible = not isLocked, isLocked
+		if v then v.TextTransparency = isLocked and 0.5 or 0 end
 		chev.ImageColor3 = C.dim:Lerp(C.hi, st.hover.x)
 		if v then
 			local t = type(sub) == "function" and sub() or sub
@@ -2867,7 +2892,7 @@ function statsRow(box, captions)
 end
 
 -- A searchable list living inside a group box. getItems() returns { { key, text, sub, color, action } }.
-function pickList(box, getItems, searchable, height, empty)
+function pickList(box, getItems, searchable, height, empty, locked)
 	local n = boxRows[box] or 0
 	boxRows[box] = n + 1
 	local top = searchable and 44 or 4
@@ -2900,16 +2925,25 @@ function pickList(box, getItems, searchable, height, empty)
 		local b = button({ Size = UDim2.new(1, 0, 0, 30), LayoutOrder = i, Parent = list }, { corner(6) })
 		local t = label({ TextSize = 13, Position = UDim2.fromOffset(10, 0), Size = UDim2.new(1, -120, 1, 0), TextTruncate = Enum.TextTruncate.AtEnd, Parent = b })
 		local s = label({ TextSize = 12, TextColor3 = C.faint, TextXAlignment = Enum.TextXAlignment.Right, AnchorPoint = Vector2.new(1, 0), Position = UDim2.new(1, -10, 0, 0), Size = UDim2.new(0, 104, 1, 0), Parent = b })
-		r = { b = b, t = t, s = s, st = hoverable(b) }
-		on(b.Activated, function() if r.item and r.item.action then task.spawn(r.item.action) end end)
+		local lk = icon(ICON.lock, 12, { Position = UDim2.new(1, -18, 0.5, 0), ImageColor3 = C.dim, Visible = false, Parent = b })
+		r = { b = b, t = t, s = s, lk = lk, st = hoverable(b) }
+		on(b.Activated, function()
+			if not (r.item and r.item.action) then return end
+			if locked and locked() then Fisch.locked() return end
+			task.spawn(r.item.action)
+		end)
 		rows[i] = r
 		return r
 	end
 	local nextAt, lastQ = 0, nil
 	onFrame(function()
 		if not wrap.Parent then return true end
+		local isLocked = locked ~= nil and locked()
 		for _, r in ipairs(rows) do
 			if r.b.Visible then
+				r.lk.Visible = isLocked
+				r.s.Visible = not isLocked
+				r.t.TextTransparency = isLocked and 0.45 or 0
 				r.b.BackgroundTransparency = 1 - 0.05 * r.st.hover.x
 				r.t.TextColor3 = (r.item.color or C.text):Lerp(C.hi, r.st.hover.x * 0.5)
 			end
@@ -3005,6 +3039,7 @@ end
 -- Teleports onto the ground under pos (searched from `above` studs higher). Lands on water ->
 -- stands on a small platform so you can fish right there. exact = no ground search.
 function Fisch.tp(pos, look, above, exact)
+	if Fisch.safe then Fisch.locked() return false end
 	local char = LP.Character
 	local hrp = char and char:FindFirstChild("HumanoidRootPart")
 	if not hrp then return false end
@@ -3032,6 +3067,7 @@ function Fisch.tp(pos, look, above, exact)
 	return true
 end
 function Fisch.back(cf)
+	if Fisch.safe then Fisch.locked() return end
 	local char = LP.Character
 	local hrp = char and char:FindFirstChild("HumanoidRootPart")
 	if not hrp then return end
@@ -3121,6 +3157,7 @@ end)
 -- Unequips, makes sure every protected fish is favourited (server-confirmed), sells at the nearest
 -- merchant through the game's own Sell All, and puts you back exactly where you stood.
 function Fisch.sell()
+	if Fisch.safe then return false, "Safe Mode" end
 	if Fisch.busy then return false, "busy" end
 	Fisch.busy = true
 	local ok, err = pcall(function()
@@ -3238,7 +3275,7 @@ local sellAt = sliderControl(rowPanel("fish.sell", "Auto Sell"), "fish.sell.at",
 buttonRow(sellG, "Sell now", function()
 	local ok, err = Fisch.sell()
 	toast(ok and "Sold everything that isn't favourited" or ("Sell failed: " .. tostring(err)))
-end, function() return Fisch.sellableCount() .. " sellable" end)
+end, function() return Fisch.sellableCount() .. " sellable" end, Fisch.isSafe)
 
 ---------------------------------------- game state
 
@@ -3841,7 +3878,7 @@ local function nearestRow(text, ty)
 	end, function()
 		local e, d = Fisch.nearest(ty)
 		return e and string.format("%s  %d st", e.rec.name, d) or "not seen yet"
-	end)
+	end, Fisch.isSafe)
 end
 nearestRow("Merchant", "Merchant")
 nearestRow("Appraiser", "Appraiser")
@@ -3854,7 +3891,7 @@ buttonRow(q, "Save this spot", function()
 end)
 buttonRow(q, "Back to saved spot", function()
 	if Fisch.home then Fisch.back(Fisch.home) else toast("No spot saved") end
-end, function() return Fisch.home and dist(Fisch.home.Position) or "none" end)
+end, function() return Fisch.home and dist(Fisch.home.Position) or "none" end, Fisch.isSafe)
 
 -- islands (approximate centers; the teleport finds the ground or water under them)
 local ISLANDS = {
@@ -3873,7 +3910,7 @@ pickList(isl, function()
 		out[#out + 1] = { text = d[1], sub = dist(p), action = function() Fisch.tp(p) end }
 	end
 	return out
-end, true, 190)
+end, true, 190, nil, Fisch.isSafe)
 
 -- every NPC the game keeps loaded, plus every one seen before (remembered in npcs.json)
 local ng = group(right, "NPCs")
@@ -3887,7 +3924,7 @@ pickList(ng, function()
 	end
 	table.sort(out, function(a, b) return a.d < b.d end)
 	return out
-end, true, 190, "No NPCs found")
+end, true, 190, "No NPCs found", Fisch.isSafe)
 
 ---------------------------------------- rare fish tracker
 
@@ -3935,7 +3972,7 @@ pickList(rg, function()
 		end
 	end
 	return out
-end, false, 110, "None active right now")
+end, false, 110, "None active right now", Fisch.isSafe)
 end)()
 
 ---------------------------------------------------- Player: fly
@@ -4224,6 +4261,82 @@ onFrame(function()
 end)
 end)()
 
+---------------------------------------------------- Safe Mode: yellow marker, locks, 5 clicks to turn off
+
+;(function()
+local YELLOW = Color3.fromRGB(240, 196, 72)
+local LOCKED = { "fish.sell", "move.fly", "move.walk", "move.jump", "move.swim", "move.water" }
+local function save() pcall(writefile, "FischMenu/safe.json", game:GetService("HttpService"):JSONEncode({ on = Fisch.safe })) end
+
+-- locked toggles: read as off, ignore clicks, show a padlock where the switch was
+for _, id in ipairs(LOCKED) do
+	local rec = functions[id]
+	if rec then
+		rec.locked = Fisch.isSafe
+		local track
+		for _, c in ipairs(rec.row:GetChildren()) do
+			if c:IsA("Frame") and c.Size.X.Offset == 34 and c.Size.Y.Offset == 20 then track = c end
+		end
+		local lock = icon(ICON.lock, 14, { Position = UDim2.new(1, -31, 0.5, 0), ImageColor3 = C.dim, Visible = false, Parent = rec.row })
+		local lbl
+		for _, d in ipairs(rec.row:GetDescendants()) do if d:IsA("TextLabel") then lbl = d break end end
+		onFrame(function()
+			local on_ = Fisch.safe
+			lock.Visible = on_
+			if track then track.Visible = not on_ end
+			if lbl then lbl.TextTransparency = on_ and 0.45 or 0 end
+		end)
+	end
+end
+
+-- the switch itself: one click turns it on, five quick clicks turn it off
+local box = group(settingsRight, "Safety")
+local r, setRight, st = itemRow(box, "Safe Mode")
+setRight(150)
+local state = label({
+	Text = "", TextSize = 12, Font = Enum.Font.BuilderSansMedium, TextXAlignment = Enum.TextXAlignment.Right,
+	AnchorPoint = Vector2.new(1, 0.5), Position = UDim2.new(1, -14, 0.5, 0), Size = UDim2.fromOffset(140, 20), Parent = r,
+})
+local rowLbl
+for _, d in ipairs(r:GetDescendants()) do if d:IsA("TextLabel") and d ~= state then rowLbl = d break end end
+local clicks, lastClick = 0, 0
+on(r.Activated, function()
+	if not Fisch.safe then
+		Fisch.safe = true
+		save()
+		toast("Safe Mode on")
+		return
+	end
+	if os.clock() - lastClick > 2.5 then clicks = 0 end
+	lastClick = os.clock()
+	clicks += 1
+	if clicks >= 5 then
+		clicks = 0
+		Fisch.safe = false
+		save()
+		toast("Safe Mode off")
+	end
+end)
+
+-- yellow marker in the window header while it's on
+local badge = label({
+	Text = "SAFE MODE", Font = Enum.Font.BuilderSansBold, TextSize = 11, TextColor3 = YELLOW, TextXAlignment = Enum.TextXAlignment.Right,
+	AnchorPoint = Vector2.new(1, 0), Position = UDim2.new(1, -46, 0, 11), Size = UDim2.fromOffset(160, 14), ZIndex = 20, Parent = window,
+})
+onFrame(function()
+	if os.clock() - lastClick > 2.5 then clicks = 0 end
+	local on_ = Fisch.safe
+	badge.Visible = on_
+	local t
+	if not on_ then t = "Off"
+	elseif clicks > 0 then t = (5 - clicks) .. " more clicks"
+	else t = "On" end
+	C.setText(state, t)
+	state.TextColor3 = on_ and YELLOW or C.dim
+	if rowLbl then rowLbl.TextColor3 = on_ and YELLOW or C.text:Lerp(C.hi, st.hover.x * 0.5) end
+end)
+end)()
+
 ---------------------------------------------------- Language + function info tooltips
 
 ;(function()
@@ -4257,8 +4370,10 @@ local RU = {
 	["Fly"] = "Полёт", ["Fly speed"] = "Скорость полёта", ["Menu key"] = "Клавиша меню", ["Menu color"] = "Цвет меню",
 	["Hotkey list"] = "Список хоткеев", ["Language"] = "Язык", ["Function info"] = "Инфо о функциях",
 	["Hotkeys"] = "Хоткеи",
-	["Walk Speed"] = "Скорость бега", ["Jump Power"] = "Сила прыжка", ["Swim Speed"] = "Скорость плавания",
-	["Walk on Water"] = "Ходьба по воде", ["Anti AFK"] = "Анти-АФК", ["Utility"] = "Утилиты", ["Speed"] = "Скорость", ["Power"] = "Сила",
+	["Walk Speed"] = "Скорость бега", ["Jump Power"] = "Сила прыжка", ["Swim Speed"] = "Турбодизель",
+	["Walk on Water"] = "Ходьба по воде", ["Safe Mode"] = "Безопасный режим", ["Safety"] = "Безопасность",
+	["On"] = "Вкл", ["Locked by Safe Mode"] = "Заблокировано безопасным режимом", ["Safe Mode on"] = "Безопасный режим включён",
+	["Safe Mode off"] = "Безопасный режим выключен", ["SAFE MODE"] = "БЕЗОПАСНЫЙ РЕЖИМ", ["Anti AFK"] = "Анти-АФК", ["Utility"] = "Утилиты", ["Speed"] = "Скорость", ["Power"] = "Сила",
 	-- choices, pills, states
 	["Random"] = "Случайно", ["Centered"] = "По центру", ["Legit"] = "Легит", ["All"] = "Все", ["Selected"] = "Выбранные",
 	["Off"] = "Выключен", ["Busy"] = "Занят", ["Reeling"] = "Вытягивает", ["Shaking"] = "Шейк", ["No rod"] = "Нет удочки",
@@ -4280,6 +4395,8 @@ local RU = {
 }
 local PATTERNS = {
 	{ "^(%d+) sellable$", "%1 к продаже" },
+	{ "^(%d+) more clicks$", "ещё %1 нажатий" },
+	{ "^Sell failed: Safe Mode$", "Заблокировано безопасным режимом" },
 	{ "^(%d+) fish  ·  (%d+) selected$", "%1 рыб  ·  выбрано %2" },
 	{ "^(%d+) fish$", "%1 рыб" },
 	{ "^(%d+) st away$", "%1 ст от тебя" },
@@ -4399,6 +4516,7 @@ local D = {
 	["Swim Speed"] = { "Your speed while swimming.", "Скорость, пока ты плывёшь.", "16 – 150, default 45", "16 – 150, по умолчанию 45" },
 	["Walk on Water"] = { "Water holds you like ground; if you're already swimming you're lifted onto the surface.", "Вода держит тебя как земля; если уже плывёшь — поднимает на поверхность.", "On / Off", "Вкл / Выкл" },
 	["Anti AFK"] = { "Keeps you from ever being kicked or marked idle: a harmless input every minute you don't touch anything. Doesn't move the camera or click.", "Никогда не даст кикнуть или пометить тебя АФК: безобидный ввод раз в минуту, пока ты ничего не трогаешь. Камеру не двигает и ничего не нажимает.", "On / Off, on by default", "Вкл / Выкл, по умолчанию вкл" },
+	["Safe Mode"] = { "Locks everything the server can notice: teleports, fly, speed, jump, swim speed, water walk, auto sell. Click 5 times in a row to turn it off, once to turn it back on.", "Блокирует всё, что может заметить сервер: телепорты, полёт, скорость, прыжок, турбодизель, ходьбу по воде, автопродажу. Выключается 5 нажатиями подряд, включается одним.", "On / Off, on by default", "Вкл / Выкл, по умолчанию вкл" },
 	["Fly speed"] = { "Flying speed.", "Скорость полёта.", "10 – 250, default 70", "10 – 250, по умолчанию 70" },
 	["Menu key"] = { "Key that opens and closes the menu.", "Клавиша открытия и закрытия меню.", "default Insert", "по умолчанию Insert" },
 	["Menu color"] = { "Accent color of the menu.", "Акцентный цвет меню.", "", "" },
