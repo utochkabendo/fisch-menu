@@ -102,7 +102,6 @@ local NAV = {
 	{ tab = "Collection", icon = "list" },
 	{ tab = "Teleport", icon = "globe" },
 	{ tab = "Player", icon = "person" },
-	{ tab = "Settings", icon = "sliders" },
 }
 
 local function rgb(r, g, b) return Color3.fromRGB(r, g, b) end
@@ -1238,7 +1237,8 @@ do -- scoped: Luau caps a function at 200 locals
 	local POP_W = 300
 	local LIST_Y = 86
 	local CROW_H, CROW_GAP = 36, 6
-	local pop = Popup.new(POP_W, 200, 0.2)
+	local pop = Popup.new(POP_W, 200, 0.03)
+	C.presetsInner = pop.inner
 	pop.dir = -1
 	local view = "configs"
 	local sortDesc = false
@@ -2719,13 +2719,15 @@ local function submenuRow(box, text, pp)
 end
 
 ---------------------------------------------------- Settings
-local settingsLeft, settingsRight = columns(pages.Settings)
-local settingsMenu
+-- Menu settings: a popup opened from the profile button at the bottom of the sidebar (see the
+-- "Profile" block). Two boxes: menu look / behaviour, and safety / sync.
+local profilePanel = panel("")
+profilePanel.w = 292
+local settingsMenu = panelBox(profilePanel)
+local settingsSafety = panelBox(profilePanel)
 local menuColors = {}
 do
-	local left = settingsLeft
-	local menuBox = group(left, "Menu")
-	settingsMenu = menuBox
+	local menuBox = settingsMenu
 	keybindControl(menuBox, "Menu key", function() return menuKey end, function(k) menuKey = k end)
 	-- one swatch, several colors: accent, background, panels, text (chips in the picker)
 	menuColors.bg = colorValue(C.window, 1)
@@ -4398,7 +4400,7 @@ end)()
 -- Looks like the reference: a dark rounded pill "[list icon] Hotkeys", and under it one pill per bound
 -- function with a small switch glyph and the function's name. Drag the header to move it.
 ;(function()
-local showOn = toggleControl(group(settingsLeft, "Indicators"), "ui.hotkeys", "Hotkey list", true)
+local showOn = toggleControl(settingsMenu, "ui.hotkeys", "Hotkey list", true)
 local pos = { x = 24, y = 320 }
 options["ui.hotkeys.pos"] = {
 	save = function() return { pos.x, pos.y } end,
@@ -4507,7 +4509,7 @@ for _, id in ipairs(LOCKED) do
 end
 
 -- the switch itself: one click turns it on, five quick clicks turn it off
-local box = group(settingsRight, "Safety")
+local box = settingsSafety
 local r, setRight, st = itemRow(box, "Safe Mode")
 setRight(150)
 local state = label({
@@ -4544,6 +4546,8 @@ onFrame(function()
 	if os.clock() - lastClick > 2.5 then clicks = 0 end
 	local on_ = Fisch.safe
 	badge.Visible = on_
+	local sw = Fisch.searchW or 0
+	badge.Position = UDim2.new(1, -50 - (sw > 1 and sw + 18 or 0), 0.5, 0)
 	local t
 	if not on_ then t = "Off"
 	elseif clicks > 0 then t = (5 - clicks) .. " more clicks"
@@ -4557,7 +4561,7 @@ end)()
 ---------------------------------------------------- Menu look: DPI scale, background / panels / text colors
 
 ;(function()
-local dpi = choiceControl(settingsMenu, "ui.dpi", "DPI scale", { "70%", "100%", "125%", "150%" }, "100%")
+local dpi = choiceControl(settingsMenu, "ui.dpi", "Menu scale", { "70%", "100%", "125%", "150%" }, "100%")
 onFrame(function()
 	local v = (tonumber(dpi():match("%d+")) or 100) / 100
 	if C.dpi ~= v then C.dpi = v end
@@ -4666,44 +4670,42 @@ new("Frame", { BackgroundColor3 = C.divider, BorderSizePixel = 0, Position = UDi
 -- the close button gives its place to search (the menu key still closes the menu)
 closeBtn.Visible = false
 
----------------------------------------- cloud code button next to the config bar
+---------------------------------------- cloud code: a button in the presets popup (next to trash / plus)
 
-local cloudBtn, cloudIcon, cloudSt = iconButton(ICON.cloud, 16, {
-	AnchorPoint = Vector2.new(0, 0.5), Position = UDim2.new(0, 12 + 220 + 6, 0.5, 0), Size = UDim2.fromOffset(32, 32), ZIndex = 4, Parent = topbar,
-})
-new("UIStroke", { Color = C.fieldStroke, Parent = cloudBtn })
-local cpop = Popup.new(232, 84, 0.12)
-label({ Text = "Cloud config code", Font = Enum.Font.BuilderSansMedium, TextSize = 12, TextColor3 = C.dim, Position = UDim2.fromOffset(12, 8), Size = UDim2.new(1, -24, 0, 16), Parent = cpop.inner })
-local cfield = new("Frame", { BackgroundColor3 = C.field, BorderSizePixel = 0, Position = UDim2.fromOffset(10, 32), Size = UDim2.new(1, -92, 0, 30), Parent = cpop.inner }, { corner(6) })
-stroke(C.fieldStroke, cfield)
+local pin = C.presetsInner
+local cloudBtn, cloudIcon, cloudSt = iconButton(ICON.cloud, 15, { AnchorPoint = Vector2.new(1, 0), Position = UDim2.new(1, -68, 0, 10), Parent = pin })
+-- the code row slides over the search field while it's open
+local crow = new("Frame", { BackgroundColor3 = C.popup, BorderSizePixel = 0, Position = UDim2.fromOffset(8, 46), Size = UDim2.new(1, -16, 0, 30), Visible = false, ZIndex = 6, Parent = pin })
+local cfield = new("Frame", { BackgroundColor3 = C.field, BorderSizePixel = 0, Size = UDim2.new(1, -78, 1, 0), ZIndex = 6, Parent = crow }, { corner(6) })
+local cstroke = stroke(C.fieldStroke, cfield)
+icon(ICON.cloud, 14, { Position = UDim2.fromOffset(16, 15), ImageColor3 = C.faint, ZIndex = 7, Parent = cfield })
 local cbox = new("TextBox", {
-	Text = "", PlaceholderText = "ABC123", PlaceholderColor3 = C.faint, ClearTextOnFocus = false,
-	Font = Enum.Font.BuilderSansMedium, TextSize = 13, TextColor3 = C.hi, BackgroundTransparency = 1,
-	Size = UDim2.fromScale(1, 1), Parent = cfield,
+	Text = "", PlaceholderText = "Cloud config code", PlaceholderColor3 = C.faint, ClearTextOnFocus = false,
+	Font = Enum.Font.BuilderSansMedium, TextSize = 13, TextColor3 = C.hi, TextXAlignment = Enum.TextXAlignment.Left,
+	BackgroundTransparency = 1, Position = UDim2.fromOffset(31, 0), Size = UDim2.new(1, -38, 1, 0), ZIndex = 7, Parent = cfield,
 })
-local loadBtn, ls, lsc = fieldButton({ AnchorPoint = Vector2.new(1, 0), Position = UDim2.new(1, -10, 0, 32), Size = UDim2.fromOffset(72, 30), Parent = cpop.inner })
-local loadLbl = label({ Text = "Load", Font = Enum.Font.BuilderSansMedium, TextSize = 12, TextXAlignment = Enum.TextXAlignment.Center, Size = UDim2.fromScale(1, 1), Parent = loadBtn })
+local loadBtn, ls, lsc = fieldButton({ AnchorPoint = Vector2.new(1, 0), Position = UDim2.new(1, 0, 0, 0), Size = UDim2.fromOffset(72, 30), ZIndex = 6, Parent = crow })
+local loadLbl = label({ Text = "Load", Font = Enum.Font.BuilderSansMedium, TextSize = 12, TextXAlignment = Enum.TextXAlignment.Center, Size = UDim2.fromScale(1, 1), ZIndex = 7, Parent = loadBtn })
 bindAccent(loadLbl, function(c) loadLbl.TextColor3 = c:Lerp(Color3.new(1, 1, 1), 0.3) end)
 local loadSt = hoverable(loadBtn)
 local function doLoad()
 	local code = cbox.Text
-	cpop:hide()
+	crow.Visible = false
+	cbox.Text = ""
 	task.spawn(function() if Fisch.loadCode then Fisch.loadCode(code) end end)
 end
 on(loadBtn.Activated, doLoad)
 on(cbox.FocusLost, function(enter) if enter then doLoad() end end)
 on(cloudBtn.Activated, function()
-	if cpop.open then cpop:hide() return end
-	cbox.Text = ""
-	cpop.h:snap(74)
-	cpop:placeAt(cloudBtn, 74, false)
-	cpop:show(cloudBtn)
-	task.defer(function() cbox:CaptureFocus() end)
+	crow.Visible = not crow.Visible
+	if crow.Visible then task.defer(function() cbox:CaptureFocus() end) end
 end)
 onFrame(function()
-	local a = math.max(cloudSt.hover.x, cpop.open and 1 or 0)
+	if not pin.Parent or not pin.Parent.Visible then crow.Visible = false return end
+	local a = math.max(cloudSt.hover.x, crow.Visible and 1 or 0)
 	cloudBtn.BackgroundTransparency = 1 - 0.06 * a
 	cloudIcon.ImageColor3 = C.dim:Lerp(C.hi, a)
+	cstroke.Color = C.fieldStroke:Lerp(C.dim, cbox:IsFocused() and 0.5 or 0)
 	loadBtn.BackgroundColor3 = C.field:Lerp(C.fieldHover, loadSt.hover.x)
 	lsc.Scale = 1 - loadSt.press.x * 0.04
 end)
@@ -4820,11 +4822,77 @@ end)
 onFrame(function()
 	sw_.t = sOpen and 200 or 0
 	sfield.Size = UDim2.fromOffset(round(sw_.x), 30)
+	Fisch.searchW = sw_.x
 	sfield.Visible = sw_.x > 1
 	sstroke.Color = C.fieldStroke:Lerp(C.dim, sbox:IsFocused() and 0.5 or 0)
 	local a = math.max(searchSt.hover.x, sOpen and 1 or 0)
 	searchBtn.BackgroundTransparency = 1 - 0.06 * a
 	searchIcon.ImageColor3 = C.dim:Lerp(C.hi, a)
+end)
+end)()
+
+---------------------------------------------------- Profile: avatar + name at the bottom left, opens the menu settings
+
+;(function()
+local pp = profilePanel
+local HEAD = 62
+-- header inside the popup: big avatar, display name, @username, script name
+local head = new("Frame", { BackgroundTransparency = 1, Position = UDim2.fromOffset(0, 0), Size = UDim2.new(1, 0, 0, HEAD), Parent = pp.inner })
+local bigAv = new("ImageLabel", { BackgroundColor3 = C.field, BorderSizePixel = 0, Position = UDim2.fromOffset(14, 12), Size = UDim2.fromOffset(40, 40), Parent = head }, { new("UICorner", { CornerRadius = UDim.new(1, 0) }) })
+label({ Text = LP.DisplayName, Font = Enum.Font.BuilderSansBold, TextSize = 14, TextColor3 = C.hi, Position = UDim2.fromOffset(64, 13), Size = UDim2.new(1, -76, 0, 16), TextTruncate = Enum.TextTruncate.AtEnd, Parent = head })
+label({ Text = "@" .. LP.Name, TextSize = 12, TextColor3 = C.dim, Position = UDim2.fromOffset(64, 30), Size = UDim2.new(1, -76, 0, 14), TextTruncate = Enum.TextTruncate.AtEnd, Parent = head })
+local brand = label({ Text = "FalloLose", Font = Enum.Font.BuilderSansMedium, TextSize = 11, Position = UDim2.fromOffset(64, 44), Size = UDim2.new(1, -76, 0, 12), Parent = head })
+bindAccent(brand, function(c) brand.TextColor3 = c end)
+new("Frame", { BackgroundColor3 = C.divider, BorderSizePixel = 0, Position = UDim2.new(0, 10, 0, HEAD), Size = UDim2.new(1, -20, 0, 1), Parent = head })
+-- the panel lays its body out under a 38px title; ours is HEAD tall, a spacer evens the height out
+pp.body.Position = UDim2.fromOffset(10, HEAD + 8)
+new("Frame", { BackgroundTransparency = 1, Size = UDim2.new(1, 0, 0, HEAD + 8 - 38 - 10), LayoutOrder = 1e6, Parent = pp.body })
+
+-- profile button in the sidebar
+local btn = button({ AnchorPoint = Vector2.new(0, 1), Position = UDim2.new(0, 8, 1, -10), Size = UDim2.new(1, -16, 0, 46), ZIndex = 4, Parent = sidebar }, { corner(8) })
+local av = new("ImageLabel", { BackgroundColor3 = C.field, BorderSizePixel = 0, AnchorPoint = Vector2.new(0, 0.5), Position = UDim2.new(0, 8, 0.5, 0), Size = UDim2.fromOffset(30, 30), ZIndex = 4, Parent = btn }, { new("UICorner", { CornerRadius = UDim.new(1, 0) }) })
+local nameLbl = label({ Text = LP.DisplayName, Font = Enum.Font.BuilderSansMedium, TextSize = 13, TextColor3 = C.hi, Position = UDim2.fromOffset(46, 0), Size = UDim2.new(1, -70, 1, 0), TextTruncate = Enum.TextTruncate.AtEnd, ZIndex = 4, Parent = btn })
+local chev = icon(ICON.chevron, 12, { Position = UDim2.new(1, -14, 0.5, 0), Rotation = -90, ImageColor3 = C.dim, ZIndex = 4, Parent = btn })
+local st = hoverable(btn)
+task.spawn(function()
+	local ok, img = pcall(function()
+		return game:GetService("Players"):GetUserThumbnailAsync(LP.UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size150x150)
+	end)
+	if ok and img then av.Image = img; bigAv.Image = img end
+end)
+on(btn.Activated, function()
+	if pp.open then pp:hide() return end
+	local h = round(38 + pp.body.AbsoluteSize.Y / C.S() + 10)
+	pp.h:snap(h)
+	pp.dir = -1
+	local rp = relPos(btn)
+	pp:place(SIDE_W + 8, rp.Y + btn.AbsoluteSize.Y / C.S() - h, h)
+	pp:show(btn)
+end)
+onFrame(function()
+	local a = math.max(st.hover.x, pp.open and 1 or 0)
+	btn.BackgroundTransparency = 1 - 0.05 * a
+	chev.ImageColor3 = C.dim:Lerp(C.hi, a)
+end)
+
+-- order and icons of the rows, like the reference
+local ORDER = {
+	{ "Language", "globe" }, { "Menu scale", "expand" }, { "Menu color", "image" }, { "Menu key", "keycap" },
+	{ "Function info", "alert" }, { "Hotkey list", "list" },
+	{ "Safe Mode", "lock" }, { "Synchronization", "users" },
+}
+task.defer(function()
+	for i, def in ipairs(ORDER) do
+		for row, text in pairs(C.rows) do
+			if text == def[1] and row:IsDescendantOf(pp.inner) then
+				row.LayoutOrder = i * 100
+				local clip = row:FindFirstChildWhichIsA("Frame")
+				for _, c in ipairs(row:GetChildren()) do if c:IsA("Frame") and c.ClipsDescendants then clip = c end end
+				if clip then clip.Position = UDim2.fromOffset(36, 0) end
+				icon(ICON[def[2]], 14, { Position = UDim2.fromOffset(20, ROW_H / 2), ImageColor3 = C.dim, Parent = row })
+			end
+		end
+	end
 end)
 end)()
 
@@ -4855,7 +4923,7 @@ end
 
 local net = { users = {} } -- userId (string) -> name, everyone on this server running the script
 Fisch.net = net
-local ng = group(settingsRight, "Network")
+local ng = settingsSafety
 local badgesOn = toggleControl(ng, "net.badges", "Synchronization", true)
 local ICON_FL = ICON.fl
 
@@ -5196,7 +5264,7 @@ local RU = {
 	["Walk Speed"] = "Скорость бега", ["Jump Power"] = "Сила прыжка", ["Swim Speed"] = "Турбодизель",
 	["Walk on Water"] = "Ходьба по воде", ["Send to player"] = "Отправить игроку", ["Network"] = "Сеть",
 	["Synchronization"] = "Синхронизация", ["Freeze Player"] = "Заморозка игрока", ["Auto Water Aim"] = "Автоприцел в воду",
-	["DPI scale"] = "Масштаб (DPI)", ["Cloud config code"] = "Код облачного конфига", ["Load"] = "Загрузить", ["Accent"] = "Акцент", ["Text"] = "Текст", ["Background"] = "Фон", ["Panels"] = "Панели", ["Text color"] = "Цвет текста", ["Cloud"] = "Облако", ["Config code"] = "Код конфига", ["Load code"] = "Загрузить по коду",
+	["DPI scale"] = "Масштаб (DPI)", ["Menu scale"] = "Масштаб меню", ["Cloud config code"] = "Код облачного конфига", ["Load"] = "Загрузить", ["Accent"] = "Акцент", ["Text"] = "Текст", ["Background"] = "Фон", ["Panels"] = "Панели", ["Text color"] = "Цвет текста", ["Cloud"] = "Облако", ["Config code"] = "Код конфига", ["Load code"] = "Загрузить по коду",
 	["Accept"] = "Принять", ["Decline"] = "Отказаться", ["Config loaded"] = "Конфиг загружен", ["Code not found"] = "Код не найден",
 	["Enter a code"] = "Введи код", ["No FL users on this server"] = "На сервере нет пользователей FL",
 	["STARTER"] = "НАЧАЛЬНЫЕ", ["OPEN SEA"] = "ОТКРЫТОЕ МОРЕ", ["FAR"] = "ДАЛЬНИЕ", ["OTHER"] = "ДРУГИЕ", ["Safe Mode"] = "Безопасный режим", ["Safety"] = "Безопасность",
@@ -5355,7 +5423,7 @@ local D = {
 	["Synchronization"] = { "Connects you with everyone on this server who runs the script: FL badge in the player list, chat and over their head, a little FL pet next to them, config sending.", "Связывает тебя со всеми на сервере, у кого скрипт: значок FL в списке игроков, в чате и над головой, маленький FL-пет рядом с ними, отправка конфигов.", "On / Off", "Вкл / Выкл" },
 	["Freeze Player"] = { "While auto fish runs you're held in place: nothing can push you, fishing still works. Released while swimming or selling.", "Пока работает автофиш, тебя держит на месте: ничто не толкнёт, рыбалка работает. Отпускает в воде и при продаже.", "On / Off", "Вкл / Выкл" },
 	["Auto Water Aim"] = { "Before each cast turns you to the nearest direction with open water, so the bobber always lands in it.", "Перед каждым забросом поворачивает тебя к ближайшему направлению с водой, чтобы поплавок всегда попадал в неё.", "On / Off", "Вкл / Выкл" },
-	["DPI scale"] = { "Size of the whole menu.", "Размер всего меню.", "70% / 100% / 125% / 150%", "70% / 100% / 125% / 150%" },
+	["Menu scale"] = { "Size of the whole menu.", "Размер всего меню.", "70% / 100% / 125% / 150%", "70% / 100% / 125% / 150%" },
 	["Background"] = { "Window background color.", "Цвет фона окна.", "", "" },
 	["Panels"] = { "Color of boxes, fields and popups.", "Цвет блоков, полей и всплывающих окон.", "", "" },
 	["Text color"] = { "Main text color of the menu.", "Основной цвет текста меню.", "", "" },
