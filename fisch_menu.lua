@@ -30,6 +30,7 @@ local ASSET_DATA = {
 	snow = "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAEXElEQVR42u2Xa2+bShCGh12W6y4Yk4tDE53+/7+VxHXtYMxeYFlgOR9CKsty3LRHPe2HvtLIloWZxzPDu2OAv/rNcv7DdxwAmM68n34FwHFSNL86R59PR2F/BMb5YHI0BwYAvFwu8TiOOI5jBACglLIY43G/348A8Bb2BOanAL4lzvPc833f67rOp5R6YRh61loEAIAQsm3bGiml8X2/67rOlGVpTkDOyv1AcpKmqR9FUUQIia+urihjLA6CIMAYuwAA4zgOWmsthFBSSokxVsMwNHVddwDQz/ezPwLwLXmSJGEURXSxWKR5ni/TNM2SJEkppbHneR4AgDHGSCkV57yu67oqy3I/DIM7TZPknMMlCPdCa3Capn6e55Qxtry+vr4tiuL25ubmJsuyJaWUBUHgAQBorY2UUlRVtd9ut1vXdQOEEBZCgOM4tq7rd2fBvTB0hBASxnGcXl9f3z48PNzf398/fPr0aZXn+RVjjB1XQAghyrJ8CcOQYowJAIC1duSc9wAwvDeU7wFgxpifJAlN03S5Wq1uHx4e7j9//vxPURRFnuf53AIyA/RSSjVD+Y7jTH3f91prrZTSXdcZIcQwD+V3ARAA4CzLPEopzfM8W61WN0VR3BVFUdzd3a0Wi0UWRVFICHEBAPq+H6IoOgbqmqZRQgjOOefDMEghhJ7vbS8BOADgZFnmOo7jM8biJEnSLMuWeZ5f5Xm+XCwWWZqmCSHExxhjeO3VSAghJ+3YJ0mSMsbiuq79LMvcqqrMiWueb8E4jjgMQy8IgoBSGlNKGWOMxXFMoygKPc/zCSEEIYQAADDGyHEciKIojOOYMsYYpZRRSuMgCIIwDL2qqvA530HnKkApday1CGPsep7nBUHgBUHg+b5PXNclCCGMXuXMgRBC2HVd4vs+ebve8zwPY+xaaxGl9NS+zwL87zoFmABgklJOCCE7juNgjDFaa6O1Nl3X9cMw9Nba0b5qmsNaa8dhGPqu6/q3640xZhzHASFkpZTHB9bFp2DCGI9t2xqttZZSKimlEEIIpZSM4zgmhJBpmuBtCMdxHPu+75qmaZVSUgghpJRCSqm01rptW4MxHs+ZkXuuAlVVDYyxTgihOOd1VVX7sixfjs3n9DFsmqY9HA5VWZb7sixfqqrac85rIYSapqmrqmo4VwH8XmustZgQgl3XJXO4GGPsOI4zTdM0DMNgjOnatm2FELKqqsN2u92t1+v14+Pj0+Pj4/OXL1825aukMaabHfH7LQCAUQjR+b4v4zjebzabYC67Y4zphBDiPSt+fn7ePD09PW02m691Xe8551II0Z1zwUsA9rWyfauUqne73Vuv+7ZtZVmW+0uH0Xq9/rrb7b4qpeq+79v5NLQfBfhWhbquu2maZNu2ME+5ruuaf+Q4fnl5qZVSknP+7q+/BPDm1z3nHBzHsYfDYVBKaUop/95C0ve9apqmmZP3l7ai376S/fFL6R+xlv/SPyZ/9dv1L/UBKJkhGn09AAAAAElFTkSuQmCC",
 	rain = "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAtklEQVR42u3TQQqDQAwF0PxRsQzY5UAZ4gFc9UY9gLfxBr1RVx7AoRRmWyiIOOmm9gZaoXmrrOaHTEKklFLq32EpRAQANgkVEQIgu5nAoa7rk4jYGOOLiNbuDM45C+A1DMMj995z27aXpmnO0zQ953lOa6ZnWWaKoqj6vr91XXfNiYgAGGvtEUCVUiJjzCrhy9uffTPfL2Bmz8yuLMtNtnAcRwkhxBDCfV9nuGnwXs5QKaXUz70Bn0c9xiWF10sAAAAASUVORK5CYII=",
 	ring = "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAC3klEQVR42sWXzUtVYRDGn7n3VlzCRUUmEtLGCKWVmzbtkiioRdQ6gqRFBP4H+ne4iFoKGi37pl0g7RRTaVOLyijBumh+3PtrM4fG13u9x6PhgcP5emfmmXnnPDMjHfBhRQWBLbJmxn8HAJQklSRhZvXkW9n1Ncyssa8A3NtSNOoGO/xxzcxWk/WWB4jlMF7ODAOnJd2UdFHSOUldvqwmaU7SO0mTZjadyhbd57Jfu4GHwDLtjw3gBXAh27Y0X3Zr/DLwpYmhdeCnn7UWQIYLgQjGh5oofg7cAfqAY372ADeAx8BaAAAwBlimczfGB11BpnABuJJDvh945jKrfh31b5W2v5mj7QK+AZuuYAo4HtZUwlrz+3L00j0H+OPXS9HBdt4/cqFN4GMwXskTwaBnImzdPFDNQLdkNs/4GtBwwcG8xptE8iTwA6i7rmsto5AZAIYD6tdtw9YaRKZv1HU1gKc7AcjCNhkA3HZPKgUAZFHoDYn8GahuqyUhmarAnC9eAXpDDShUsIDDwExIyL6os5RUs6qkU/5qRdL3TFfRamtm65K++vMRSd2xDDTzjP0o1zvUnC3OpAA2vLBI0mFJR/domKRqbkr6tQ2AmQGUzOy3pFn/1iFpwJOlyF9gvq2dkvr99ZKkeb9vpBHI7t+Hd7dcSZEcyEBf9UjiJbvmztKs2xFw3gtJw7P27K6Kyb/sLwOHgA+B1O7tSGoBxNvABS8DxZby/noJCdWBJeBESypOAAx4HcgIZCwyXLP6nhFWoPShEEWA+7lYNTDicCAkgHGguwnbbQHjxDOaVMKJXVF6ADGW9ASLwIg3I5VEpge4C0wnMlPetOTvirIa7/cjLdqtWeCNn1Mt2rLx2EcU4fFS6AtnyH8sAg/S3CpKZZWwt9eBJ8Anb0pTo688+TrzNqN5B5NyMpRUJZ1J5oIFM1tuJbPn0Sybjpy6621Gt3reWdH2MJhaIt8oOqAe6PEXrtme0Z1ewWwAAAAASUVORK5CYII=",
+	rod = "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACmElEQVR42t2XP2sUURTFf3d2s8bgvxgECxsbLUwlphREBAvt7QwKGyNapI5a+Q1EYohgLYF0NnapBBGsLPwGIYVRwWiSnd1jkbMwDju7m3F3BR8sd5b33j3nzTvvvDvwvzdJFUnxr8Cj0/NIgNuAkq5IOjZSEpKqjkvab+8knZKUDJ2EpDHHOwbfdbza1sRQBec4I+mHpB1JLUmrkg51Ak8GCR4RTUkzwFvgMFAFAvgYEbt+HjyBDPhZg0869zcPmSiamwwAPDH4JLBqcIB1YNbP6VAISEocp7zyS+7aAm4CG+2hAyfg4xQR0QJeAzNAC/gK3IiIbeB4rzzVvwRvSloBrgF7wDZwPSI+eEzaK1dSErwSES2D1w1eA+oGH48I9ZOvzBZUIyKVtGDwHYPPRcSaXbAxFG/PWGzd7vbL8V7OgtuGdNn9T7L9pdwt8382Z7HL+eQHIdCTkYV2xGPPA0uZPX8ZEfNO3Czzdqu9lA4sAvMGnLDFBrAWEXNebbNAdJGL/RHIWOsi8DTX3QLeA3UbkbooPu3lhIVVjKSjkjYlpf61MvFy0Z5Kqmau5IfWwGrRVdxNAzVgDKjYSrOvc9xE1UEz2dVOOZ4ssuSki8dvAZue1LDwKsB34FNmO/IF6ANJZ7za1oEuI68qsb8vA+ecpOZfA1iIiA1bsXJbcR94DryKiKbzy8T7Mpv2+V3x3qWOzyQ9ljSdvQU7nPtbkho2qNuSPnv+m67lWK6KfZRzuXqnK7hAuKcl7enPti3pojGSwntd0pikF570M2exNas76aM2uCtp3TVhKmm2iHie/WSO+XJp/96fNy3pQl+VcLtedyn9RdJS5kzHQauk7Gq7vbWiBCfyuihbrpUBT0b+Hdftg3IU7TfS9rqmKcc4wgAAAABJRU5ErkJggg==",
 	head = "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACHUlEQVR42sWXu4oUQRSG/9PTK8iiqKhgsIiRCuoLGAgmJgYiaqYvsMk+gi8gpqZGJsZippFMLHhLzAzEbNnAcbrrMzklRe9YU30ZPVAMXdN1zn9uf5+S/rPY0IPAn7Nmxj8B4EZnkjCzNtmvJFWSgpmFjYQKmHWejwIngOO59yaJADAzsxY4I+mOpHuSLkk6Jmkp6ZOkt5JemNmXmJ4xqVEnvAIeAN/IywJ4vKpOxhp/mhhZAg3QAsFX4/tRXgMnARsMIuYS2EsMt2siEDwKAC+Bqm9NdD2/mHgXKJcI4tGQwky9f55430daX5+9W8pTEV8EzgEHSZ77SuO/t3NRqDJ71yVtSwoDGRNft3ItX2W44VqiaCjLmqSr/hxKAWik4a5kqTkHYDERgKY3AC/EjyO/mDGC85ytVZs4h++O9DzqflWc0qT/7yetNKQNYwu+cQ6oivrfV+0E0gA/OzTbh4iWwI1iJky83+0oew/86gEisuYT11fn7NYr2mUu6aakHUkXJH2VdCDpmaTTBYUZ/7sMbElqp5qI7nbym/si4jR+at1cUP/lS2iJJ+bR+dGzLRcllX8IQHeoTMaxrU0MvFVPSmUAEU0GoHavKAR7pCQKJQCCF9EHSft+L2jcyKrVuN65pH2gGj0dJyPaQ+B7ARfMgfPp2dE3I/ckAGclXcmkopX0zswawCa5G3Qj0ffuOOnl1BWvAxIm9XyT8hvis440IPe4YwAAAABJRU5ErkJggg==",
 	skull = "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACnElEQVR42sWXv24UQQzGP+8d6AQkISflPRANtFDyDihSeirKVKTjFdJen5ZISCRdgIIiCIl0CAhCSEciioSQ7P5oPMha7e2/HDDSaHY9HtvjsT/PSP+5WRdmwCRlvg7vSU6iFWbG3C0FBn+D11ruWmYGkEm6K+mepNuSbjrbsaQ3knYkvTSzIq67zK6z8L0G7NPc9oG1Khm9lANjYDsoKIBz4KLUz30utW1g3MsIwLyPgdcu8BeQt/BA7rz42nGS10V5BlwF9oLyri2t2XNZWSsjUgQD6yVBubs6b9h95Elr11tlR7IQWAGmLqhwobFdVCiv4ilcxhRYiTpSKwdHsvCBpLGkItAPPc0O/T+mFzN45DLGLjPqqHX/JEQ7wBNgwecW/D+5PG/gSdkxaTyGkHq7wZVbVQgHbHXk2a1KyawFQm4CA2BoZjkwdCWbHXkqMyCbofhj6YwvXUpcZj38A0MfV1u6N0V5myNYjTq6pGFVgG1UpOFGTaDOTMM2QHTm42fghY9J8AfgVTC0zHPWCYhqoPi0tNsk+DFwawZcn/aC4ppiFCtfAXwDFp3/Xcj5i4CK3YvRjHL8LIBOAqenwBKwDDwKRib4ft67HFcYcQ04CvcBPLCOvH8vFSSAO41RL2nYbAMmaRRwIV1GxyXeopTjN3xtLZ40usbvdJTWZCVjFG7Lfwxqcx/scjapMu5Lui9pEq7jE6e97XrV72PA1Mx2JB2EuQOnTSveDHMxwDxeCkkDB5RRUDRy2iDEwpW5GOCBdCLpazpnM8uD+y3QUnwUkj6FOOlngAeRmdlPSQ/d7Sc+fSLpyHui/ZD0RdKamb0HMjMr5vEsS0VqCCz598hBaBkYOW0RuN6q6FzmlfRP34Y170QrH1ef9+BvFakQVyxwKl8AAAAASUVORK5CYII=",
 	mask = "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACrElEQVR42sWXv08UURDHv3N7BM6IIRZaWSgJISFYWVmSUBjtSCipLfBP8I8g/AEG/wSimEBiRWlFYqlCoeYwmCjG48ftfmxmk3HZO3bvjvCSze57M2/mu/PjzTzpmocNuhH4b6+ZceUAXGkiCTNLC7TE5aV1wFgNxY2oFGhJGvfpqZl1CmCyKkCsgvKGmWX+fUfSU0nPJD2SNOlsx5I+SHoj6a2ZHRb3Durnhr/HgJdAm8tH23nHooxhlM8Au0HBOdAFUiDzJ/W188C3C8wMBCIonweOguKsggWyAOQImK8FAjAgASaBvaC87sj37LmspJi6vQAk/l53AWfB1HWfM5exHmVXMf0cox9zZa5o9kjL55J+Ser4wSNJmaQ8r3v9SRrkNMJay2W+KKa+9bDElKQzSXfD8oSkMRf8O4CJsm450HNJJ4HWlpSY2XGdDFgHDoFvwA9gB3gMrHqut51+GOarzrPje747fROY8gC3SwsMcBs4LUT0bODbKPHxRqDPlmTOYlkgNvsY48TNjX93CrRu8HlSMHnHnwl3ybi/K50DCdAC3hf+YB9YAdb6RPqa8+wX1r8C94DGhTJ+CZiHYdpyi1UJwm7BYh+L5fsCgLxyAdOSVjwLopCYho0S8AQzxzSUu2BC0msz+xSrZBmA+5I+X1EH9sDMvkQAzdBSZUDiDJuSnniQNYdU2vUgfeeyk17uiHVgwYOnO4IjOJexULcebI8ARL53u3JJzlMFmAZ+hmZjEOWpy5h2mZV7gtwVSyV/U+fPAZYqmb4PiOXQFaV+xKYlSou0I2B5IOUlIGaArZLWKw29YRxboR9MhsqhKABYBF4BByUWOHDaYtneYS8mDb8N4fMbkuYk3XSWP37c/g1V1Ya6E/QpVMmg9JFdTvOrWmE5G/SCeq3jH1Qcd/QvykBnAAAAAElFTkSuQmCC",
@@ -95,7 +96,7 @@ local BAR_H = 32
 local ROW_H = 38
 local NAV = {
 	{ section = "Common" },
-	{ tab = "Fishing", icon = "ring" },
+	{ tab = "Fishing", icon = "rod" },
 	{ tab = "Collection", icon = "list" },
 	{ tab = "Teleport", icon = "globe" },
 	{ tab = "Player", icon = "person" },
@@ -2710,7 +2711,7 @@ end
 -- state shared by the page blocks below (each block is its own function for the register budget)
 local Fisch = { busy = false, cleanups = {}, home = nil }
 env.__FischShared = Fisch -- for live testing
-local choiceControl, infoRow, buttonRow, pickList
+local choiceControl, infoRow, buttonRow, pickList, rowPanel, dimRows, statsRow
 
 ;(function()
 -- single choice dropdown row
@@ -2797,6 +2798,72 @@ function buttonRow(box, text, fn, sub)
 		end
 	end)
 	return r
+end
+
+-- "⋯" button on a toggle row that opens a side panel with that function's settings.
+-- Returns the panel box to put the controls in.
+function rowPanel(id, title)
+	local rec = functions[id]
+	local pp = panel(title)
+	local b = panelBox(pp)
+	rec.setRight(80)
+	local dots, dotsIcon, dotsSt = iconButton(ICON.dots, 14, { AnchorPoint = Vector2.new(1, 0.5), Position = UDim2.new(1, -56, 0.5, 0), Size = UDim2.fromOffset(26, 22), Parent = rec.row })
+	on(dots.Activated, function()
+		if pp.open then
+			pp:hide()
+			return
+		end
+		local h = round(38 + pp.body.AbsoluteSize.Y + 10)
+		pp.h:snap(h)
+		pp.dir = 1
+		local rp = relPos(dots)
+		pp:place(rp.X + dots.AbsoluteSize.X + 8, rp.Y - 8, h)
+		pp:show(dots)
+	end)
+	onFrame(function()
+		local a = math.max(dotsSt.hover.x, pp.open and 1 or 0)
+		dots.BackgroundTransparency = 1 - 0.06 * a
+		dotsIcon.ImageColor3 = C.dim:Lerp(C.hi, a)
+	end)
+	return b
+end
+
+-- Fades the given toggle rows while active() is false: they only matter when the master switch is on.
+function dimRows(ids, active)
+	local items = {}
+	for _, id in ipairs(ids) do
+		local row = functions[id].row
+		for _, o in ipairs(row:GetDescendants()) do
+			if o:IsA("TextLabel") then items[#items + 1] = { o, "TextTransparency" }
+			elseif o:IsA("ImageLabel") or o:IsA("ImageButton") then items[#items + 1] = { o, "ImageTransparency" }
+			elseif o:IsA("Frame") and o.BackgroundTransparency < 1 and o.Size.Y.Offset ~= 1 then items[#items + 1] = { o, "BackgroundTransparency" } end
+		end
+	end
+	local k = spring(active() and 0 or 1, 18, 1e-3)
+	onFrame(function()
+		k.t = active() and 0 or 1
+		local v = k.x * 0.55
+		for _, it in ipairs(items) do
+			if it[1][it[2]] ~= v then it[1][it[2]] = v end
+		end
+	end)
+end
+
+-- One compact row of numbers with captions under them, e.g. Caught / Perfect / Lost.
+function statsRow(box, captions)
+	local n = boxRows[box] or 0
+	boxRows[box] = n + 1
+	local r = new("Frame", { BackgroundTransparency = 1, Size = UDim2.new(1, 0, 0, 54), LayoutOrder = (n + 1) * 100, Parent = box })
+	if n > 0 then new("Frame", { BackgroundColor3 = C.rowLine, BorderSizePixel = 0, Size = UDim2.new(1, 0, 0, 1), Parent = r }) end
+	local setters = {}
+	for i, cap in ipairs(captions) do
+		local col = new("Frame", { BackgroundTransparency = 1, Position = UDim2.fromScale((i - 1) / #captions, 0), Size = UDim2.new(1 / #captions, 0, 1, 0), Parent = r })
+		local v = label({ Text = "0", Font = Enum.Font.BuilderSansMedium, TextSize = 17, TextColor3 = C.hi, TextXAlignment = Enum.TextXAlignment.Center, Position = UDim2.fromOffset(0, 9), Size = UDim2.new(1, 0, 0, 20), Parent = col })
+		label({ Text = cap, TextSize = 11, TextColor3 = C.dim, TextXAlignment = Enum.TextXAlignment.Center, Position = UDim2.fromOffset(0, 31), Size = UDim2.new(1, 0, 0, 14), Parent = col })
+		if i > 1 then new("Frame", { BackgroundColor3 = C.rowLine, BorderSizePixel = 0, Position = UDim2.new(0, 0, 0, 12), Size = UDim2.new(0, 1, 1, -24), Parent = col }) end
+		setters[i] = function(t) C.setText(v, t) end
+	end
+	return setters
 end
 
 -- A searchable list living inside a group box. getItems() returns { { key, text, sub, color, action } }.
@@ -3138,6 +3205,8 @@ local left, right = columns(pages.Fishing)
 
 ---------------------------------------- controls
 
+-- left: the master switch first, its parts under it (faded while it's off); every part's settings
+-- sit behind its "⋯". Right: what's happening now, then selling.
 local g = group(left, "Auto Fish")
 local autoOn = toggleControl(g, "fish.auto", "Auto Fish", false)
 local equipOn = toggleControl(g, "fish.equip", "Auto Equip Rod", true)
@@ -3146,32 +3215,30 @@ local shakeOn = toggleControl(g, "fish.shake", "Auto Shake", true)
 local reelOn = toggleControl(g, "fish.reel", "Auto Reel", true)
 local cineOn = toggleControl(g, "fish.cinematic", "Cinematic Camera", false)
 
-local sellG = group(left, "Auto Sell")
+local castP = rowPanel("fish.cast", "Auto Cast")
+local castMode = choiceControl(castP, "fish.cast.mode", "Cast power", { "Perfect", "Random" }, "Perfect")
+local recastDelay = sliderControl(castP, "fish.cast.delay", "Recast delay", 0, 3000, 700, " ms")
+local shakeDelay = sliderControl(rowPanel("fish.shake", "Auto Shake"), "fish.shake.delay", "Extra shake delay", 0, 500, 40, " ms")
+local reelP = rowPanel("fish.reel", "Auto Reel")
+local reelMode = choiceControl(reelP, "fish.reel.mode", "Mode", { "Centered", "Legit" }, "Centered")
+local lookahead = sliderControl(reelP, "fish.reel.look", "Lookahead", 80, 500, 220, " ms")
+local cineP = rowPanel("fish.cinematic", "Cinematic Camera")
+local cineSpeed = sliderControl(cineP, "fish.cine.speed", "Orbit speed", 2, 40, 10, "")
+local cineDist = sliderControl(cineP, "fish.cine.dist", "Distance", 6, 40, 14, " st")
+dimRows({ "fish.equip", "fish.cast", "fish.shake", "fish.reel", "fish.cinematic" }, autoOn)
+
+local sg = group(right, "Session")
+local setStatus = infoRow(sg, "Status")
+local stats = statsRow(sg, { "Caught", "Perfect", "Lost" })
+local setCaught, setPerfect, setLost = stats[1], stats[2], stats[3]
+
+local sellG = group(right, "Auto Sell")
 local sellOn = toggleControl(sellG, "fish.sell", "Auto Sell", false)
-local sellAt = sliderControl(sellG, "fish.sell.at", "Sell at", 5, 150, 30, " fish")
+local sellAt = sliderControl(rowPanel("fish.sell", "Auto Sell"), "fish.sell.at", "Sell at", 5, 150, 30, " fish")
 buttonRow(sellG, "Sell now", function()
 	local ok, err = Fisch.sell()
 	toast(ok and "Sold everything that isn't favourited" or ("Sell failed: " .. tostring(err)))
 end, function() return Fisch.sellableCount() .. " sellable" end)
-
-local tg = group(left, "Timing")
-local castMode = choiceControl(tg, "fish.cast.mode", "Cast power", { "Perfect", "Random" }, "Perfect")
-local recastDelay = sliderControl(tg, "fish.cast.delay", "Recast delay", 0, 3000, 700, " ms")
-local shakeDelay = sliderControl(tg, "fish.shake.delay", "Extra shake delay", 0, 500, 40, " ms")
-
-local rg = group(right, "Reel")
-local reelMode = choiceControl(rg, "fish.reel.mode", "Mode", { "Centered", "Legit" }, "Centered")
-local lookahead = sliderControl(rg, "fish.reel.look", "Lookahead", 80, 500, 220, " ms")
-
-local cg = group(right, "Cinematic")
-local cineSpeed = sliderControl(cg, "fish.cine.speed", "Orbit speed", 2, 40, 10, "")
-local cineDist = sliderControl(cg, "fish.cine.dist", "Distance", 6, 40, 14, " st")
-
-local sg = group(right, "Session")
-local setStatus = infoRow(sg, "Status")
-local setCaught = infoRow(sg, "Caught")
-local setPerfect = infoRow(sg, "Perfect")
-local setLost = infoRow(sg, "Lost")
 
 ---------------------------------------- game state
 
@@ -3877,7 +3944,7 @@ end)()
 local left = columns(pages.Player)
 local mg = group(left, "Movement")
 local flyOn = toggleControl(mg, "move.fly", "Fly", false)
-local flySpeed = sliderControl(mg, "move.fly.speed", "Fly speed", 10, 250, 70, "")
+local flySpeed = sliderControl(rowPanel("move.fly", "Fly"), "move.fly.speed", "Fly speed", 10, 250, 70, "")
 local FLY_STEP = "FischMenuFly" .. gui.Name
 local fly = {}
 local function teardown()
