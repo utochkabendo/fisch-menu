@@ -129,6 +129,13 @@ local C = {
 	danger = rgb(226, 96, 96),
 }
 local DEFAULT_ACCENT = rgb(96, 156, 245)
+C.src = setmetatable({}, { __mode = "k" })
+C.rows = setmetatable({}, { __mode = "k" })
+function C.setText(o, s)
+	local cur = C.src[o]
+	if cur == nil then cur = o.Text end
+	if cur ~= s then o.Text = s end
+end
 
 ---------------------------------------------------------------- springs & frame loop
 
@@ -1917,7 +1924,7 @@ local picker, pickValue, pickTarget, pickDrag, openPicker, colorMenu
 
 		if not hexField:IsFocused() then
 			local s = "#" .. hex6(cv:rgb())
-			if hexField.Text ~= s then hexField.Text = s end
+			C.setText(hexField, s)
 		end
 		if pickMode ~= "HEX" then
 			local vals = { fieldValues() }
@@ -1928,7 +1935,7 @@ local picker, pickValue, pickTarget, pickDrag, openPicker, colorMenu
 		end
 		if not alphaField:IsFocused() then
 			local s = round(cv.a * 100) .. "%"
-			if alphaField.Text ~= s then alphaField.Text = s end
+			C.setText(alphaField, s)
 		end
 
 		fmtBtn.BackgroundColor3 = C.field:Lerp(C.fieldHover, fmtSt.hover.x)
@@ -1989,6 +1996,7 @@ local function itemRow(box, text)
 	local n = boxRows[box] or 0
 	boxRows[box] = n + 1
 	local r = button({ Size = UDim2.new(1, 0, 0, ROW_H), LayoutOrder = (n + 1) * 100, Parent = box }, { corner(10) })
+	C.rows[r] = text
 	if n > 0 then
 		new("Frame", { BackgroundColor3 = C.rowLine, BorderSizePixel = 0, Size = UDim2.new(1, 0, 0, 1), Parent = r })
 	end
@@ -2132,7 +2140,7 @@ do
 			return
 		end
 		local t = listening and "..." or (b.key and keyName(b.key) or "None")
-		if keyLbl.Text ~= t then keyLbl.Text = t end
+		C.setText(keyLbl, t)
 		local l = listening and 1 or 0
 		local pulse = 0.6 + 0.4 * math.sin(os.clock() * 6)
 		keyStroke.Color = C.fieldStroke:Lerp(C.dim, keySt.hover.x * 0.4):Lerp(accent, l * pulse)
@@ -2186,7 +2194,7 @@ do
 			if e.b then
 				local listening = listeningBind == e.b.listener
 				local txt = listening and "..." or (e.b.key and keyName(e.b.key) or "None")
-				if t.Text ~= txt then t.Text = txt end
+				C.setText(t, txt)
 				col = listening and accent or (e.b.key and C.text or C.dim):Lerp(C.hi, st.hover.x)
 			else
 				col = base:Lerp(opts.danger and rgb(255, 130, 130) or C.hi, st.hover.x)
@@ -2539,7 +2547,7 @@ local function multiDropdown(box, id, text, items)
 		local names = {}
 		for _, it in ipairs(items) do if chosen[it] then names[#names + 1] = it end end
 		local s2 = #names > 0 and table.concat(names, ", ") or "None"
-		if lbl.Text ~= s2 then lbl.Text = s2 end
+		C.setText(lbl, s2)
 		lbl.TextColor3 = #names > 0 and C.text or C.dim
 		local openA = 1 - pop.alpha.x
 		b.BackgroundColor3 = C.field:Lerp(C.fieldHover, math.max(st.hover.x, openA) * 0.7)
@@ -2573,7 +2581,7 @@ local function keybindControl(box, text, get, set)
 		local isL = listeningBind == state
 		listen.t = isL and 1 or 0
 		local t = isL and "..." or keyName(get())
-		if lbl.Text ~= t then lbl.Text = t end
+		C.setText(lbl, t)
 		w.t = math.max(56, textWidth(t, 12, Enum.Font.GothamMedium) + 24)
 		b.Size = UDim2.fromOffset(round(w.x), 24)
 		setRight(round(w.x) + 8)
@@ -2638,7 +2646,7 @@ local function sliderControl(box, id, text, min, max, default, suffix)
 		track.Size = UDim2.fromOffset(W, round(4 + 2 * active))
 		track.BackgroundColor3 = C.toggleOff:Lerp(C.fieldStroke, active * 0.6)
 		local t = wide and suffix(value) or tostring(value) .. (suffix or "")
-		if val.Text ~= t then val.Text = t end
+		C.setText(val, t)
 		val.TextColor3 = C.dim:Lerp(C.text, active)
 	end)
 	return function() return value end, function(v) value = math.clamp(round(v), min, max) end
@@ -2688,9 +2696,11 @@ end
 
 ---------------------------------------------------- Settings
 local settingsLeft = columns(pages.Settings)
+local settingsMenu
 do
 	local left = settingsLeft
 	local menuBox = group(left, "Menu")
+	settingsMenu = menuBox
 	keybindControl(menuBox, "Menu key", function() return menuKey end, function(k) menuKey = k end)
 	colorControl(menuBox, "Menu color", menuColor)
 end
@@ -2746,7 +2756,7 @@ function choiceControl(box, id, text, items, default)
 		end
 	end)
 	onFrame(function()
-		if lbl.Text ~= value then lbl.Text = value end
+		C.setText(lbl, value)
 		local openA = 1 - pop.alpha.x
 		b.BackgroundColor3 = C.field:Lerp(C.fieldHover, math.max(st.hover.x, openA) * 0.7)
 		s.Color = C.fieldStroke:Lerp(C.dim, math.max(st.hover.x * 0.4, openA * 0.5))
@@ -2765,7 +2775,7 @@ function infoRow(box, text)
 		Text = "", TextSize = 13, TextColor3 = C.dim, TextXAlignment = Enum.TextXAlignment.Right,
 		AnchorPoint = Vector2.new(1, 0.5), Position = UDim2.new(1, -14, 0.5, 0), Size = UDim2.fromOffset(120, 20), Parent = r,
 	})
-	return function(s) if v.Text ~= s then v.Text = s end end
+	return function(s) C.setText(v, s) end
 end
 
 -- clickable row with an arrow: runs fn; sub (string or function) is shown dim on the right
@@ -2783,7 +2793,7 @@ function buttonRow(box, text, fn, sub)
 		chev.ImageColor3 = C.dim:Lerp(C.hi, st.hover.x)
 		if v then
 			local t = type(sub) == "function" and sub() or sub
-			if v.Text ~= t then v.Text = t end
+			C.setText(v, t)
 		end
 	end)
 	return r
@@ -2848,9 +2858,9 @@ function pickList(box, getItems, searchable, height, empty)
 				k += 1
 				local r = row(k)
 				r.item = it
-				if r.t.Text ~= it.text then r.t.Text = it.text end
+				C.setText(r.t, it.text)
 				local sub = it.sub or ""
-				if r.s.Text ~= sub then r.s.Text = sub end
+				C.setText(r.s, sub)
 				r.b.Visible = true
 			end
 		end
@@ -3606,7 +3616,9 @@ local function makeRow()
 	r.ic = new("ImageLabel", { BackgroundTransparency = 1, Position = UDim2.fromOffset(10, 3), Size = UDim2.fromOffset(28, 28), ScaleType = Enum.ScaleType.Fit, Parent = r.b })
 	r.nm = label({ Font = Enum.Font.GothamMedium, TextSize = 13, TextColor3 = Color3.new(1, 1, 1), Position = UDim2.fromOffset(48, 0), Size = UDim2.new(1, -250, 1, 0), TextTruncate = Enum.TextTruncate.AtEnd, Parent = r.b })
 	r.grad = new("UIGradient", { Parent = r.nm })
+	r.nm:SetAttribute("rarity", true) -- fish names never match a menu word, rarity tags must not
 	r.rar = label({ TextSize = 11, TextColor3 = C.dim, TextXAlignment = Enum.TextXAlignment.Right, AnchorPoint = Vector2.new(1, 0.5), Position = UDim2.new(1, -128, 0.5, 0), Size = UDim2.fromOffset(100, 20), Parent = r.b })
+	r.rar:SetAttribute("rarity", true)
 	r.kgF = new("Frame", { BackgroundColor3 = C.field, BorderSizePixel = 0, AnchorPoint = Vector2.new(1, 0.5), Position = UDim2.new(1, -44, 0.5, 0), Size = UDim2.fromOffset(74, 24), Parent = r.b }, { corner(6) })
 	r.kgS = stroke(C.fieldStroke, r.kgF)
 	r.kg = new("TextBox", {
@@ -3621,6 +3633,7 @@ local function makeRow()
 	-- header look
 	r.hd = label({ Font = Enum.Font.GothamBold, TextSize = 11, TextColor3 = Color3.new(1, 1, 1), Position = UDim2.fromOffset(12, 0), Size = UDim2.new(0.5, 0, 1, 0), Parent = r.b })
 	r.hdGrad = new("UIGradient", { Parent = r.hd })
+	r.hd:SetAttribute("rarity", true)
 	r.hdN = label({ TextSize = 11, TextColor3 = C.faint, TextXAlignment = Enum.TextXAlignment.Right, AnchorPoint = Vector2.new(1, 0), Position = UDim2.new(1, -12, 0, 0), Size = UDim2.fromOffset(120, ROW_H - 4), Parent = r.b })
 	r.hdLine = new("Frame", { BorderSizePixel = 0, BackgroundTransparency = 0.7, Position = UDim2.new(0, 12, 1, -2), Size = UDim2.new(1, -24, 0, 1), Parent = r.b })
 	on(r.b.Activated, function()
@@ -3676,7 +3689,7 @@ onFrame(function()
 	local nSel = 0
 	for _ in pairs(rules) do nSel += 1 end
 	local t = #entries .. " fish  ·  " .. nSel .. " selected"
-	if countLbl.Text ~= t then countLbl.Text = t end
+	C.setText(countLbl, t)
 
 	local y, h = list.CanvasPosition.Y, list.AbsoluteSize.Y
 	if dirty or y ~= lastY or h ~= lastH then
@@ -3984,10 +3997,10 @@ onFrame(function()
 				r.s.t = on_ and 1 or 0
 				r.f.Visible = true
 				r.f.Position = UDim2.fromOffset(0, n * (PILL_H + GAP))
-				if r.name.Text ~= rec.text then r.name.Text = rec.text end
+				C.setText(r.name, rec.text)
 				local k = "[" .. keyName(b.key) .. "]"
-				if r.key.Text ~= k then r.key.Text = k end
-				local w = round(48 + textWidth(rec.text, 12, Enum.Font.GothamMedium) + 12 + textWidth(k, 11, Enum.Font.Gotham) + 12)
+				C.setText(r.key, k)
+				local w = round(48 + textWidth(r.name.Text, 12, Enum.Font.GothamMedium) + 12 + textWidth(k, 11, Enum.Font.Gotham) + 12)
 				r.f.Size = UDim2.fromOffset(math.max(w, 120), PILL_H)
 				local a = r.s.x
 				r.track.BackgroundColor3 = C.toggleOff:Lerp(accent, a)
@@ -4000,6 +4013,252 @@ onFrame(function()
 	for i = n + 1, #rows do rows[i].f.Visible = false end
 	host.Visible = vis and n > 0
 	host.Position = UDim2.fromOffset(round(pos.x), round(pos.y))
+end)
+end)()
+
+---------------------------------------------------- Language + function info tooltips
+
+;(function()
+local lang = choiceControl(settingsMenu, "ui.lang", "Language", { "English", "Русский" }, "English")
+local infoOn = toggleControl(settingsMenu, "ui.info", "Function info", false)
+Fisch.setLang = function(v) options["ui.lang"].load(v) end -- testing
+
+local RAR = {
+	["Trash"] = "Мусор", ["Common"] = "Обычная", ["Uncommon"] = "Необычная", ["Unusual"] = "Странная", ["Rare"] = "Редкая",
+	["Legendary"] = "Легендарная", ["Mythical"] = "Мифическая", ["Exotic"] = "Экзотическая", ["Secret"] = "Секретная",
+	["Limited"] = "Лимитированная", ["Limited+"] = "Лимитированная+", ["Relic"] = "Реликвия", ["Fragment"] = "Фрагмент",
+	["Seed"] = "Семя", ["Gemstone"] = "Самоцвет", ["Apex"] = "Апекс", ["Extinct"] = "Вымершая", ["Special"] = "Особая",
+	["Divine Secret"] = "Божественная тайна",
+}
+local RU = {
+	-- tabs, sections, groups
+	["Fishing"] = "Рыбалка", ["Collection"] = "Коллекция", ["Teleport"] = "Телепорт",
+	["Player"] = "Игрок", ["Settings"] = "Настройки", ["Menu"] = "Меню", ["Indicators"] = "Индикаторы",
+	["Auto Fish"] = "Автофиш", ["Timing"] = "Тайминги", ["Reel"] = "Вытягивание", ["Session"] = "Сессия",
+	["Auto Sell"] = "Автопродажа", ["Cinematic"] = "Кинокамера", ["Nearest"] = "Ближайшие", ["Islands"] = "Острова",
+	["NPCs"] = "NPC", ["Rare Fish"] = "Редкие рыбы", ["Movement"] = "Передвижение",
+	-- rows
+	["Auto Equip Rod"] = "Автоэкип удочки", ["Auto Cast"] = "Автозаброс", ["Auto Shake"] = "Автошейк",
+	["Auto Reel"] = "Автовытягивание", ["Cinematic Camera"] = "Кинокамера", ["Sell at"] = "Продавать при",
+	["Sell now"] = "Продать сейчас", ["Cast power"] = "Сила заброса", ["Recast delay"] = "Задержка заброса",
+	["Extra shake delay"] = "Доп. задержка шейка", ["Mode"] = "Режим", ["Lookahead"] = "Предсказание",
+	["Orbit speed"] = "Скорость облёта", ["Distance"] = "Дистанция", ["Status"] = "Статус", ["Caught"] = "Поймано",
+	["Perfect"] = "Идеально", ["Lost"] = "Сорвалось", ["Auto favourite"] = "Автоизбранное",
+	["Merchant"] = "Торговец", ["Appraiser"] = "Оценщик", ["Inn Keeper"] = "Трактирщик", ["Angler"] = "Рыбак",
+	["Save this spot"] = "Сохранить точку", ["Back to saved spot"] = "Вернуться на точку", ["Alerts"] = "Оповещения",
+	["Fly"] = "Полёт", ["Fly speed"] = "Скорость полёта", ["Menu key"] = "Клавиша меню", ["Menu color"] = "Цвет меню",
+	["Hotkey list"] = "Список хоткеев", ["Language"] = "Язык", ["Function info"] = "Инфо о функциях",
+	["Hotkeys"] = "Хоткеи",
+	-- choices, pills, states
+	["Random"] = "Случайно", ["Centered"] = "По центру", ["Legit"] = "Легит", ["All"] = "Все", ["Selected"] = "Выбранные",
+	["Off"] = "Выключен", ["Busy"] = "Занят", ["Reeling"] = "Вытягивает", ["Shaking"] = "Шейк", ["No rod"] = "Нет удочки",
+	["Equipping"] = "Берёт удочку", ["Waiting for bite"] = "Ждёт поклёвку", ["Ready"] = "Готов", ["Selling"] = "Продаёт",
+	["Dead"] = "Мёртв", ["Casting"] = "Забрасывает", ["Idle"] = "Ожидание", ["none"] = "нет", ["not seen yet"] = "ещё не встречался",
+	["Nothing here"] = "Пусто", ["No NPCs found"] = "NPC не найдены", ["None active right now"] = "Сейчас нет активных",
+	["kg"] = "кг", ["Search"] = "Поиск", ["Search fish or rarity"] = "Поиск рыбы или редкости", ["any"] = "любой",
+	-- toasts
+	["Spot saved"] = "Точка сохранена", ["No spot saved"] = "Точка не сохранена", ["It's gone"] = "Уже исчезла",
+	["Sold everything that isn't favourited"] = "Продано всё, кроме избранного",
+	-- framework
+	["Injecting"] = "Загрузка", ["Injected"] = "Загружено", ["Presets"] = "Пресеты", ["Config name"] = "Имя конфига",
+	["Config copied to clipboard"] = "Конфиг скопирован", ["Copy"] = "Копировать", ["Paste"] = "Вставить",
+	["Duplicate"] = "Дублировать", ["Delete"] = "Удалить", ["Delete forever"] = "Удалить навсегда", ["Restore"] = "Восстановить",
+	["Share"] = "Поделиться", ["Trash is empty"] = "Корзина пуста", ["No configs"] = "Нет конфигов",
+	["No config"] = "Нет конфига", ["Nothing found"] = "Ничего не найдено", ["All Hotkeys"] = "Все хоткеи",
+	["New Hotkey"] = "Новый хоткей", ["No hotkeys"] = "Нет хоткеев", ["Reset"] = "Сбросить", ["Key"] = "Клавиша",
+	["Value"] = "Значение", ["Hold"] = "Удерж.", ["Toggle"] = "Переключ.", ["None"] = "Нет",
+}
+local PATTERNS = {
+	{ "^(%d+) sellable$", "%1 к продаже" },
+	{ "^(%d+) fish  ·  (%d+) selected$", "%1 рыб  ·  выбрано %2" },
+	{ "^(%d+) fish$", "%1 рыб" },
+	{ "^(%d+) st away$", "%1 ст от тебя" },
+	{ "^(%d+) st$", "%1 ст" },
+	{ "^(%d+) ms$", "%1 мс" },
+	{ "^(.-)  (%d+) st$", "%1  %2 ст" },
+	{ "^Favourited (.+)  ([%d.]+) kg$", "В избранное: %1  %2 кг" },
+	{ "^(.+) appeared$", "Появилась: %1" },
+	{ "^Sell failed: (.+)$", "Продажа не удалась: %1" },
+	{ "^Auto sell: (.+)$", "Автопродажа: %1" },
+	{ "^No .+ seen yet, visit an island first$", "Ещё не встречался, сначала посети его остров" },
+	{ "^Ready %[(%d+)/(%d+)%]$", "Готово [%1/%2]" },
+	{ "^Initialization in progress %[(%d+)/(%d+)%]%.%.%.$", "Инициализация [%1/%2]..." },
+}
+-- labels tagged with the "rarity" attribute (fish list) use rarity names, everything else menu words
+local MENU_WORDS = { Common = "Общее", Trash = "Корзина" }
+
+-- Cyrillic-aware upper(): group titles are shown in caps
+local function upper(s)
+	return (s:gsub("[%z\1-\127\194-\244][\128-\191]*", function(ch)
+		local cp = utf8.codepoint(ch)
+		if cp >= 0x430 and cp <= 0x44F then return utf8.char(cp - 0x20) end
+		if cp == 0x451 then return utf8.char(0x401) end
+		return ch:upper()
+	end))
+end
+local RUU, RARU = {}, {}
+for en, ru in pairs(RU) do RUU[en:upper()] = upper(ru) end
+for en, ru in pairs(RAR) do RARU[en:upper()] = upper(ru) end
+for en, ru in pairs(MENU_WORDS) do RU[en] = ru; RUU[en:upper()] = upper(ru) end
+for en, ru in pairs(RAR) do if not RU[en] then RU[en] = ru end end
+local function translate(s, o)
+	if s == "" then return s end
+	if o and o:GetAttribute("rarity") then return RAR[s] or RARU[s] or s end
+	local t = RU[s] or RUU[s]
+	if t then return t end
+	for _, p in ipairs(PATTERNS) do
+		local r, n = s:gsub(p[1], p[2])
+		if n > 0 then return r end
+	end
+	return s
+end
+
+---------------------------------------- live translation of every label under the menu gui
+
+local ph = setmetatable({}, { __mode = "k" }) -- TextBox -> English placeholder
+local setting = false
+local isRu = false
+-- what the layer itself wrote: Text-changed signals are deferred, so a flag alone can't tell them apart
+local mine = setmetatable({}, { __mode = "k" })
+local function apply(o)
+	local src = C.src[o]
+	if type(src) ~= "string" then return end
+	local want = isRu and translate(src, o) or src
+	if o.Text ~= want then
+		setting = true
+		mine[o] = want
+		o.Text = want
+		setting = false
+	end
+end
+local function register(o)
+	if not o.Parent then return end
+	if o:IsA("TextBox") then
+		if ph[o] == nil and o.PlaceholderText ~= "" then
+			ph[o] = o.PlaceholderText
+			if isRu then o.PlaceholderText = translate(ph[o]) end
+		end
+		return
+	end
+	if not (o:IsA("TextLabel") or o:IsA("TextButton")) or C.src[o] ~= nil then return end
+	C.src[o] = o.Text
+	o:GetPropertyChangedSignal("Text"):Connect(function()
+		if setting or C.src[o] == false or o.Text == mine[o] then return end
+		C.src[o] = o.Text
+		if isRu then apply(o) end
+	end)
+	if isRu then apply(o) end
+end
+for _, o in ipairs(gui:GetDescendants()) do register(o) end
+on(gui.DescendantAdded, function(o) task.defer(register, o) end)
+local function applyAll()
+	for o in pairs(C.src) do if o.Parent then apply(o) end end
+	for o, en in pairs(ph) do if o.Parent then o.PlaceholderText = isRu and translate(en) or en end end
+end
+
+---------------------------------------- function info
+
+local D = {
+	["Auto Fish"] = { "Master switch: equips the rod, casts, shakes and reels by itself.", "Главный тумблер: сам берёт удочку, забрасывает, шейкает и вытягивает.", "On / Off", "Вкл / Выкл" },
+	["Auto Equip Rod"] = { "Takes your current rod out of the backpack when it isn't in hand.", "Достаёт текущую удочку из рюкзака, если она не в руке.", "On / Off", "Вкл / Выкл" },
+	["Auto Cast"] = { "Holds the cast and releases at the top of the power meter.", "Зажимает заброс и отпускает на пике шкалы силы.", "On / Off", "Вкл / Выкл" },
+	["Auto Shake"] = { "Presses Enter on the shake button as fast as the game allows.", "Жмёт Enter по кнопке шейка так быстро, как позволяет игра.", "On / Off", "Вкл / Выкл" },
+	["Auto Reel"] = { "Keeps the fish inside your bar during the reel minigame.", "Держит рыбу внутри полоски в мини-игре вытягивания.", "On / Off", "Вкл / Выкл" },
+	["Cinematic Camera"] = { "While auto fish runs, the camera slowly orbits your character.", "Пока работает автофиш, камера плавно облетает персонажа.", "On / Off", "Вкл / Выкл" },
+	["Auto Sell"] = { "Between casts, sells at the nearest merchant and brings you back. Favourites are never sold.", "Между забросами продаёт у ближайшего торговца и возвращает назад. Избранное не продаётся.", "On / Off", "Вкл / Выкл" },
+	["Sell at"] = { "How many sellable fish trigger a sale.", "Сколько рыбы на продажу нужно, чтобы продать.", "5 – 150, default 30", "5 – 150, по умолчанию 30" },
+	["Sell now"] = { "Sells everything that isn't favourited right now.", "Сразу продаёт всё, кроме избранного.", "", "" },
+	["Cast power"] = { "Perfect releases at the top for a perfect cast, Random at a random power.", "Идеально — отпускает на пике (perfect cast), Случайно — на случайной силе.", "Perfect / Random", "Идеально / Случайно" },
+	["Recast delay"] = { "Pause after a catch before the next cast.", "Пауза после улова перед следующим забросом.", "0 – 3000 ms, default 700", "0 – 3000 мс, по умолчанию 700" },
+	["Extra shake delay"] = { "Added on top of the game's own shake cooldown.", "Добавляется к собственному кулдауну шейка в игре.", "0 – 500 ms, default 40", "0 – 500 мс, по умолчанию 40" },
+	["Mode"] = { "Centered keeps the fish dead center, Legit lets it drift inside the bar.", "По центру — рыба ровно в центре, Легит — гуляет внутри полоски.", "Centered / Legit", "По центру / Легит" },
+	["Lookahead"] = { "How far ahead the bar and fish movement are predicted.", "На сколько вперёд предсказывается движение полоски и рыбы.", "80 – 500 ms, default 220", "80 – 500 мс, по умолчанию 220" },
+	["Orbit speed"] = { "How fast the cinematic camera circles you.", "Как быстро кинокамера облетает тебя.", "2 – 40, default 10", "2 – 40, по умолчанию 10" },
+	["Distance"] = { "How far the cinematic camera stays from you.", "На каком расстоянии держится кинокамера.", "6 – 40 studs, default 14", "6 – 40 ст, по умолчанию 14" },
+	["Auto favourite"] = { "Freshly caught fish that match your list and weight go to favourites.", "Свежепойманная рыба из твоего списка и нужного веса уходит в избранное.", "On / Off", "Вкл / Выкл" },
+	["Merchant"] = { "Teleports to the nearest merchant you've seen.", "Телепорт к ближайшему встреченному торговцу.", "", "" },
+	["Appraiser"] = { "Teleports to the nearest appraiser you've seen.", "Телепорт к ближайшему встреченному оценщику.", "", "" },
+	["Inn Keeper"] = { "Teleports to the nearest inn keeper you've seen.", "Телепорт к ближайшему встреченному трактирщику.", "", "" },
+	["Angler"] = { "Teleports to the nearest angler you've seen.", "Телепорт к ближайшему встреченному рыбаку.", "", "" },
+	["Save this spot"] = { "Remembers where you stand now.", "Запоминает, где ты стоишь сейчас.", "", "" },
+	["Back to saved spot"] = { "Teleports back to the saved spot.", "Телепорт обратно на сохранённую точку.", "", "" },
+	["Alerts"] = { "Pops a card with a TP button when a rare fish event appears.", "Показывает карточку с кнопкой TP, когда появляется событие редкой рыбы.", "On / Off", "Вкл / Выкл" },
+	["Fly"] = { "WASD along the camera, Space up, Ctrl down. Nothing pulls you back.", "WASD по камере, Space вверх, Ctrl вниз. Назад не откидывает.", "On / Off", "Вкл / Выкл" },
+	["Fly speed"] = { "Flying speed.", "Скорость полёта.", "10 – 250, default 70", "10 – 250, по умолчанию 70" },
+	["Menu key"] = { "Key that opens and closes the menu.", "Клавиша открытия и закрытия меню.", "default Insert", "по умолчанию Insert" },
+	["Menu color"] = { "Accent color of the menu.", "Акцентный цвет меню.", "", "" },
+	["Hotkey list"] = { "Floating list of every bound function and its state. Drag it by the header.", "Плавающий список всех забинженных функций и их состояния. Таскается за заголовок.", "On / Off", "Вкл / Выкл" },
+	["Language"] = { "Menu language. Fish, island and NPC names stay as in the game.", "Язык меню. Названия рыб, островов и NPC остаются как в игре.", "English / Русский", "English / Русский" },
+	["Function info"] = { "Hover a function for a second to see what it does.", "Наведи на функцию на секунду, чтобы увидеть, что она делает.", "On / Off", "Вкл / Выкл" },
+}
+
+local tip = new("Frame", {
+	BackgroundColor3 = C.popup, BorderSizePixel = 0, Size = UDim2.fromOffset(260, 0), AutomaticSize = Enum.AutomaticSize.Y,
+	Visible = false, ZIndex = 300, Parent = gui,
+}, {
+	corner(8),
+	new("UIPadding", { PaddingTop = UDim.new(0, 9), PaddingBottom = UDim.new(0, 10), PaddingLeft = UDim.new(0, 12), PaddingRight = UDim.new(0, 12) }),
+	new("UIListLayout", { SortOrder = Enum.SortOrder.LayoutOrder, Padding = UDim.new(0, 5) }),
+})
+stroke(C.popupStroke, tip)
+local tTitle = new("TextLabel", { BackgroundTransparency = 1, Font = Enum.Font.GothamMedium, TextSize = 13, TextColor3 = C.hi, TextXAlignment = Enum.TextXAlignment.Left, Size = UDim2.new(1, 0, 0, 16), LayoutOrder = 1, ZIndex = 301 })
+local tDesc = new("TextLabel", { BackgroundTransparency = 1, Font = Enum.Font.Gotham, TextSize = 12, TextColor3 = C.text, TextWrapped = true, TextXAlignment = Enum.TextXAlignment.Left, Size = UDim2.new(1, 0, 0, 0), AutomaticSize = Enum.AutomaticSize.Y, LayoutOrder = 2, ZIndex = 301 })
+local tVal = new("TextLabel", { BackgroundTransparency = 1, Font = Enum.Font.Gotham, TextSize = 11, TextColor3 = C.dim, TextXAlignment = Enum.TextXAlignment.Left, Size = UDim2.new(1, 0, 0, 14), LayoutOrder = 3, ZIndex = 301 })
+-- the tooltip writes its own language: keep the translation layer off it
+for _, o in ipairs({ tTitle, tDesc, tVal }) do
+	C.src[o] = false
+	o.Parent = tip
+end
+
+local function shown(g)
+	local o = g
+	while o and o ~= gui do
+		if o:IsA("GuiObject") and not o.Visible then return false end
+		o = o.Parent
+	end
+	return o == gui
+end
+local hov, since = nil, 0
+local lastLang
+local last = os.clock()
+onFrame(function()
+	local now = os.clock()
+	local dt = now - last
+	last = now
+	local ru = lang() == "Русский"
+	if ru ~= lastLang then
+		lastLang, isRu = ru, ru
+		applyAll()
+	end
+	local found
+	if infoOn() and holder.Visible then
+		local m = mouseAbs()
+		for r, text in pairs(C.rows) do
+			if D[text] and r.Parent and inside(r, m) and shown(r) then found = r break end
+		end
+	end
+	if found ~= hov then hov, since = found, 0 end
+	since += dt
+	if not (hov and since >= 1) then
+		tip.Visible = false
+		return
+	end
+	local key = C.rows[hov]
+	local d = D[key]
+	local title = ru and translate(key) or key
+	C.setText(tTitle, title)
+	local desc = ru and d[2] or d[1]
+	C.setText(tDesc, desc)
+	local vals = ru and d[4] or d[3]
+	local v = vals ~= "" and ((ru and "Значения: " or "Values: ") .. vals) or ""
+	C.setText(tVal, v)
+	tVal.Visible = v ~= ""
+	local p = mouseAbs() - probe.AbsolutePosition
+	local vp = gui.AbsoluteSize
+	local x = math.min(p.X + 16, vp.X - 270)
+	local y = math.min(p.Y + 18, vp.Y - tip.AbsoluteSize.Y - 8)
+	tip.Position = UDim2.fromOffset(round(x), round(y))
+	tip.Visible = true
 end)
 end)()
 
