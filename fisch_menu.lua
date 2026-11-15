@@ -4078,13 +4078,29 @@ buttonRow(q, "Back to saved spot", function()
 end, function() return Fisch.home and dist(Fisch.home.Position) or "none" end)
 
 -- islands (approximate centers; the teleport finds the ground or water under them)
+-- Every Sea 1 location. Coordinates from the Fisch wiki / map guides, each checked in game by streaming
+-- the area in and finding ground (or the cave floor) under it. 5th value: how far above the point the
+-- landing search starts (caves and interiors search just above the point, not from the sky).
 local ISLANDS = {
-	{ "Moosewood", 400, 135, 250 }, { "Moosewood Docks", 360, 133, 264 }, { "Roslit Bay", -1600, 130, 500 },
-	{ "Roslit Dock", -1462, 132, 717 }, { "Mushgrove Swamp", 2420, 135, -750 }, { "Snowcap Island", 2625, 135, 2370 },
-	{ "Sunstone Island", -870, 135, -1100 }, { "Statue of Sovereignty", 35, 135, -1010 }, { "Terrapin Island", -95, 130, 1875 },
-	{ "The Arch", 1100, 130, -1250 }, { "Harvester's Spike", -1260, 135, 1550 }, { "Birch Cay", 1650, 130, -2350 },
-	{ "Earmark Island", 1200, 130, 530 }, { "Haddock Rock", -500, 125, -505 }, { "Desolate Deep", -800, 130, -3100 },
-	{ "Forsaken Shores", -2750, 130, 1450 }, { "Ancient Isle", 6000, 200, 300 },
+	-- starter
+	{ "Moosewood", 400, 135, 250 }, { "Moosewood Docks", 360, 133, 264 }, { "Shady Bazaar", 693, 134, 320, 6 },
+	{ "Roslit Bay", -1450, 135, 750 }, { "Roslit Volcano", -1888, 163, 329, 40 }, { "Submarine Depot", -1305, 130, 310 },
+	{ "Terrapin Island", -200, 130, 1925 },
+	-- islands
+	{ "Mushgrove Swamp", 2425, 130, -670 }, { "Sunstone Island", -935, 130, -1105 }, { "Statue of Sovereignty", 20, 160, -1040, 40 },
+	{ "The Arch", 1100, 130, -1250, 20 }, { "Earmark Island", 1200, 130, 530 }, { "Haddock Rock", -500, 125, -505 },
+	{ "Birch Cay", 1650, 130, -2350 }, { "Everturn Forest", 2365, 130, -2330 }, { "Harvester's Spike", -1260, 135, 1550 },
+	{ "Castaway Cliffs", 690, 135, -1693 }, { "Tidefall", 3223, 130, 850 }, { "Forsaken Shores", -2425, 135, 1555 },
+	{ "Grand Reef", -3530, 130, 550 }, { "Lost Jungle", -2680, 154, -2078 }, { "Scoria Reach", -4781, 138, -1378 },
+	{ "Drylands", -6200, 180, -1500 },
+	-- far
+	{ "Snowcap Island", 2625, 135, 2370 }, { "Ancient Isle", 5900, 200, 350 }, { "Skycrest", 2900, 1620, 900, 40 },
+	{ "Northern Expedition", 20000, 133, 5300 }, { "Boreal Pines", 21400, 135, 4123 }, { "Treasure Island", 8582, 175, -17304 },
+	{ "The Deep", -194, 130, -4669 }, { "Desolate Deep", -790, 125, -3100 }, { "Mariana's Veil", -1500, 125, 530 },
+	-- underground / secret
+	{ "Vertigo", -110, -515, 1040, 12 }, { "The Depths", 472, -706, 1231, 12 }, { "Crystal Cove", 1364, -612, 2472, 12 },
+	{ "Keeper's Altar", 1380, -805, -300, 12 }, { "Brine Pool", -1600, -110, -2845, 12 }, { "Luminescent Cavern", -1013, -313, -4038, 12 },
+	{ "Atlantis", -4300, -580, 1800, 30 }, { "Wrath of Olympus", -4265, -1117, 1825, 12 },
 }
 -- each island in the game's own location color (library.locations), regions as colored headers
 local LOC = require(game:GetService("ReplicatedStorage").shared.modules.library.locations)
@@ -4099,10 +4115,13 @@ local function locColor(name)
 	return C.text
 end
 local REGIONS = {
-	{ "Starter", { "Moosewood", "Moosewood Docks", "Roslit Bay", "Roslit Dock", "Terrapin Island" } },
-	{ "Open Sea", { "Mushgrove Swamp", "Sunstone Island", "Statue of Sovereignty", "The Arch", "Earmark Island", "Haddock Rock", "Birch Cay", "Harvester's Spike" } },
-	{ "Far", { "Snowcap Island", "Forsaken Shores", "Desolate Deep", "Ancient Isle" } },
+	{ "Starter", { "Moosewood", "Moosewood Docks", "Shady Bazaar", "Roslit Bay", "Roslit Volcano", "Submarine Depot", "Terrapin Island" } },
+	{ "Islands", { "Mushgrove Swamp", "Sunstone Island", "Statue of Sovereignty", "The Arch", "Earmark Island", "Haddock Rock", "Birch Cay",
+		"Everturn Forest", "Harvester's Spike", "Castaway Cliffs", "Tidefall", "Forsaken Shores", "Grand Reef", "Lost Jungle", "Scoria Reach", "Drylands" } },
+	{ "Far", { "Snowcap Island", "Ancient Isle", "Skycrest", "Northern Expedition", "Boreal Pines", "Treasure Island", "The Deep", "Desolate Deep", "Mariana's Veil" } },
+	{ "Underground", { "Vertigo", "The Depths", "Crystal Cove", "Keeper's Altar", "Brine Pool", "Luminescent Cavern", "Atlantis", "Wrath of Olympus" } },
 }
+local UNDERWATER = { Atlantis = true }
 local byName = {}
 for _, d in ipairs(ISLANDS) do byName[d[1]] = d end
 local isl = group(left, "Islands")
@@ -4114,12 +4133,15 @@ pickList(isl, function()
 			local d = byName[n]
 			if d then
 				local p = Vector3.new(d[2], d[3], d[4])
-				out[#out + 1] = { text = d[1], sub = dist(p), dot = locColor(d[1]), action = function() Fisch.tp(p) end }
+				out[#out + 1] = {
+					text = d[1], sub = UNDERWATER[d[1]] and "underwater" or dist(p), dot = locColor(d[1]),
+					action = function() Fisch.tp(p, nil, d[5]) end,
+				}
 			end
 		end
 	end
 	return out
-end, true, 230)
+end, true, 300)
 
 -- every NPC the game keeps loaded, plus every one seen before (remembered in npcs.json)
 -- NPCs grouped under the island they stand on (nearest island), in that island's color
@@ -4131,6 +4153,7 @@ pickList(ng, function()
 		local p = Vector3.new(e.rec.x, e.rec.y, e.rec.z)
 		local best, bd = "Other", math.huge
 		for _, d in ipairs(ISLANDS) do
+			if d[3] < 0 or d[3] > 1000 then continue end
 			local dd = (Vector3.new(d[2], p.Y, d[4]) - p).Magnitude
 			if dd < bd then best, bd = d[1], dd end
 		end
@@ -5290,7 +5313,7 @@ local RU = {
 	["DPI scale"] = "Масштаб (DPI)", ["Menu scale"] = "Масштаб меню", ["Cloud config code"] = "Код облачного конфига", ["Load"] = "Загрузить", ["Accent"] = "Акцент", ["Text"] = "Текст", ["Background"] = "Фон", ["Panels"] = "Панели", ["Text color"] = "Цвет текста", ["Cloud"] = "Облако", ["Config code"] = "Код конфига", ["Load code"] = "Загрузить по коду",
 	["Accept"] = "Принять", ["Decline"] = "Отказаться", ["Config loaded"] = "Конфиг загружен", ["Code not found"] = "Код не найден",
 	["Enter a code"] = "Введи код", ["No FL users on this server"] = "На сервере нет пользователей FL",
-	["STARTER"] = "НАЧАЛЬНЫЕ", ["OPEN SEA"] = "ОТКРЫТОЕ МОРЕ", ["FAR"] = "ДАЛЬНИЕ", ["OTHER"] = "ДРУГИЕ", ["Safe Mode"] = "Безопасный режим", ["Safety"] = "Безопасность",
+	["STARTER"] = "НАЧАЛЬНЫЕ", ["ISLANDS"] = "ОСТРОВА", ["UNDERGROUND"] = "ПОДЗЕМНЫЕ И СЕКРЕТНЫЕ", ["underwater"] = "под водой", ["OPEN SEA"] = "ОТКРЫТОЕ МОРЕ", ["FAR"] = "ДАЛЬНИЕ", ["OTHER"] = "ДРУГИЕ", ["Safe Mode"] = "Безопасный режим", ["Safety"] = "Безопасность",
 	["On"] = "Вкл", ["Locked by Safe Mode"] = "Заблокировано безопасным режимом", ["Safe Mode on"] = "Безопасный режим включён",
 	["Safe Mode off"] = "Безопасный режим выключен", ["SAFE MODE"] = "БЕЗОПАСНЫЙ РЕЖИМ", ["Anti AFK"] = "Анти-АФК", ["Utility"] = "Утилиты", ["Speed"] = "Скорость", ["Power"] = "Сила",
 	-- choices, pills, states
