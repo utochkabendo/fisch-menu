@@ -2722,7 +2722,7 @@ end
 -- Menu settings: a popup opened from the profile button at the bottom of the sidebar (see the
 -- "Profile" block). Two boxes: menu look / behaviour, and safety / sync.
 local profilePanel = panel("")
-profilePanel.w = 292
+profilePanel.w = 214
 local settingsMenu = panelBox(profilePanel)
 local settingsSafety = panelBox(profilePanel)
 local menuColors = {}
@@ -3337,7 +3337,7 @@ local castMode = choiceControl(castP, "fish.cast.mode", "Cast power", { "Perfect
 local recastDelay = sliderControl(castP, "fish.cast.delay", "Recast delay", 0, 3000, 700, " ms")
 local shakeDelay = sliderControl(rowPanel("fish.shake", "Auto Shake"), "fish.shake.delay", "Extra shake delay", 0, 500, 40, " ms")
 local reelP = rowPanel("fish.reel", "Auto Reel")
-local reelMode = choiceControl(reelP, "fish.reel.mode", "Mode", { "Centered", "Legit" }, "Centered")
+local reelMode = choiceControl(reelP, "fish.reel.mode", "Mode", { "Centered", "Legit", "Rage" }, "Centered")
 local lookahead = sliderControl(reelP, "fish.reel.look", "Lookahead", 80, 500, 220, " ms")
 local cineP = rowPanel("fish.cinematic", "Cinematic Camera")
 local cineSpeed = sliderControl(cineP, "fish.cine.speed", "Orbit speed", 2, 40, 10, "")
@@ -3638,6 +3638,20 @@ RunService:BindToRenderStep(REEL_STEP, Enum.RenderPriority.Input.Value, function
 	local ok = pcall(function()
 		local mult = LP:GetAttribute("MinigameSpeedMulti") or 1
 		local step = math.clamp(dt * mult, 1 / 240, 1 / 20)
+		if reelMode() == "Rage" then
+			-- The bar is pinned onto the fish every frame and given the fish's own velocity, so the game's
+			-- bar tick moves it along with the fish: it can't leave the bar, whatever the rod. The bar never
+			-- goes to the server, only the result does, and progress still builds at the normal rate.
+			local half = r.barSize / 2
+			local lo, hi = r.minBarPosition + half, r.maxBarPosition - half
+			local fv = fish.CurrentVelocity or 0
+			local want = math.clamp(r.fishPosition + fv * step, lo, hi)
+			setDir(rod, fv >= 0 and 1 or -1)
+			r.barPosition = want
+			rod.CurrentVelocity = fv
+			rod.CurrentAcceleration = 0
+			return
+		end
 		local aim = 0
 		if reelMode() == "Legit" then
 			-- drift around inside the bar instead of pinning the fish dead center
@@ -4545,9 +4559,7 @@ local badge = label({
 onFrame(function()
 	if os.clock() - lastClick > 2.5 then clicks = 0 end
 	local on_ = Fisch.safe
-	badge.Visible = on_
-	local sw = Fisch.searchW or 0
-	badge.Position = UDim2.new(1, -50 - (sw > 1 and sw + 18 or 0), 0.5, 0)
+	badge.Visible = on_ and (Fisch.searchW or 0) < 1
 	local t
 	if not on_ then t = "Off"
 	elseif clicks > 0 then t = (5 - clicks) .. " more clicks"
@@ -4835,18 +4847,21 @@ end)()
 
 ;(function()
 local pp = profilePanel
-local HEAD = 62
--- header inside the popup: big avatar, display name, @username, script name
+local HEAD = 46
+-- header inside the popup: avatar, display name, @username · script name
 local head = new("Frame", { BackgroundTransparency = 1, Position = UDim2.fromOffset(0, 0), Size = UDim2.new(1, 0, 0, HEAD), Parent = pp.inner })
-local bigAv = new("ImageLabel", { BackgroundColor3 = C.field, BorderSizePixel = 0, Position = UDim2.fromOffset(14, 12), Size = UDim2.fromOffset(40, 40), Parent = head }, { new("UICorner", { CornerRadius = UDim.new(1, 0) }) })
-label({ Text = LP.DisplayName, Font = Enum.Font.BuilderSansBold, TextSize = 14, TextColor3 = C.hi, Position = UDim2.fromOffset(64, 13), Size = UDim2.new(1, -76, 0, 16), TextTruncate = Enum.TextTruncate.AtEnd, Parent = head })
-label({ Text = "@" .. LP.Name, TextSize = 12, TextColor3 = C.dim, Position = UDim2.fromOffset(64, 30), Size = UDim2.new(1, -76, 0, 14), TextTruncate = Enum.TextTruncate.AtEnd, Parent = head })
-local brand = label({ Text = "FalloLose", Font = Enum.Font.BuilderSansMedium, TextSize = 11, Position = UDim2.fromOffset(64, 44), Size = UDim2.new(1, -76, 0, 12), Parent = head })
+local bigAv = new("ImageLabel", { BackgroundColor3 = C.field, BorderSizePixel = 0, Position = UDim2.fromOffset(12, 9), Size = UDim2.fromOffset(30, 30), Parent = head }, { new("UICorner", { CornerRadius = UDim.new(1, 0) }) })
+label({ Text = LP.DisplayName, Font = Enum.Font.BuilderSansBold, TextSize = 13, TextColor3 = C.hi, Position = UDim2.fromOffset(50, 9), Size = UDim2.new(1, -60, 0, 15), TextTruncate = Enum.TextTruncate.AtEnd, Parent = head })
+label({ Text = "@" .. LP.Name, TextSize = 11, TextColor3 = C.dim, Position = UDim2.fromOffset(50, 25), Size = UDim2.new(1, -120, 0, 13), TextTruncate = Enum.TextTruncate.AtEnd, Parent = head })
+local brand = label({ Text = "FalloLose", Font = Enum.Font.BuilderSansMedium, TextSize = 11, TextXAlignment = Enum.TextXAlignment.Right, AnchorPoint = Vector2.new(1, 0), Position = UDim2.new(1, -12, 0, 25), Size = UDim2.fromOffset(70, 13), Parent = head })
 bindAccent(brand, function(c) brand.TextColor3 = c end)
 new("Frame", { BackgroundColor3 = C.divider, BorderSizePixel = 0, Position = UDim2.new(0, 10, 0, HEAD), Size = UDim2.new(1, -20, 0, 1), Parent = head })
 -- the panel lays its body out under a 38px title; ours is HEAD tall, a spacer evens the height out
-pp.body.Position = UDim2.fromOffset(10, HEAD + 8)
-new("Frame", { BackgroundTransparency = 1, Size = UDim2.new(1, 0, 0, HEAD + 8 - 38 - 10), LayoutOrder = 1e6, Parent = pp.body })
+pp.body.Position = UDim2.fromOffset(8, HEAD + 6)
+local spacerH = HEAD + 6 - 38 - 8
+if spacerH > 0 then new("Frame", { BackgroundTransparency = 1, Size = UDim2.new(1, 0, 0, spacerH), LayoutOrder = 1e6, Parent = pp.body }) end
+local layout = pp.body:FindFirstChildOfClass("UIListLayout")
+if layout then layout.Padding = UDim.new(0, 6) end
 
 -- profile button in the sidebar
 local btn = button({ AnchorPoint = Vector2.new(0, 1), Position = UDim2.new(0, 8, 1, -10), Size = UDim2.new(1, -16, 0, 46), ZIndex = 4, Parent = sidebar }, { corner(8) })
@@ -4886,10 +4901,15 @@ task.defer(function()
 		for row, text in pairs(C.rows) do
 			if text == def[1] and row:IsDescendantOf(pp.inner) then
 				row.LayoutOrder = i * 100
-				local clip = row:FindFirstChildWhichIsA("Frame")
+				row.Size = UDim2.new(1, 0, 0, 30)
+				local clip
 				for _, c in ipairs(row:GetChildren()) do if c:IsA("Frame") and c.ClipsDescendants then clip = c end end
-				if clip then clip.Position = UDim2.fromOffset(36, 0) end
-				icon(ICON[def[2]], 14, { Position = UDim2.fromOffset(20, ROW_H / 2), ImageColor3 = C.dim, Parent = row })
+				if clip then clip.Position = UDim2.fromOffset(32, 0) end
+				-- narrow popup: dropdown fields shrink to fit
+				for _, c in ipairs(row:GetChildren()) do
+					if c:IsA("GuiButton") and c.Size.X.Offset == 104 then c.Size = UDim2.fromOffset(78, c.Size.Y.Offset) end
+				end
+				icon(ICON[def[2]], 13, { Position = UDim2.fromOffset(18, 15), ImageColor3 = C.dim, Parent = row })
 			end
 		end
 	end
@@ -4992,7 +5012,10 @@ local function peoplePanel()
 		if badgesOn() and isUser(p) then names[p.DisplayName] = true; names["@" .. p.Name] = true end
 	end
 	for _, d in ipairs(CoreGui_:GetDescendants()) do
-		if d:IsA("TextLabel") and d.Visible then
+		if d:IsA("TextLabel") and d:IsDescendantOf(gui) then
+			local own = d:FindFirstChild("FLBadge")
+			if own then own:Destroy() end
+		elseif d:IsA("TextLabel") and d.Visible then
 			local want = names[d.Text] == true
 			local has = d:FindFirstChild("FLBadge")
 			if want and not has then
@@ -5271,7 +5294,7 @@ local RU = {
 	["On"] = "Вкл", ["Locked by Safe Mode"] = "Заблокировано безопасным режимом", ["Safe Mode on"] = "Безопасный режим включён",
 	["Safe Mode off"] = "Безопасный режим выключен", ["SAFE MODE"] = "БЕЗОПАСНЫЙ РЕЖИМ", ["Anti AFK"] = "Анти-АФК", ["Utility"] = "Утилиты", ["Speed"] = "Скорость", ["Power"] = "Сила",
 	-- choices, pills, states
-	["Random"] = "Случайно", ["Centered"] = "По центру", ["Legit"] = "Легит", ["All"] = "Все", ["Selected"] = "Выбранные",
+	["Rage"] = "Рейдж", ["Random"] = "Случайно", ["Centered"] = "По центру", ["Legit"] = "Легит", ["All"] = "Все", ["Selected"] = "Выбранные",
 	["Off"] = "Выключен", ["Busy"] = "Занят", ["Reeling"] = "Вытягивает", ["Shaking"] = "Шейк", ["No rod"] = "Нет удочки",
 	["Equipping"] = "Берёт удочку", ["Waiting for bite"] = "Ждёт поклёвку", ["Ready"] = "Готов", ["Selling"] = "Продаёт",
 	["Dead"] = "Мёртв", ["Casting"] = "Забрасывает", ["Idle"] = "Ожидание", ["none"] = "нет", ["not seen yet"] = "ещё не встречался",
@@ -5401,7 +5424,7 @@ local D = {
 	["Cast power"] = { "Perfect releases at the top for a perfect cast, Random at a random power.", "Идеально — отпускает на пике (perfect cast), Случайно — на случайной силе.", "Perfect / Random", "Идеально / Случайно" },
 	["Recast delay"] = { "Pause after a catch before the next cast.", "Пауза после улова перед следующим забросом.", "0 – 3000 ms, default 700", "0 – 3000 мс, по умолчанию 700" },
 	["Extra shake delay"] = { "Added on top of the game's own shake cooldown.", "Добавляется к собственному кулдауну шейка в игре.", "0 – 500 ms, default 40", "0 – 500 мс, по умолчанию 40" },
-	["Mode"] = { "Centered keeps the fish dead center, Legit lets it drift inside the bar.", "По центру — рыба ровно в центре, Легит — гуляет внутри полоски.", "Centered / Legit", "По центру / Легит" },
+	["Mode"] = { "Centered keeps the fish dead center, Legit lets it drift inside the bar, Rage pins the bar onto the fish every frame (can't lose it on any rod; only the result goes to the server, catch time stays normal).", "По центру — рыба ровно в центре, Легит — гуляет внутри полоски, Рейдж — полоска каждый кадр прибита к рыбе (не упустишь ни на какой удочке; на сервер уходит только итог, время улова обычное).", "Centered / Legit / Rage", "По центру / Легит / Рейдж" },
 	["Lookahead"] = { "How far ahead the bar and fish movement are predicted.", "На сколько вперёд предсказывается движение полоски и рыбы.", "80 – 500 ms, default 220", "80 – 500 мс, по умолчанию 220" },
 	["Orbit speed"] = { "How fast the cinematic camera circles you.", "Как быстро кинокамера облетает тебя.", "2 – 40, default 10", "2 – 40, по умолчанию 10" },
 	["Distance"] = { "How far the cinematic camera stays from you.", "На каком расстоянии держится кинокамера.", "6 – 40 studs, default 14", "6 – 40 ст, по умолчанию 14" },
