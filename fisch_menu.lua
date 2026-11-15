@@ -91,7 +91,7 @@ local START_SIZE = Vector2.new(720, 520)
 local MIN_SIZE = Vector2.new(580, 480)
 local PAD = 32 -- window canvas margin for the shadow
 local PP = 28 -- popup canvas margin for the shadow
-local HEADER_H = 34
+local HEADER_H = 48
 local SIDE_W = 168
 local TAB_H = 30
 local BAR_H = 32
@@ -1096,7 +1096,7 @@ do
 	end
 
 	onFrame(function()
-		local y = 12
+		local y = HEADER_H + 10
 		for _, it in ipairs(items) do
 			if it.kind == "section" then
 				if it.gap then y += 10 end
@@ -1181,11 +1181,11 @@ end
 do -- scoped: Luau caps a function at 200 locals
 	local bar = new("Frame", {
 		BackgroundTransparency = 1,
-		AnchorPoint = Vector2.new(0, 1),
-		Position = UDim2.new(0, 8, 1, -10),
-		Size = UDim2.new(1, -16, 0, BAR_H),
+		AnchorPoint = Vector2.new(0, 0.5),
+		Position = UDim2.new(0, 12, 0.5, 0),
+		Size = UDim2.fromOffset(220, BAR_H),
 		ZIndex = 4,
-		Parent = sidebar,
+		Parent = topbar,
 	})
 
 	-- One outlined control split in two: quicksave | config name. No fill, just the outline.
@@ -1491,13 +1491,12 @@ do -- scoped: Luau caps a function at 200 locals
 	onFrame(function()
 		-- Rise from the bar, never higher than the tab list.
 		local ws = winSize()
-		local barTop = ws.Y - 10 - BAR_H
-		local maxH = barTop - 8 - (tabsBottom + 8)
+		local maxH = ws.Y - HEADER_H - 14
 		local n = #rows + (nameRow and 1 or 0)
 		local listH = n > 0 and (2 + n * (CROW_H + CROW_GAP) - CROW_GAP + 8) or 44
 		pop.h.t = math.min(LIST_Y + listH + 4, maxH)
-		pop.pos = Vector2.new(8, 0)
-		pop.bottom = barTop - 8
+		pop.pos = Vector2.new(SIDE_W + 9, HEADER_H - 4)
+		pop.bottom = nil
 		list.Size = UDim2.new(1, 0, 0, math.max(0, round(pop.h.x) - LIST_Y - 4))
 
 		local pw = 34 + textWidth(pillLbl.Text, 13, Enum.Font.BuilderSansMedium) + 12
@@ -4539,7 +4538,7 @@ end)
 -- yellow marker in the window header while it's on
 local badge = label({
 	Text = "SAFE MODE", Font = Enum.Font.BuilderSansBold, TextSize = 11, TextColor3 = YELLOW, TextXAlignment = Enum.TextXAlignment.Right,
-	AnchorPoint = Vector2.new(1, 0), Position = UDim2.new(1, -46, 0, 11), Size = UDim2.fromOffset(160, 14), ZIndex = 20, Parent = window,
+	AnchorPoint = Vector2.new(1, 0.5), Position = UDim2.new(1, -50, 0.5, 0), Size = UDim2.fromOffset(160, 14), ZIndex = 20, Parent = topbar,
 })
 onFrame(function()
 	if os.clock() - lastClick > 2.5 then clicks = 0 end
@@ -4635,6 +4634,197 @@ onFrame(function()
 		applied.tint.BackgroundColor3 = bg
 		applied.tint.BackgroundTransparency = bg == D0.window and 1 or 0.3
 	end
+end)
+end)()
+
+---------------------------------------------------- Header: logo + place, cloud code button, menu search
+
+;(function()
+local MPS = game:GetService("MarketplaceService")
+
+-- logo block over the sidebar
+local logo = new("Frame", { BackgroundTransparency = 1, Size = UDim2.new(0, SIDE_W, 0, HEADER_H), ZIndex = 5, Parent = sidebar })
+new("ImageLabel", { BackgroundTransparency = 1, Image = ICON.fl, AnchorPoint = Vector2.new(0, 0.5), Position = UDim2.new(0, 14, 0.5, 0), Size = UDim2.fromOffset(30, 30), ZIndex = 5, Parent = logo }, { corner(5) })
+label({ Text = "FalloLose", Font = Enum.Font.BuilderSansBold, TextSize = 15, TextColor3 = C.hi, Position = UDim2.fromOffset(52, 9), Size = UDim2.new(1, -58, 0, 16), ZIndex = 5, Parent = logo })
+local placeLbl = label({ Text = "Fisch", TextSize = 11, TextColor3 = C.dim, Position = UDim2.fromOffset(52, 26), Size = UDim2.new(1, -58, 0, 13), TextTruncate = Enum.TextTruncate.AtEnd, ZIndex = 5, Parent = logo })
+task.spawn(function()
+	local name = game.GameId == 5750914919 and "Fisch" or nil
+	if not name then
+		local ok, info = pcall(MPS.GetProductInfo, MPS, game.PlaceId)
+		name = ok and info and info.Name or "Roblox"
+	end
+	local world
+	pcall(function()
+		local W = require(game:GetService("ReplicatedStorage").shared.modules.Worlds)
+		world = W.Places[game.PlaceId] or W.DefaultPlace
+	end)
+	placeLbl.Text = world and (name .. "  ·  " .. world) or name
+end)
+-- a line under the whole header row
+new("Frame", { BackgroundColor3 = C.divider, BorderSizePixel = 0, Position = UDim2.fromOffset(0, HEADER_H), Size = UDim2.new(1, 0, 0, 1), ZIndex = 3, Parent = window })
+
+-- the close button gives its place to search (the menu key still closes the menu)
+closeBtn.Visible = false
+
+---------------------------------------- cloud code button next to the config bar
+
+local cloudBtn, cloudIcon, cloudSt = iconButton(ICON.cloud, 16, {
+	AnchorPoint = Vector2.new(0, 0.5), Position = UDim2.new(0, 12 + 220 + 6, 0.5, 0), Size = UDim2.fromOffset(32, 32), ZIndex = 4, Parent = topbar,
+})
+new("UIStroke", { Color = C.fieldStroke, Parent = cloudBtn })
+local cpop = Popup.new(232, 84, 0.12)
+label({ Text = "Cloud config code", Font = Enum.Font.BuilderSansMedium, TextSize = 12, TextColor3 = C.dim, Position = UDim2.fromOffset(12, 8), Size = UDim2.new(1, -24, 0, 16), Parent = cpop.inner })
+local cfield = new("Frame", { BackgroundColor3 = C.field, BorderSizePixel = 0, Position = UDim2.fromOffset(10, 32), Size = UDim2.new(1, -92, 0, 30), Parent = cpop.inner }, { corner(6) })
+stroke(C.fieldStroke, cfield)
+local cbox = new("TextBox", {
+	Text = "", PlaceholderText = "ABC123", PlaceholderColor3 = C.faint, ClearTextOnFocus = false,
+	Font = Enum.Font.BuilderSansMedium, TextSize = 13, TextColor3 = C.hi, BackgroundTransparency = 1,
+	Size = UDim2.fromScale(1, 1), Parent = cfield,
+})
+local loadBtn, ls, lsc = fieldButton({ AnchorPoint = Vector2.new(1, 0), Position = UDim2.new(1, -10, 0, 32), Size = UDim2.fromOffset(72, 30), Parent = cpop.inner })
+local loadLbl = label({ Text = "Load", Font = Enum.Font.BuilderSansMedium, TextSize = 12, TextXAlignment = Enum.TextXAlignment.Center, Size = UDim2.fromScale(1, 1), Parent = loadBtn })
+bindAccent(loadLbl, function(c) loadLbl.TextColor3 = c:Lerp(Color3.new(1, 1, 1), 0.3) end)
+local loadSt = hoverable(loadBtn)
+local function doLoad()
+	local code = cbox.Text
+	cpop:hide()
+	task.spawn(function() if Fisch.loadCode then Fisch.loadCode(code) end end)
+end
+on(loadBtn.Activated, doLoad)
+on(cbox.FocusLost, function(enter) if enter then doLoad() end end)
+on(cloudBtn.Activated, function()
+	if cpop.open then cpop:hide() return end
+	cbox.Text = ""
+	cpop.h:snap(74)
+	cpop:placeAt(cloudBtn, 74, false)
+	cpop:show(cloudBtn)
+	task.defer(function() cbox:CaptureFocus() end)
+end)
+onFrame(function()
+	local a = math.max(cloudSt.hover.x, cpop.open and 1 or 0)
+	cloudBtn.BackgroundTransparency = 1 - 0.06 * a
+	cloudIcon.ImageColor3 = C.dim:Lerp(C.hi, a)
+	loadBtn.BackgroundColor3 = C.field:Lerp(C.fieldHover, loadSt.hover.x)
+	lsc.Scale = 1 - loadSt.press.x * 0.04
+end)
+
+---------------------------------------- search over every function in the menu
+
+local pageName = {}
+for name, page in pairs(pages) do pageName[page] = name end
+local function pageOf(g)
+	local o = g
+	while o and o ~= gui do
+		if pageName[o] then return o end
+		o = o.Parent
+	end
+end
+
+local searchBtn, searchIcon, searchSt = iconButton(ICON.search, 15, {
+	AnchorPoint = Vector2.new(1, 0.5), Position = UDim2.new(1, -12, 0.5, 0), Size = UDim2.fromOffset(30, 30), ZIndex = 4, Parent = topbar,
+})
+local sfield = new("Frame", {
+	BackgroundColor3 = C.field, BorderSizePixel = 0, AnchorPoint = Vector2.new(1, 0.5), Position = UDim2.new(1, -46, 0.5, 0),
+	Size = UDim2.fromOffset(0, 30), ClipsDescendants = true, ZIndex = 4, Parent = topbar,
+}, { corner(6) })
+local sstroke = stroke(C.fieldStroke, sfield)
+local sbox = new("TextBox", {
+	Text = "", PlaceholderText = "Search", PlaceholderColor3 = C.faint, ClearTextOnFocus = false,
+	Font = Enum.Font.BuilderSans, TextSize = 13, TextColor3 = C.hi, TextXAlignment = Enum.TextXAlignment.Left,
+	BackgroundTransparency = 1, Position = UDim2.fromOffset(10, 0), Size = UDim2.new(1, -16, 1, 0), ZIndex = 4, Parent = sfield,
+})
+local sOpen = false
+local sw_ = spring(0, 22, 0.05)
+local RES_W, RES_H, MAXR = 260, 30, 9
+local rpop = Popup.new(RES_W, 40, 0.12)
+local resRows = {}
+local function flash(row)
+	local f = new("Frame", { BorderSizePixel = 0, BackgroundTransparency = 0.82, Size = UDim2.fromScale(1, 1), ZIndex = row.ZIndex + 1, Parent = row }, { corner(10) })
+	bindAccent(f, function(c) f.BackgroundColor3 = c end)
+	local t0 = os.clock()
+	onFrame(function()
+		local k = (os.clock() - t0) / 1.4
+		if k >= 1 or not f.Parent then f:Destroy() return true end
+		f.BackgroundTransparency = 0.82 + 0.18 * k * k
+	end)
+end
+local function jump(row)
+	local page = pageOf(row)
+	if not page then return end
+	local name = pageName[page]
+	for _, tab in ipairs(tabs) do if tab.name == name then selectTab(tab) end end
+	task.defer(function()
+		local y = (row.AbsolutePosition.Y - page.AbsolutePosition.Y) / C.S() + page.CanvasPosition.Y
+		page.CanvasPosition = Vector2.new(0, math.max(0, y - 60))
+		flash(row)
+	end)
+end
+local function closeSearch()
+	sOpen = false
+	sbox.Text = ""
+	rpop:hide()
+	if sbox:IsFocused() then sbox:ReleaseFocus() end
+end
+local function results()
+	for _, r in ipairs(resRows) do r:Destroy() end
+	table.clear(resRows)
+	local q = sbox.Text:lower()
+	if q == "" then rpop:hide() return end
+	local found, seen = {}, {}
+	for row, text in pairs(C.rows) do
+		if row.Parent and #found < MAXR then
+			local page = pageOf(row)
+			if page then
+				local shown
+				for _, d in ipairs(row:GetDescendants()) do if d:IsA("TextLabel") then shown = d.Text break end end
+				local key = text .. "|" .. pageName[page]
+				if not seen[key] and (text:lower():find(q, 1, true) or (shown and shown:lower():find(q, 1, true))) then
+					seen[key] = true
+					found[#found + 1] = { row = row, text = shown or text, tab = pageName[page] }
+				end
+			end
+		end
+	end
+	table.sort(found, function(a, b) return a.text < b.text end)
+	if #found == 0 then found[1] = { text = "Nothing found" } end
+	for i, f in ipairs(found) do
+		local b = button({ Position = UDim2.fromOffset(4, 4 + (i - 1) * RES_H), Size = UDim2.new(1, -8, 0, RES_H), Parent = rpop.inner }, { corner(5) })
+		label({ Text = f.text, TextSize = 13, TextColor3 = f.row and C.text or C.faint, Position = UDim2.fromOffset(10, 0), Size = UDim2.new(1, -110, 1, 0), TextTruncate = Enum.TextTruncate.AtEnd, Parent = b })
+		if f.tab then
+			label({ Text = f.tab, TextSize = 11, TextColor3 = C.faint, TextXAlignment = Enum.TextXAlignment.Right, AnchorPoint = Vector2.new(1, 0), Position = UDim2.new(1, -10, 0, 0), Size = UDim2.fromOffset(90, RES_H), Parent = b })
+		end
+		local st = hoverable(b)
+		onFrame(function()
+			if not b.Parent then return true end
+			b.BackgroundTransparency = 1 - 0.05 * st.hover.x
+		end)
+		if f.row then on(b.Activated, function() closeSearch(); jump(f.row) end) end
+		resRows[i] = b
+	end
+	local h = 8 + #found * RES_H
+	rpop.h:snap(h)
+	if not rpop.open then
+		rpop:placeAt(sfield, h, true)
+		rpop:show(sfield)
+	end
+end
+on(searchBtn.Activated, function()
+	if sOpen then closeSearch() return end
+	sOpen = true
+	task.defer(function() sbox:CaptureFocus() end)
+end)
+on(sbox:GetPropertyChangedSignal("Text"), results)
+on(sbox.FocusLost, function()
+	task.delay(0.15, function() if sbox.Text == "" then sOpen = false end end)
+end)
+onFrame(function()
+	sw_.t = sOpen and 200 or 0
+	sfield.Size = UDim2.fromOffset(round(sw_.x), 30)
+	sfield.Visible = sw_.x > 1
+	sstroke.Color = C.fieldStroke:Lerp(C.dim, sbox:IsFocused() and 0.5 or 0)
+	local a = math.max(searchSt.hover.x, sOpen and 1 or 0)
+	searchBtn.BackgroundTransparency = 1 - 0.06 * a
+	searchIcon.ImageColor3 = C.dim:Lerp(C.hi, a)
 end)
 end)()
 
@@ -4956,20 +5146,9 @@ offerHandler = function(o)
 	end, 10, "Decline", function() end)
 end
 
--- load by code (Settings > Cloud)
-local cg = group(settingsRight, "Cloud")
-local codeRow, setR = itemRow(cg, "Config code")
-setR(116)
-local field = new("Frame", { BackgroundColor3 = C.field, BorderSizePixel = 0, AnchorPoint = Vector2.new(1, 0.5), Position = UDim2.new(1, -12, 0.5, 0), Size = UDim2.fromOffset(100, 26), Parent = codeRow }, { corner(6) })
-stroke(C.fieldStroke, field)
-local codeBox = new("TextBox", {
-	Text = "", PlaceholderText = "ABC123", PlaceholderColor3 = C.faint, ClearTextOnFocus = false,
-	Font = Enum.Font.BuilderSansMedium, TextSize = 13, TextColor3 = C.hi, BackgroundTransparency = 1,
-	Size = UDim2.fromScale(1, 1), Parent = field,
-})
-on(codeBox.FocusLost, function() codeBox.Text = codeBox.Text:upper():gsub("[^%w]", ""):sub(1, 8) end)
-buttonRow(cg, "Load code", function()
-	local code = codeBox.Text:upper():gsub("[^%w]", "")
+-- load by code: the cloud button next to the config bar in the header
+Fisch.loadCode = function(code)
+	code = tostring(code or ""):upper():gsub("[^%w]", "")
 	if #code < 4 then toast("Enter a code") return end
 	local data = download(code)
 	if data then
@@ -4978,7 +5157,7 @@ buttonRow(cg, "Load code", function()
 	else
 		toast("Code not found")
 	end
-end)
+end
 end)()
 
 ---------------------------------------------------- Language + function info tooltips
@@ -5017,7 +5196,7 @@ local RU = {
 	["Walk Speed"] = "Скорость бега", ["Jump Power"] = "Сила прыжка", ["Swim Speed"] = "Турбодизель",
 	["Walk on Water"] = "Ходьба по воде", ["Send to player"] = "Отправить игроку", ["Network"] = "Сеть",
 	["Synchronization"] = "Синхронизация", ["Freeze Player"] = "Заморозка игрока", ["Auto Water Aim"] = "Автоприцел в воду",
-	["DPI scale"] = "Масштаб (DPI)", ["Accent"] = "Акцент", ["Text"] = "Текст", ["Background"] = "Фон", ["Panels"] = "Панели", ["Text color"] = "Цвет текста", ["Cloud"] = "Облако", ["Config code"] = "Код конфига", ["Load code"] = "Загрузить по коду",
+	["DPI scale"] = "Масштаб (DPI)", ["Cloud config code"] = "Код облачного конфига", ["Load"] = "Загрузить", ["Accent"] = "Акцент", ["Text"] = "Текст", ["Background"] = "Фон", ["Panels"] = "Панели", ["Text color"] = "Цвет текста", ["Cloud"] = "Облако", ["Config code"] = "Код конфига", ["Load code"] = "Загрузить по коду",
 	["Accept"] = "Принять", ["Decline"] = "Отказаться", ["Config loaded"] = "Конфиг загружен", ["Code not found"] = "Код не найден",
 	["Enter a code"] = "Введи код", ["No FL users on this server"] = "На сервере нет пользователей FL",
 	["STARTER"] = "НАЧАЛЬНЫЕ", ["OPEN SEA"] = "ОТКРЫТОЕ МОРЕ", ["FAR"] = "ДАЛЬНИЕ", ["OTHER"] = "ДРУГИЕ", ["Safe Mode"] = "Безопасный режим", ["Safety"] = "Безопасность",
