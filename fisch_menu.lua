@@ -4003,6 +4003,115 @@ Fisch.cleanups[#Fisch.cleanups + 1] = function()
 	pcall(RunService.UnbindFromRenderStep, RunService, FLY_STEP)
 	teardown()
 end
+
+---------------------------------------- walk / jump / swim speed, walk on water
+
+local walkOn = toggleControl(mg, "move.walk", "Walk Speed", false)
+local walkV = sliderControl(rowPanel("move.walk", "Walk Speed"), "move.walk.v", "Speed", 16, 150, 32, "")
+local jumpOn = toggleControl(mg, "move.jump", "Jump Power", false)
+local jumpV = sliderControl(rowPanel("move.jump", "Jump Power"), "move.jump.v", "Power", 20, 300, 80, "")
+local swimOn = toggleControl(mg, "move.swim", "Swim Speed", false)
+local swimV = sliderControl(rowPanel("move.swim", "Swim Speed"), "move.swim.v", "Speed", 16, 150, 45, "")
+local waterOn = toggleControl(mg, "move.water", "Walk on Water", false)
+
+-- The game's WalkSpeedController writes WalkSpeed / JumpPower only on events (equip, attributes,
+-- state), so ours is re-applied every frame and the game's last value is put back when switched off.
+local game_ = { ws = nil, jp = nil }
+local ours = { ws = nil, jp = nil }
+local hooked
+local function watch(hum)
+	if hooked == hum then return end
+	hooked = hum
+	game_.ws, game_.jp = hum.WalkSpeed, hum.JumpPower
+	on(hum:GetPropertyChangedSignal("WalkSpeed"), function() if hum.WalkSpeed ~= ours.ws then game_.ws = hum.WalkSpeed end end)
+	on(hum:GetPropertyChangedSignal("JumpPower"), function() if hum.JumpPower ~= ours.jp then game_.jp = hum.JumpPower end end)
+end
+local function swimming(hum, hrp)
+	if hum:GetState() == Enum.HumanoidStateType.Swimming then return true end
+	local bs = hrp:FindFirstChildWhichIsA("BuoyancySensor")
+	return bs ~= nil and (bs.TouchingSurface or bs:GetAttribute("InFakeWater") == true)
+end
+
+local floor_ -- invisible floor kept at the water surface under you
+local rp = RaycastParams.new()
+rp.FilterType = Enum.RaycastFilterType.Exclude
+rp.IgnoreWater = false
+local function surfaceBelow(hrp, from, dist)
+	local ignore = { LP.Character }
+	if floor_ then ignore[#ignore + 1] = floor_ end
+	if workspace:FindFirstChild("zones") then ignore[#ignore + 1] = workspace.zones end
+	rp.FilterDescendantsInstances = ignore
+	local hit = workspace:Raycast(from, Vector3.new(0, -dist, 0), rp)
+	if hit and hit.Instance == workspace.Terrain and hit.Material == Enum.Material.Water then return hit.Position end
+end
+
+local MOVE_STEP = "FischMenuMove" .. gui.Name
+RunService:BindToRenderStep(MOVE_STEP, Enum.RenderPriority.Input.Value + 3, function()
+	local char = LP.Character
+	local hrp = char and char:FindFirstChild("HumanoidRootPart")
+	local hum = char and char:FindFirstChildOfClass("Humanoid")
+	if not (hrp and hum and hum.Health > 0) then return end
+	watch(hum)
+	local reelLock = char:GetAttribute("ReelActive") ~= nil
+	-- speed: swim value in water, walk value on land; nothing while the reel minigame holds you
+	local want
+	if not reelLock then
+		if swimOn() and swimming(hum, hrp) then want = swimV()
+		elseif walkOn() then want = walkV() end
+	end
+	if want then
+		ours.ws = want
+		if hum.WalkSpeed ~= want then hum.WalkSpeed = want end
+	elseif ours.ws then
+		ours.ws = nil
+		if game_.ws then hum.WalkSpeed = game_.ws end
+	end
+	if jumpOn() and not reelLock then
+		local j = jumpV()
+		ours.jp = j
+		if not hum.UseJumpPower then hum.UseJumpPower = true end
+		if hum.JumpPower ~= j then hum.JumpPower = j end
+	elseif ours.jp then
+		ours.jp = nil
+		if game_.jp then hum.JumpPower = game_.jp end
+	end
+	-- walk on water: a floor follows you at the surface; if you're already in, you're lifted out
+	if waterOn() and not flyOn() then
+		local surf = surfaceBelow(hrp, hrp.Position + Vector3.new(0, 1, 0), 8)
+		if not surf and swimming(hum, hrp) then
+			surf = surfaceBelow(hrp, hrp.Position + Vector3.new(0, 25, 0), 40)
+			if surf then
+				hrp.AssemblyLinearVelocity = Vector3.new(hrp.AssemblyLinearVelocity.X, 0, hrp.AssemblyLinearVelocity.Z)
+				char:PivotTo(CFrame.new(hrp.Position.X, surf.Y + 3.2, hrp.Position.Z) * hrp.CFrame.Rotation)
+				hum:ChangeState(Enum.HumanoidStateType.Running)
+			end
+		end
+		if surf then
+			if not (floor_ and floor_.Parent) then
+				floor_ = new("Part", {
+					Name = tostring(math.random(1e8, 9e8)), Anchored = true, CanCollide = true, CanQuery = false, CanTouch = false,
+					Transparency = 1, Size = Vector3.new(12, 1, 12), Parent = workspace,
+				})
+			end
+			floor_.CFrame = CFrame.new(hrp.Position.X, surf.Y - 0.5, hrp.Position.Z)
+		elseif floor_ then
+			floor_.CFrame = CFrame.new(0, -1e4, 0)
+		end
+	elseif floor_ then
+		floor_:Destroy()
+		floor_ = nil
+	end
+end)
+Fisch.cleanups[#Fisch.cleanups + 1] = function()
+	pcall(RunService.UnbindFromRenderStep, RunService, MOVE_STEP)
+	if floor_ then floor_:Destroy() end
+	local char = LP.Character
+	local hum = char and char:FindFirstChildOfClass("Humanoid")
+	if hum then
+		if ours.ws and game_.ws then hum.WalkSpeed = game_.ws end
+		if ours.jp and game_.jp then hum.JumpPower = game_.jp end
+	end
+end
 end)()
 
 ---------------------------------------------------- Hotkeys indicator: every bound function, live state
@@ -4116,6 +4225,8 @@ local RU = {
 	["Fly"] = "Полёт", ["Fly speed"] = "Скорость полёта", ["Menu key"] = "Клавиша меню", ["Menu color"] = "Цвет меню",
 	["Hotkey list"] = "Список хоткеев", ["Language"] = "Язык", ["Function info"] = "Инфо о функциях",
 	["Hotkeys"] = "Хоткеи",
+	["Walk Speed"] = "Скорость бега", ["Jump Power"] = "Сила прыжка", ["Swim Speed"] = "Скорость плавания",
+	["Walk on Water"] = "Ходьба по воде", ["Speed"] = "Скорость", ["Power"] = "Сила",
 	-- choices, pills, states
 	["Random"] = "Случайно", ["Centered"] = "По центру", ["Legit"] = "Легит", ["All"] = "Все", ["Selected"] = "Выбранные",
 	["Off"] = "Выключен", ["Busy"] = "Занят", ["Reeling"] = "Вытягивает", ["Shaking"] = "Шейк", ["No rod"] = "Нет удочки",
@@ -4251,6 +4362,10 @@ local D = {
 	["Back to saved spot"] = { "Teleports back to the saved spot.", "Телепорт обратно на сохранённую точку.", "", "" },
 	["Alerts"] = { "Pops a card with a TP button when a rare fish event appears.", "Показывает карточку с кнопкой TP, когда появляется событие редкой рыбы.", "On / Off", "Вкл / Выкл" },
 	["Fly"] = { "WASD along the camera, Space up, Ctrl down. Nothing pulls you back.", "WASD по камере, Space вверх, Ctrl вниз. Назад не откидывает.", "On / Off", "Вкл / Выкл" },
+	["Walk Speed"] = { "Your running speed on land, kept even while holding the rod.", "Скорость бега по суше, держится даже с удочкой в руках.", "16 – 150, default 32", "16 – 150, по умолчанию 32" },
+	["Jump Power"] = { "How high you jump.", "Насколько высоко ты прыгаешь.", "20 – 300, default 80", "20 – 300, по умолчанию 80" },
+	["Swim Speed"] = { "Your speed while swimming.", "Скорость, пока ты плывёшь.", "16 – 150, default 45", "16 – 150, по умолчанию 45" },
+	["Walk on Water"] = { "Water holds you like ground; if you're already swimming you're lifted onto the surface.", "Вода держит тебя как земля; если уже плывёшь — поднимает на поверхность.", "On / Off", "Вкл / Выкл" },
 	["Fly speed"] = { "Flying speed.", "Скорость полёта.", "10 – 250, default 70", "10 – 250, по умолчанию 70" },
 	["Menu key"] = { "Key that opens and closes the menu.", "Клавиша открытия и закрытия меню.", "default Insert", "по умолчанию Insert" },
 	["Menu color"] = { "Accent color of the menu.", "Акцентный цвет меню.", "", "" },
