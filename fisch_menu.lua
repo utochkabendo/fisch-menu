@@ -67,6 +67,11 @@ local CoreGui = game:GetService("CoreGui")
 local HttpService = game:GetService("HttpService")
 local TextService = game:GetService("TextService")
 local CAS = game:GetService("ContextActionService")
+for name in pairs(CAS:GetAllBoundActionInfo()) do
+	if type(name) == "string" and (name:find("^FischMenu") or name:find("^InsertMenu") or name:find("^SmoothMenu")) then
+		pcall(CAS.UnbindAction, CAS, name)
+	end
+end
 
 ---------------------------------------------------------------- files & assets
 
@@ -4337,7 +4342,39 @@ end
 -- (events.idleReport). A zero-distance mouse move every ~50 s of real idleness counts as input for
 -- both, without moving the camera or clicking anything. Idled itself, if it still comes, gets a
 -- VirtualUser click as a backup.
-local afkOn = toggleControl(group(pright, "Utility"), "misc.antiafk", "Anti AFK", true)
+local utilG = group(pright, "Utility")
+local afkOn = toggleControl(utilG, "misc.antiafk", "Anti AFK", true)
+
+-- Fullbright: bright flat lighting, no shadows or fog. The game keeps rewriting Lighting (day/night,
+-- zones), so it's re-applied every frame; switching off puts back the game's latest values.
+local fbOn = toggleControl(utilG, "misc.fullbright", "Fullbright", false)
+local Lighting_ = game:GetService("Lighting")
+local FB = {
+	Brightness = 2, Ambient = Color3.fromRGB(178, 178, 178), OutdoorAmbient = Color3.fromRGB(178, 178, 178),
+	GlobalShadows = false, FogStart = 1e6, FogEnd = 1e6, ExposureCompensation = 0,
+}
+local fbSaved, atmoSaved = {}, {}
+local FB_STEP = "FischMenuFullbright" .. gui.Name
+RunService:BindToRenderStep(FB_STEP, Enum.RenderPriority.Last.Value, function()
+	if fbOn() then
+		for k, v in pairs(FB) do
+			local cur = Lighting_[k]
+			if cur ~= v then fbSaved[k] = cur; Lighting_[k] = v end
+		end
+		for _, a in ipairs(Lighting_:GetChildren()) do
+			if a:IsA("Atmosphere") and a.Density ~= 0 then atmoSaved[a] = a.Density; a.Density = 0 end
+		end
+	elseif next(fbSaved) or next(atmoSaved) then
+		for k, v in pairs(fbSaved) do pcall(function() Lighting_[k] = v end) end
+		for a, d in pairs(atmoSaved) do if a.Parent then a.Density = d end end
+		table.clear(fbSaved); table.clear(atmoSaved)
+	end
+end)
+Fisch.cleanups[#Fisch.cleanups + 1] = function()
+	pcall(RunService.UnbindFromRenderStep, RunService, FB_STEP)
+	for k, v in pairs(fbSaved) do pcall(function() Lighting_[k] = v end) end
+	for a, d in pairs(atmoSaved) do if a.Parent then a.Density = d end end
+end
 local VIM_ = game:GetService("VirtualInputManager")
 local lastInput = os.clock()
 on(UIS.InputBegan, function() lastInput = os.clock() end)
@@ -5308,7 +5345,7 @@ local RU = {
 	["Hotkey list"] = "Список хоткеев", ["Language"] = "Язык", ["Function info"] = "Инфо о функциях",
 	["Hotkeys"] = "Хоткеи",
 	["Walk Speed"] = "Скорость бега", ["Jump Power"] = "Сила прыжка", ["Swim Speed"] = "Турбодизель",
-	["Walk on Water"] = "Ходьба по воде", ["Send to player"] = "Отправить игроку", ["Network"] = "Сеть",
+	["Walk on Water"] = "Ходьба по воде", ["Fullbright"] = "Фуллбрайт", ["Send to player"] = "Отправить игроку", ["Network"] = "Сеть",
 	["Synchronization"] = "Синхронизация", ["Freeze Player"] = "Заморозка игрока", ["Auto Water Aim"] = "Автоприцел в воду",
 	["DPI scale"] = "Масштаб (DPI)", ["Menu scale"] = "Масштаб меню", ["Cloud config code"] = "Код облачного конфига", ["Load"] = "Загрузить", ["Accent"] = "Акцент", ["Text"] = "Текст", ["Background"] = "Фон", ["Panels"] = "Панели", ["Text color"] = "Цвет текста", ["Cloud"] = "Облако", ["Config code"] = "Код конфига", ["Load code"] = "Загрузить по коду",
 	["Accept"] = "Принять", ["Decline"] = "Отказаться", ["Config loaded"] = "Конфиг загружен", ["Code not found"] = "Код не найден",
