@@ -209,7 +209,7 @@ local function shiftDown()
 end
 local function label(props)
 	props.BackgroundTransparency = 1
-	props.Font = props.Font or Enum.Font.Gotham
+	props.Font = props.Font or Enum.Font.BuilderSans
 	props.TextSize = props.TextSize or 12
 	props.TextColor3 = props.TextColor3 or C.text
 	props.TextXAlignment = props.TextXAlignment or Enum.TextXAlignment.Left
@@ -298,7 +298,7 @@ do
 	stroke(C.popupStroke, bg)
 	local logo = new("Frame", { BackgroundColor3 = DEFAULT_ACCENT, BorderSizePixel = 0, Position = UDim2.fromOffset(11, 11), Size = UDim2.fromOffset(36, 36), Parent = bg }, { corner(8) })
 	icon(ICON.crosshair, 19, { Position = UDim2.fromScale(0.5, 0.5), ImageColor3 = Color3.new(1, 1, 1), Parent = logo })
-	local title = label({ Text = "Injecting", Font = Enum.Font.GothamMedium, TextSize = 13, TextColor3 = C.hi, Position = UDim2.fromOffset(58, 11), Size = UDim2.new(1, -66, 0, 16), Parent = bg })
+	local title = label({ Text = "Injecting", Font = Enum.Font.BuilderSansMedium, TextSize = 13, TextColor3 = C.hi, Position = UDim2.fromOffset(58, 11), Size = UDim2.new(1, -66, 0, 16), Parent = bg })
 	local sub = label({ Text = "", TextSize = 12, TextColor3 = C.dim, Position = UDim2.fromOffset(58, 30), Size = UDim2.new(1, -66, 0, 16), Parent = bg })
 	local bar = new("Frame", { BackgroundColor3 = DEFAULT_ACCENT, BorderSizePixel = 0, AnchorPoint = Vector2.new(0, 1), Position = UDim2.new(0, 0, 1, 0), Size = UDim2.new(0, 0, 0, 2), Parent = bg })
 	local ease = TweenInfo.new(0.35, Enum.EasingStyle.Quint, Enum.EasingDirection.Out)
@@ -760,7 +760,7 @@ local function openContext(items, at, anchor)
 		end)
 	end
 	local w = 0
-	for _, it in ipairs(items) do w = math.max(w, textWidth(it.text, 12, Enum.Font.Gotham)) end
+	for _, it in ipairs(items) do w = math.max(w, textWidth(it.text, 12, Enum.Font.BuilderSans)) end
 	ctx.w = math.max(110, round(31 + w + 16))
 	local h = 8 + #items * 28
 	ctx.h:snap(h)
@@ -1037,7 +1037,7 @@ do
 		local btn = button({ Position = UDim2.fromOffset(x, 0), Size = UDim2.new(1, -x - 8, 0, TAB_H), ZIndex = 2, Parent = parent }, { corner(6) })
 		local ic = icon(ICON[iconName], 15, { Position = UDim2.fromOffset(17, TAB_H / 2), ImageColor3 = C.tabIdle, ZIndex = 2, Parent = btn })
 		local lbl = label({
-			Text = name, Font = Enum.Font.GothamMedium, TextSize = 13, TextColor3 = C.tabIdle,
+			Text = name, Font = Enum.Font.BuilderSansMedium, TextSize = 13, TextColor3 = C.tabIdle,
 			Position = UDim2.fromOffset(34, 0), Size = UDim2.new(1, -40, 1, 0), ZIndex = 2, Parent = btn,
 		})
 		return btn, ic, lbl
@@ -1061,7 +1061,7 @@ do
 			items[#items + 1] = {
 				kind = "section", gap = i > 1,
 				inst = label({
-					Text = item.section:upper(), Font = Enum.Font.GothamBold, TextSize = 10, TextColor3 = C.section,
+					Text = item.section:upper(), Font = Enum.Font.BuilderSansBold, TextSize = 10, TextColor3 = C.section,
 					Size = UDim2.new(1, -32, 0, 22), Parent = sidebar,
 				}),
 			}
@@ -1236,7 +1236,7 @@ do -- scoped: Luau caps a function at 200 locals
 	bindAccent(pill, function(c) pill.BackgroundColor3 = c end)
 	pill.BackgroundTransparency = 0.86
 	local pillIcon = icon(ICON.cloud, 15, { Position = UDim2.fromOffset(19, 15), Parent = pill })
-	local pillLbl = label({ Text = "Presets", Font = Enum.Font.GothamMedium, TextSize = 13, Position = UDim2.fromOffset(34, 0), Size = UDim2.new(1, -34, 1, 0), Parent = pill })
+	local pillLbl = label({ Text = "Presets", Font = Enum.Font.BuilderSansMedium, TextSize = 13, Position = UDim2.fromOffset(34, 0), Size = UDim2.new(1, -34, 1, 0), Parent = pill })
 	bindAccent(pillIcon, function(c) pillIcon.ImageColor3 = c end)
 	bindAccent(pillLbl, function(c) pillLbl.TextColor3 = c:Lerp(Color3.new(1, 1, 1), 0.3) end)
 
@@ -1248,7 +1248,7 @@ do -- scoped: Luau caps a function at 200 locals
 	icon(ICON.search, 14, { Position = UDim2.fromOffset(16, 15), ImageColor3 = C.faint, Parent = search })
 	local searchBox = new("TextBox", {
 		Text = "", PlaceholderText = "Search", PlaceholderColor3 = C.faint, ClearTextOnFocus = false,
-		Font = Enum.Font.Gotham, TextSize = 13, TextColor3 = C.hi, TextXAlignment = Enum.TextXAlignment.Left,
+		Font = Enum.Font.BuilderSans, TextSize = 13, TextColor3 = C.hi, TextXAlignment = Enum.TextXAlignment.Left,
 		BackgroundTransparency = 1, Position = UDim2.fromOffset(31, 0), Size = UDim2.new(1, -38, 1, 0), Parent = search,
 	})
 	local searchSt = hoverable(searchBox)
@@ -1303,7 +1303,7 @@ do -- scoped: Luau caps a function at 200 locals
 		local rs = stroke(C.cardStroke, r)
 		-- The name itself is a text box: click it to rename in place. The rest of the row loads.
 		local t = new(trash and "TextLabel" or "TextBox", {
-			Text = name, Font = Enum.Font.Gotham, TextSize = 13, TextColor3 = trash and C.dim or C.text,
+			Text = name, Font = Enum.Font.BuilderSans, TextSize = 13, TextColor3 = trash and C.dim or C.text,
 			TextXAlignment = Enum.TextXAlignment.Left, TextTruncate = Enum.TextTruncate.AtEnd,
 			BackgroundTransparency = 1, AutomaticSize = Enum.AutomaticSize.X,
 			Position = UDim2.fromOffset(12, 0), Size = UDim2.new(0, 0, 1, 0), Parent = r,
@@ -1396,7 +1396,7 @@ do -- scoped: Luau caps a function at 200 locals
 		bindAccent(s, function(c) s.Color = c end)
 		nameBox = new("TextBox", {
 			Text = "", PlaceholderText = "Config name", PlaceholderColor3 = C.faint, ClearTextOnFocus = false,
-			Font = Enum.Font.Gotham, TextSize = 13, TextColor3 = C.hi, TextXAlignment = Enum.TextXAlignment.Left,
+			Font = Enum.Font.BuilderSans, TextSize = 13, TextColor3 = C.hi, TextXAlignment = Enum.TextXAlignment.Left,
 			BackgroundTransparency = 1, Position = UDim2.fromOffset(12, 0), Size = UDim2.new(1, -24, 1, 0), Parent = nameRow,
 		})
 		on(nameBox.FocusLost, function(enter)
@@ -1486,7 +1486,7 @@ do -- scoped: Luau caps a function at 200 locals
 		pop.bottom = barTop - 8
 		list.Size = UDim2.new(1, 0, 0, math.max(0, round(pop.h.x) - LIST_Y - 4))
 
-		local pw = 34 + textWidth(pillLbl.Text, 13, Enum.Font.GothamMedium) + 12
+		local pw = 34 + textWidth(pillLbl.Text, 13, Enum.Font.BuilderSansMedium) + 12
 		pill.Size = UDim2.fromOffset(round(pw), 30)
 
 		plusBtn.BackgroundTransparency = 1 - 0.06 * plusSt.hover.x
@@ -1601,7 +1601,7 @@ local picker, pickValue, pickTarget, pickDrag, openPicker, colorMenu
 
 	local function smallField(x, w)
 		local tb = new("TextBox", {
-			Text = "", ClearTextOnFocus = false, Font = Enum.Font.Gotham, TextSize = 12, TextColor3 = C.text,
+			Text = "", ClearTextOnFocus = false, Font = Enum.Font.BuilderSans, TextSize = 12, TextColor3 = C.text,
 			BackgroundColor3 = C.field, BorderSizePixel = 0,
 			Position = UDim2.fromOffset(x, Y_ROW), Size = UDim2.fromOffset(w, 22), Parent = body,
 		}, { corner(4) })
@@ -1617,7 +1617,7 @@ local picker, pickValue, pickTarget, pickDrag, openPicker, colorMenu
 
 	local fmtBtn, _, fmtScale = fieldButton({ Position = UDim2.fromOffset(10, Y_ROW), Size = UDim2.fromOffset(48, 22), Parent = body })
 	fmtBtn:FindFirstChildOfClass("UICorner").CornerRadius = UDim.new(0, 4)
-	local fmtLbl = label({ Text = "HEX", Font = Enum.Font.GothamMedium, TextSize = 11, Position = UDim2.fromOffset(8, 0), Size = UDim2.new(1, -8, 1, 0), Parent = fmtBtn })
+	local fmtLbl = label({ Text = "HEX", Font = Enum.Font.BuilderSansMedium, TextSize = 11, Position = UDim2.fromOffset(8, 0), Size = UDim2.new(1, -8, 1, 0), Parent = fmtBtn })
 	local fmtChevron = icon(ICON.chevron, 10, { Position = UDim2.new(1, -10, 0.5, 0), ImageColor3 = C.dim, Parent = fmtBtn })
 	local fmtSt = hoverable(fmtBtn)
 
@@ -1718,11 +1718,11 @@ local picker, pickValue, pickTarget, pickDrag, openPicker, colorMenu
 		if #pickList < 2 then return end
 		for i, e in ipairs(pickList) do
 			local name = e.name or ("Color " .. i)
-			local tw = textWidth(name, 12, Enum.Font.GothamMedium)
+			local tw = textWidth(name, 12, Enum.Font.BuilderSansMedium)
 			local chip = button({ BackgroundColor3 = C.field, BackgroundTransparency = 1, ClipsDescendants = true, Size = UDim2.fromOffset(24, 24), LayoutOrder = i, Parent = chips }, { corner(6) })
 			local cs = stroke(C.fieldStroke, chip)
 			local sq = new("Frame", { BorderSizePixel = 0, AnchorPoint = Vector2.new(0, 0.5), Position = UDim2.new(0, 6, 0.5, 0), Size = UDim2.fromOffset(12, 12), Parent = chip }, { corner(3) })
-			local lbl = label({ Text = name, Font = Enum.Font.GothamMedium, TextColor3 = C.hi, Position = UDim2.fromOffset(24, 0), Size = UDim2.new(0, tw + 4, 1, 0), Parent = chip })
+			local lbl = label({ Text = name, Font = Enum.Font.BuilderSansMedium, TextColor3 = C.hi, Position = UDim2.fromOffset(24, 0), Size = UDim2.new(0, tw + 4, 1, 0), Parent = chip })
 			local st = hoverable(chip)
 			local sel = spring(i == pickIndex and 1 or 0, 26)
 			on(chip.Activated, function()
@@ -1980,7 +1980,7 @@ local function group(col, title)
 		BackgroundTransparency = 1, Size = UDim2.new(1, 0, 0, 0), AutomaticSize = Enum.AutomaticSize.Y,
 		LayoutOrder = #col:GetChildren(), Parent = col,
 	}, { new("UIListLayout", { SortOrder = Enum.SortOrder.LayoutOrder, Padding = UDim.new(0, 7) }) })
-	label({ Text = title:upper(), Font = Enum.Font.GothamBold, TextSize = 10, TextColor3 = C.section, Position = UDim2.fromOffset(2, 0), Size = UDim2.new(1, 0, 0, 12), LayoutOrder = 0, Parent = wrap })
+	label({ Text = title:upper(), Font = Enum.Font.BuilderSansBold, TextSize = 10, TextColor3 = C.section, Position = UDim2.fromOffset(2, 0), Size = UDim2.new(1, 0, 0, 12), LayoutOrder = 0, Parent = wrap })
 	local box = new("Frame", {
 		BackgroundColor3 = C.box, BackgroundTransparency = 0.06, BorderSizePixel = 0,
 		Size = UDim2.new(1, 0, 0, 0), AutomaticSize = Enum.AutomaticSize.Y, LayoutOrder = 1, Parent = wrap,
@@ -2003,7 +2003,7 @@ local function itemRow(box, text)
 	local clip = new("Frame", { BackgroundTransparency = 1, ClipsDescendants = true, Position = UDim2.fromOffset(14, 0), Size = UDim2.new(1, -28, 1, 0), Parent = r })
 	local lbl = label({ Text = text, TextSize = 13, TextColor3 = C.text, TextTruncate = Enum.TextTruncate.AtEnd, Size = UDim2.fromScale(1, 1), Parent = clip })
 	local st = hoverable(r)
-	local full = textWidth(text, 13, Enum.Font.Gotham)
+	local full = textWidth(text, 13, Enum.Font.BuilderSans)
 	local rightW = 0
 	local off = spring(0, 16, 0.05)
 	local t = 0
@@ -2067,7 +2067,7 @@ do
 
 	local keyBtn, keyStroke = fieldButton({ AnchorPoint = Vector2.new(1, 0), Position = UDim2.new(1, -10, 0, 9), Size = UDim2.fromOffset(84, 24), Parent = bindPop.inner })
 	keyBtn:FindFirstChildOfClass("UICorner").CornerRadius = UDim.new(0, 5)
-	local keyLbl = label({ Text = "", Font = Enum.Font.GothamMedium, TextXAlignment = Enum.TextXAlignment.Center, TextTruncate = Enum.TextTruncate.AtEnd, Size = UDim2.fromScale(1, 1), Parent = keyBtn })
+	local keyLbl = label({ Text = "", Font = Enum.Font.BuilderSansMedium, TextXAlignment = Enum.TextXAlignment.Center, TextTruncate = Enum.TextTruncate.AtEnd, Size = UDim2.fromScale(1, 1), Parent = keyBtn })
 	local keySt = hoverable(keyBtn)
 	on(keyBtn.Activated, function()
 		if popBind and os.clock() - popBind.listener.capturedAt > 0.4 then listeningBind = popBind.listener end
@@ -2084,7 +2084,7 @@ do
 	local segLbls = {}
 	for i, mode in ipairs({ "Hold", "Toggle" }) do
 		local b = button({ Position = UDim2.fromScale((i - 1) * 0.5, 0), Size = UDim2.fromScale(0.5, 1), Parent = seg })
-		segLbls[mode] = label({ Text = mode, Font = Enum.Font.GothamMedium, TextXAlignment = Enum.TextXAlignment.Center, Size = UDim2.fromScale(1, 1), Parent = b })
+		segLbls[mode] = label({ Text = mode, Font = Enum.Font.BuilderSansMedium, TextXAlignment = Enum.TextXAlignment.Center, Size = UDim2.fromScale(1, 1), Parent = b })
 		hoverable(b)
 		on(b.Activated, function()
 			if popBind then
@@ -2279,7 +2279,7 @@ do
 		local total, w = 8, 0
 		for _, e in ipairs(hkRows) do
 			total += round(e.h.x)
-			w = math.max(w, textWidth(e.label.Text ~= "" and e.label.Text or "None", 12, Enum.Font.Gotham))
+			w = math.max(w, textWidth(e.label.Text ~= "" and e.label.Text or "None", 12, Enum.Font.BuilderSans))
 		end
 		hkPop.w = math.max(110, round(31 + w + 16))
 		hkPop.h:snap(total)
@@ -2304,8 +2304,8 @@ do
 		local nameW, keyW = 60, 30
 		for _, b in ipairs(hotkeys) do
 			local rec = functions[b.fn]
-			nameW = math.max(nameW, textWidth(rec and rec.text or b.fn, 12, Enum.Font.Gotham))
-			keyW = math.max(keyW, textWidth(b.key and keyName(b.key) or "None", 12, Enum.Font.GothamMedium))
+			nameW = math.max(nameW, textWidth(rec and rec.text or b.fn, 12, Enum.Font.BuilderSans))
+			keyW = math.max(keyW, textWidth(b.key and keyName(b.key) or "None", 12, Enum.Font.BuilderSansMedium))
 		end
 		nameW, keyW = math.min(nameW, 180), math.min(keyW, 90)
 		for i, b in ipairs(hotkeys) do
@@ -2313,7 +2313,7 @@ do
 			local r = new("Frame", { BackgroundTransparency = 1, Size = UDim2.new(1, 0, 0, 28), LayoutOrder = i, Parent = allList })
 			label({ Text = rec and rec.text or b.fn, TextTruncate = Enum.TextTruncate.AtEnd, Position = UDim2.fromOffset(8, 0), Size = UDim2.fromOffset(nameW, 28), Parent = r })
 			label({
-				Text = b.key and keyName(b.key) or "None", Font = Enum.Font.GothamMedium, TextColor3 = b.key and C.text or C.dim,
+				Text = b.key and keyName(b.key) or "None", Font = Enum.Font.BuilderSansMedium, TextColor3 = b.key and C.text or C.dim,
 				Position = UDim2.fromOffset(8 + nameW + 16, 0), Size = UDim2.fromOffset(keyW, 28), Parent = r,
 			})
 			label({ Text = b.mode, TextSize = 11, TextColor3 = C.dim, Position = UDim2.fromOffset(8 + nameW + 16 + keyW + 12, 0), Size = UDim2.fromOffset(40, 28), Parent = r })
@@ -2562,7 +2562,7 @@ end
 local function keybindControl(box, text, get, set)
 	local r, setRight = itemRow(box, text)
 	local b, s, sc = fieldButton({ AnchorPoint = Vector2.new(1, 0.5), Position = UDim2.new(1, -12, 0.5, 0), Size = UDim2.fromOffset(60, 24), Parent = r })
-	local lbl = label({ Text = "", Font = Enum.Font.GothamMedium, TextXAlignment = Enum.TextXAlignment.Center, Size = UDim2.fromScale(1, 1), Parent = b })
+	local lbl = label({ Text = "", Font = Enum.Font.BuilderSansMedium, TextXAlignment = Enum.TextXAlignment.Center, Size = UDim2.fromScale(1, 1), Parent = b })
 	local st = hoverable(b)
 	local w = spring(60, 30, 0.01)
 	local listen = spring(0, 22, 1e-3)
@@ -2582,7 +2582,7 @@ local function keybindControl(box, text, get, set)
 		listen.t = isL and 1 or 0
 		local t = isL and "..." or keyName(get())
 		C.setText(lbl, t)
-		w.t = math.max(56, textWidth(t, 12, Enum.Font.GothamMedium) + 24)
+		w.t = math.max(56, textWidth(t, 12, Enum.Font.BuilderSansMedium) + 24)
 		b.Size = UDim2.fromOffset(round(w.x), 24)
 		setRight(round(w.x) + 8)
 		local pulse = 0.6 + 0.4 * math.sin(os.clock() * 6)
@@ -2655,7 +2655,7 @@ end
 -- A side panel (title + boxes) that opens next to a row, like a submenu.
 local function panel(title)
 	local pp = Popup.new(270, 100, 0.08)
-	label({ Text = title, Font = Enum.Font.GothamMedium, TextSize = 13, TextColor3 = C.hi, Position = UDim2.fromOffset(14, 0), Size = UDim2.new(1, -28, 0, 38), Parent = pp.inner })
+	label({ Text = title, Font = Enum.Font.BuilderSansMedium, TextSize = 13, TextColor3 = C.hi, Position = UDim2.fromOffset(14, 0), Size = UDim2.new(1, -28, 0, 38), Parent = pp.inner })
 	pp.body = new("Frame", {
 		BackgroundTransparency = 1, Position = UDim2.fromOffset(10, 38), Size = UDim2.new(1, -20, 0, 0), AutomaticSize = Enum.AutomaticSize.Y, Parent = pp.inner,
 	}, { new("UIListLayout", { SortOrder = Enum.SortOrder.LayoutOrder, Padding = UDim.new(0, 10) }) })
@@ -2813,7 +2813,7 @@ function pickList(box, getItems, searchable, height, empty)
 		icon(ICON.search, 14, { Position = UDim2.fromOffset(16, 15), ImageColor3 = C.faint, Parent = field })
 		q = new("TextBox", {
 			Text = "", PlaceholderText = "Search", PlaceholderColor3 = C.faint, ClearTextOnFocus = false,
-			Font = Enum.Font.Gotham, TextSize = 13, TextColor3 = C.hi, TextXAlignment = Enum.TextXAlignment.Left,
+			Font = Enum.Font.BuilderSans, TextSize = 13, TextColor3 = C.hi, TextXAlignment = Enum.TextXAlignment.Left,
 			BackgroundTransparency = 1, Position = UDim2.fromOffset(31, 0), Size = UDim2.new(1, -38, 1, 0), Parent = field,
 		})
 	end
@@ -3095,7 +3095,7 @@ function Fisch.notify(title, text, actionText, action, ttl)
 	stroke(C.popupStroke, card)
 	local bar = new("Frame", { BorderSizePixel = 0, Size = UDim2.new(0, 3, 1, 0), ZIndex = 201, Parent = card })
 	bindAccent(bar, function(c) bar.BackgroundColor3 = c end)
-	label({ Text = title, Font = Enum.Font.GothamMedium, TextSize = 13, TextColor3 = C.hi, Position = UDim2.fromOffset(16, 11), Size = UDim2.new(1, -100, 0, 16), ZIndex = 201, Parent = card })
+	label({ Text = title, Font = Enum.Font.BuilderSansMedium, TextSize = 13, TextColor3 = C.hi, Position = UDim2.fromOffset(16, 11), Size = UDim2.new(1, -100, 0, 16), ZIndex = 201, Parent = card })
 	label({ Text = text, TextSize = 12, TextColor3 = C.dim, Position = UDim2.fromOffset(16, 33), Size = UDim2.new(1, -100, 0, 16), TextTruncate = Enum.TextTruncate.AtEnd, ZIndex = 201, Parent = card })
 	local a = spring(0, 18, 1e-3)
 	a.t = 1
@@ -3103,7 +3103,7 @@ function Fisch.notify(title, text, actionText, action, ttl)
 	local function close() dead = true; a.t = 0 end
 	if actionText then
 		local b, s, sc = fieldButton({ AnchorPoint = Vector2.new(1, 0.5), Position = UDim2.new(1, -12, 0.5, 0), Size = UDim2.fromOffset(64, 28), ZIndex = 201, Parent = card })
-		local bl = label({ Text = actionText, Font = Enum.Font.GothamMedium, TextSize = 12, TextXAlignment = Enum.TextXAlignment.Center, Size = UDim2.fromScale(1, 1), ZIndex = 202, Parent = b })
+		local bl = label({ Text = actionText, Font = Enum.Font.BuilderSansMedium, TextSize = 12, TextXAlignment = Enum.TextXAlignment.Center, Size = UDim2.fromScale(1, 1), ZIndex = 202, Parent = b })
 		bindAccent(bl, function(c) bl.TextColor3 = c:Lerp(Color3.new(1, 1, 1), 0.3) end)
 		local st = hoverable(b)
 		on(b.Activated, function() task.spawn(action); close() end)
@@ -3555,7 +3555,7 @@ stroke(C.fieldStroke, field)
 icon(ICON.search, 14, { Position = UDim2.fromOffset(16, 15), ImageColor3 = C.faint, Parent = field })
 local search = new("TextBox", {
 	Text = "", PlaceholderText = "Search fish or rarity", PlaceholderColor3 = C.faint, ClearTextOnFocus = false,
-	Font = Enum.Font.Gotham, TextSize = 13, TextColor3 = C.hi, TextXAlignment = Enum.TextXAlignment.Left,
+	Font = Enum.Font.BuilderSans, TextSize = 13, TextColor3 = C.hi, TextXAlignment = Enum.TextXAlignment.Left,
 	BackgroundTransparency = 1, Position = UDim2.fromOffset(31, 0), Size = UDim2.new(1, -38, 1, 0), Parent = field,
 })
 
@@ -3564,7 +3564,7 @@ local onlySel = false
 local pills = {}
 for i, name in ipairs({ "All", "Selected" }) do
 	local b = button({ Position = UDim2.new(0.34, 16 + (i - 1) * 66, 0, 9), Size = UDim2.fromOffset(62, 30), Parent = box }, { corner(6) })
-	local l = label({ Text = name, Font = Enum.Font.GothamMedium, TextSize = 12, TextXAlignment = Enum.TextXAlignment.Center, Size = UDim2.fromScale(1, 1), Parent = b })
+	local l = label({ Text = name, Font = Enum.Font.BuilderSansMedium, TextSize = 12, TextXAlignment = Enum.TextXAlignment.Center, Size = UDim2.fromScale(1, 1), Parent = b })
 	pills[i] = { b = b, l = l, st = hoverable(b), sel = (i == 2) }
 end
 
@@ -3614,7 +3614,7 @@ local function makeRow()
 	r.b = button({ Size = UDim2.new(1, -14, 0, ROW_H - 4), Parent = list }, { corner(7) })
 	r.st = hoverable(r.b)
 	r.ic = new("ImageLabel", { BackgroundTransparency = 1, Position = UDim2.fromOffset(10, 3), Size = UDim2.fromOffset(28, 28), ScaleType = Enum.ScaleType.Fit, Parent = r.b })
-	r.nm = label({ Font = Enum.Font.GothamMedium, TextSize = 13, TextColor3 = Color3.new(1, 1, 1), Position = UDim2.fromOffset(48, 0), Size = UDim2.new(1, -250, 1, 0), TextTruncate = Enum.TextTruncate.AtEnd, Parent = r.b })
+	r.nm = label({ Font = Enum.Font.BuilderSansMedium, TextSize = 13, TextColor3 = Color3.new(1, 1, 1), Position = UDim2.fromOffset(48, 0), Size = UDim2.new(1, -250, 1, 0), TextTruncate = Enum.TextTruncate.AtEnd, Parent = r.b })
 	r.grad = new("UIGradient", { Parent = r.nm })
 	r.nm:SetAttribute("rarity", true) -- fish names never match a menu word, rarity tags must not
 	r.rar = label({ TextSize = 11, TextColor3 = C.dim, TextXAlignment = Enum.TextXAlignment.Right, AnchorPoint = Vector2.new(1, 0.5), Position = UDim2.new(1, -128, 0.5, 0), Size = UDim2.fromOffset(100, 20), Parent = r.b })
@@ -3623,7 +3623,7 @@ local function makeRow()
 	r.kgS = stroke(C.fieldStroke, r.kgF)
 	r.kg = new("TextBox", {
 		Text = "", PlaceholderText = "any", PlaceholderColor3 = C.faint, ClearTextOnFocus = false,
-		Font = Enum.Font.Gotham, TextSize = 12, TextColor3 = C.hi, TextXAlignment = Enum.TextXAlignment.Right,
+		Font = Enum.Font.BuilderSans, TextSize = 12, TextColor3 = C.hi, TextXAlignment = Enum.TextXAlignment.Right,
 		BackgroundTransparency = 1, Position = UDim2.fromOffset(4, 0), Size = UDim2.new(1, -28, 1, 0), Parent = r.kgF,
 	})
 	label({ Text = "kg", TextSize = 11, TextColor3 = C.faint, AnchorPoint = Vector2.new(1, 0), Position = UDim2.new(1, -6, 0, 0), Size = UDim2.fromOffset(16, 24), Parent = r.kgF })
@@ -3631,7 +3631,7 @@ local function makeRow()
 	r.ckS = stroke(C.fieldStroke, r.ck)
 	r.ckI = icon(ICON.check, 12, { Position = UDim2.fromScale(0.5, 0.5), ImageColor3 = Color3.new(1, 1, 1), Parent = r.ck })
 	-- header look
-	r.hd = label({ Font = Enum.Font.GothamBold, TextSize = 11, TextColor3 = Color3.new(1, 1, 1), Position = UDim2.fromOffset(12, 0), Size = UDim2.new(0.5, 0, 1, 0), Parent = r.b })
+	r.hd = label({ Font = Enum.Font.BuilderSansBold, TextSize = 11, TextColor3 = Color3.new(1, 1, 1), Position = UDim2.fromOffset(12, 0), Size = UDim2.new(0.5, 0, 1, 0), Parent = r.b })
 	r.hdGrad = new("UIGradient", { Parent = r.hd })
 	r.hd:SetAttribute("rarity", true)
 	r.hdN = label({ TextSize = 11, TextColor3 = C.faint, TextXAlignment = Enum.TextXAlignment.Right, AnchorPoint = Vector2.new(1, 0), Position = UDim2.new(1, -12, 0, 0), Size = UDim2.fromOffset(120, ROW_H - 4), Parent = r.b })
@@ -3958,7 +3958,7 @@ end
 local head = pill(116)
 local headIc = icon(ICON.list, 14, { Position = UDim2.fromOffset(18, PILL_H / 2), ZIndex = 151, Parent = head })
 bindAccent(headIc, function(c) headIc.ImageColor3 = c end)
-label({ Text = "Hotkeys", Font = Enum.Font.GothamBold, TextSize = 13, TextColor3 = C.hi, Position = UDim2.fromOffset(34, 0), Size = UDim2.new(1, -40, 1, 0), ZIndex = 151, Parent = head })
+label({ Text = "Hotkeys", Font = Enum.Font.BuilderSansBold, TextSize = 13, TextColor3 = C.hi, Position = UDim2.fromOffset(34, 0), Size = UDim2.new(1, -40, 1, 0), ZIndex = 151, Parent = head })
 local drag
 on(head.InputBegan, function(i)
 	if i.UserInputType == Enum.UserInputType.MouseButton1 then
@@ -3974,7 +3974,7 @@ local function row(i)
 	local r = { f = pill(160) }
 	r.track = new("Frame", { BorderSizePixel = 0, AnchorPoint = Vector2.new(0, 0.5), Position = UDim2.fromOffset(12, PILL_H / 2), Size = UDim2.fromOffset(20, 11), ZIndex = 151, Parent = r.f }, { new("UICorner", { CornerRadius = UDim.new(1, 0) }) })
 	r.knob = new("Frame", { BorderSizePixel = 0, AnchorPoint = Vector2.new(0, 0.5), Size = UDim2.fromOffset(7, 7), ZIndex = 152, Parent = r.track }, { new("UICorner", { CornerRadius = UDim.new(1, 0) }) })
-	r.name = label({ Font = Enum.Font.GothamMedium, TextSize = 12, Position = UDim2.fromOffset(40, 0), Size = UDim2.new(1, -46, 1, 0), ZIndex = 151, Parent = r.f })
+	r.name = label({ Font = Enum.Font.BuilderSansMedium, TextSize = 12, Position = UDim2.fromOffset(40, 0), Size = UDim2.new(1, -46, 1, 0), ZIndex = 151, Parent = r.f })
 	r.key = label({ TextSize = 11, TextColor3 = C.faint, TextXAlignment = Enum.TextXAlignment.Right, AnchorPoint = Vector2.new(1, 0), Position = UDim2.new(1, -12, 0, 0), Size = UDim2.fromOffset(60, PILL_H), ZIndex = 151, Parent = r.f })
 	r.s = spring(0, 24)
 	rows[i] = r
@@ -4000,7 +4000,7 @@ onFrame(function()
 				C.setText(r.name, rec.text)
 				local k = "[" .. keyName(b.key) .. "]"
 				C.setText(r.key, k)
-				local w = round(48 + textWidth(r.name.Text, 12, Enum.Font.GothamMedium) + 12 + textWidth(k, 11, Enum.Font.Gotham) + 12)
+				local w = round(48 + textWidth(r.name.Text, 12, Enum.Font.BuilderSansMedium) + 12 + textWidth(k, 11, Enum.Font.BuilderSans) + 12)
 				r.f.Size = UDim2.fromOffset(math.max(w, 120), PILL_H)
 				local a = r.s.x
 				r.track.BackgroundColor3 = C.toggleOff:Lerp(accent, a)
@@ -4201,9 +4201,9 @@ local tip = new("Frame", {
 	new("UIListLayout", { SortOrder = Enum.SortOrder.LayoutOrder, Padding = UDim.new(0, 5) }),
 })
 stroke(C.popupStroke, tip)
-local tTitle = new("TextLabel", { BackgroundTransparency = 1, Font = Enum.Font.GothamMedium, TextSize = 13, TextColor3 = C.hi, TextXAlignment = Enum.TextXAlignment.Left, Size = UDim2.new(1, 0, 0, 16), LayoutOrder = 1, ZIndex = 301 })
-local tDesc = new("TextLabel", { BackgroundTransparency = 1, Font = Enum.Font.Gotham, TextSize = 12, TextColor3 = C.text, TextWrapped = true, TextXAlignment = Enum.TextXAlignment.Left, Size = UDim2.new(1, 0, 0, 0), AutomaticSize = Enum.AutomaticSize.Y, LayoutOrder = 2, ZIndex = 301 })
-local tVal = new("TextLabel", { BackgroundTransparency = 1, Font = Enum.Font.Gotham, TextSize = 11, TextColor3 = C.dim, TextXAlignment = Enum.TextXAlignment.Left, Size = UDim2.new(1, 0, 0, 14), LayoutOrder = 3, ZIndex = 301 })
+local tTitle = new("TextLabel", { BackgroundTransparency = 1, Font = Enum.Font.BuilderSansMedium, TextSize = 13, TextColor3 = C.hi, TextXAlignment = Enum.TextXAlignment.Left, Size = UDim2.new(1, 0, 0, 16), LayoutOrder = 1, ZIndex = 301 })
+local tDesc = new("TextLabel", { BackgroundTransparency = 1, Font = Enum.Font.BuilderSans, TextSize = 12, TextColor3 = C.text, TextWrapped = true, TextXAlignment = Enum.TextXAlignment.Left, Size = UDim2.new(1, 0, 0, 0), AutomaticSize = Enum.AutomaticSize.Y, LayoutOrder = 2, ZIndex = 301 })
+local tVal = new("TextLabel", { BackgroundTransparency = 1, Font = Enum.Font.BuilderSans, TextSize = 11, TextColor3 = C.dim, TextXAlignment = Enum.TextXAlignment.Left, Size = UDim2.new(1, 0, 0, 14), LayoutOrder = 3, ZIndex = 301 })
 -- the tooltip writes its own language: keep the translation layer off it
 for _, o in ipairs({ tTitle, tDesc, tVal }) do
 	C.src[o] = false
