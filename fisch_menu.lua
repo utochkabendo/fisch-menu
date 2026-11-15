@@ -363,6 +363,7 @@ local function shadow(parent, margin, transparency)
 end
 
 local holderScale = new("UIScale", {})
+C.S = function() local k = holderScale.Scale return k > 0.05 and k or 1 end
 local holder = new("CanvasGroup", {
 	AnchorPoint = Vector2.new(0.5, 0.5),
 	BackgroundTransparency = 1,
@@ -446,8 +447,8 @@ new("Frame", {
 
 -- Everything floating (popups, context menus, toast) lives here, above the rest.
 local overlay = new("Frame", { BackgroundTransparency = 1, Size = UDim2.fromScale(1, 1), ZIndex = 50, Parent = window })
-local function relPos(g) return g.AbsolutePosition - overlay.AbsolutePosition end
-local function winSize() return overlay.AbsoluteSize end
+local function relPos(g) return (g.AbsolutePosition - overlay.AbsolutePosition) / C.S() end
+local function winSize() return overlay.AbsoluteSize / C.S() end
 
 -- Frosted sidebar: a near-invisible Glass part right in front of the camera, covering the sidebar,
 -- plus a near-field DepthOfField blurs the world seen through it (glass needs graphics level 8+).
@@ -656,8 +657,8 @@ end
 -- Below the anchor (or above when there's no room), aligned to its left or right edge.
 function Popup:placeAt(anchor, h, alignRight)
 	local r = relPos(anchor)
-	local x = alignRight and (r.X + anchor.AbsoluteSize.X - self.w) or r.X
-	local y = r.Y + anchor.AbsoluteSize.Y + 6
+	local x = alignRight and (r.X + anchor.AbsoluteSize.X / C.S() - self.w) or r.X
+	local y = r.Y + anchor.AbsoluteSize.Y / C.S() + 6
 	self.dir = 1
 	if y + h > winSize().Y - 6 then
 		y = r.Y - 6 - h
@@ -776,7 +777,7 @@ local function openContext(items, at, anchor)
 end
 -- Context menu at the cursor.
 local function contextAtMouse(items, anchor)
-	local m = mouseAbs() - overlay.AbsolutePosition
+	local m = (mouseAbs() - overlay.AbsolutePosition) / C.S()
 	openContext(items, Vector2.new(m.X + 4, m.Y + 4), anchor)
 end
 
@@ -820,7 +821,7 @@ ColorValue.__index = ColorValue
 local function colorValue(c, a)
 	local h, s, v = c:ToHSV()
 	return setmetatable({
-		h = h, s = s, v = v, a = a,
+		h = h, s = s, v = v, a = a, def = { c, a },
 		dh = spring(h, 30, 1e-4), ds = spring(s, 30, 1e-4), dv = spring(v, 30, 1e-4), da = spring(a, 30, 1e-4),
 	}, ColorValue)
 end
@@ -994,8 +995,8 @@ local tabs, pages = {}, {}
 local current
 local tabsBottom = 0
 local indY = spring(0, 26, 0.01)
-local pageY = spring(0, 15, 0.01)
-C.pageFade = spring(0, 16, 1e-3)
+local pageY = spring(0, 11, 0.01)
+C.pageFade = spring(0, 10, 1e-3)
 
 local snapHighlight = false
 local function selectTab(tab, instant)
@@ -1011,7 +1012,7 @@ local function selectTab(tab, instant)
 		snapHighlight = true
 		tab.active:snap(1)
 	else
-		pageY:snap(10)
+		pageY:snap(4)
 		pageY.t = 0
 		C.pageFade:snap(1)
 		C.pageFade.t = 0
@@ -1154,7 +1155,7 @@ do
 		end
 		if current then current.page.Position = UDim2.fromOffset(0, round(pageY.x)) end
 		local pf = C.pageFade.x
-		pageHost.GroupTransparency = pf < 0.004 and 0 or pf * pf
+		pageHost.GroupTransparency = pf < 0.004 and 0 or pf * pf * (3 - 2 * pf)
 	end)
 end
 
@@ -1306,7 +1307,7 @@ do -- scoped: Luau caps a function at 200 locals
 			contextAtMouse(items, anchor)
 		else
 			local r = relPos(anchor)
-			openContext(items, Vector2.new(r.X + anchor.AbsoluteSize.X + 6, r.Y - 4), anchor)
+			openContext(items, Vector2.new(r.X + anchor.AbsoluteSize.X / C.S() + 6, r.Y - 4), anchor)
 		end
 	end
 
@@ -1890,6 +1891,10 @@ local picker, pickValue, pickTarget, pickDrag, openPicker, colorMenu
 				swatch = clip or C.faint, text = "Paste" .. suffix, disabled = clip == nil,
 				fn = function() cv:set(colorClip[1], colorClip[2], colorClip[3], colorClip[4]) end,
 			}
+			items[#items + 1] = {
+				icon = ICON.restore, text = "Reset" .. suffix,
+				fn = function() if cv.def then cv:setRGB(cv.def[1], cv.def[2]) end end,
+			}
 		end
 		contextAtMouse(items, anchor)
 	end
@@ -2026,7 +2031,7 @@ local function itemRow(box, text)
 		r.BackgroundTransparency = 1 - 0.018 * st.hover.x
 		lbl.TextColor3 = C.text:Lerp(C.hi, st.hover.x * 0.5)
 		clip.Size = UDim2.new(1, -28 - rightW, 1, 0)
-		local over = full - clip.AbsoluteSize.X
+		local over = full - clip.AbsoluteSize.X / C.S()
 		local scrolling = over > 1 and st.hover.t == 1
 		if scrolling then
 			-- ping-pong with pauses at both ends
@@ -2282,7 +2287,7 @@ do
 			hkPop:hide()
 			rec.reset()
 		end)
-		hkAt = mouseAbs() - overlay.AbsolutePosition + Vector2.new(4, 4)
+		hkAt = (mouseAbs() - overlay.AbsolutePosition) / C.S() + Vector2.new(4, 4)
 		hkPop.dir = 1
 		hkPop:show(rec.row)
 	end
@@ -2680,7 +2685,7 @@ local function panel(title)
 		BackgroundTransparency = 1, Position = UDim2.fromOffset(10, 38), Size = UDim2.new(1, -20, 0, 0), AutomaticSize = Enum.AutomaticSize.Y, Parent = pp.inner,
 	}, { new("UIListLayout", { SortOrder = Enum.SortOrder.LayoutOrder, Padding = UDim.new(0, 10) }) })
 	onFrame(function()
-		if pp.open then pp.h:snap(round(38 + pp.body.AbsoluteSize.Y + 10)) end
+		if pp.open then pp.h:snap(round(38 + pp.body.AbsoluteSize.Y / C.S() + 10)) end
 	end)
 	return pp
 end
@@ -2701,12 +2706,12 @@ local function submenuRow(box, text, pp)
 			pp:hide()
 			return
 		end
-		local h = round(38 + pp.body.AbsoluteSize.Y + 10)
+		local h = round(38 + pp.body.AbsoluteSize.Y / C.S() + 10)
 		pp.h:snap(h)
 		local rp = relPos(r)
 		-- opens to the right of the row; near the window edge it slides left over the row instead of flipping
 		pp.dir = 1
-		pp:place(rp.X + r.AbsoluteSize.X + 8, rp.Y - 8, h)
+		pp:place(rp.X + r.AbsoluteSize.X / C.S() + 8, rp.Y - 8, h)
 		pp:show(r)
 	end)
 	onFrame(function()
@@ -2717,12 +2722,25 @@ end
 ---------------------------------------------------- Settings
 local settingsLeft, settingsRight = columns(pages.Settings)
 local settingsMenu
+local menuColors = {}
 do
 	local left = settingsLeft
 	local menuBox = group(left, "Menu")
 	settingsMenu = menuBox
 	keybindControl(menuBox, "Menu key", function() return menuKey end, function(k) menuKey = k end)
-	colorControl(menuBox, "Menu color", menuColor)
+	-- one swatch, several colors: accent, background, panels, text (chips in the picker)
+	menuColors.bg = colorValue(C.window, 1)
+	menuColors.panels = colorValue(C.box, 1)
+	menuColors.text = colorValue(C.text, 1)
+	colorOption("ui.color.bg", menuColors.bg)
+	colorOption("ui.color.panels", menuColors.panels)
+	colorOption("ui.color.text", menuColors.text)
+	local r, setR = itemRow(menuBox, "Menu color")
+	setR(42)
+	swatch(r, {
+		{ name = "Accent", cv = menuColor }, { name = "Background", cv = menuColors.bg },
+		{ name = "Panels", cv = menuColors.panels }, { name = "Text", cv = menuColors.text },
+	}, 14)
 end
 
 ---------------------------------------------------- shared: UI helpers + game helpers
@@ -2849,11 +2867,11 @@ function rowPanel(id, title)
 			pp:hide()
 			return
 		end
-		local h = round(38 + pp.body.AbsoluteSize.Y + 10)
+		local h = round(38 + pp.body.AbsoluteSize.Y / C.S() + 10)
 		pp.h:snap(h)
 		pp.dir = 1
 		local rp = relPos(dots)
-		pp:place(rp.X + dots.AbsoluteSize.X + 8, rp.Y - 8, h)
+		pp:place(rp.X + dots.AbsoluteSize.X / C.S() + 8, rp.Y - 8, h)
 		pp:show(dots)
 	end)
 	onFrame(function()
@@ -3549,10 +3567,12 @@ end)
 
 ---------------------------------------- reel: predictive bang-bang on the game's own bar physics
 
--- Rolls the game's own bar (RodMovement.Tick) and fish (FishMovement.Tick) forward for H seconds
--- with the button held (dir 1) or released (dir -1); returns how far the fish strays from the aim.
-local function rollout(r, rod, fish, dir, H, dt, aim)
+-- Rolls the game's own bar (RodMovement.Tick) and fish (FishMovement.Tick) forward for H seconds:
+-- the button held (d0 = 1) or released (d0 = -1) until tSwitch, then the other way. Trying several
+-- switch moments is what lets it brake in time, which tiny bars need. Returns how far the fish strays.
+local function rollout(r, rod, fish, d0, tSwitch, H, dt, aim)
 	local bp, vel, acc = r.barPosition, rod.CurrentVelocity, rod.CurrentAcceleration
+	local dir = d0
 	if dir ~= rod.CurrentInputDirection and rod.SimulateLegacyPhysics then acc = 0 end
 	local half = r.barSize / 2
 	local lo, hi = r.minBarPosition + half, r.maxBarPosition - half
@@ -3567,6 +3587,10 @@ local function rollout(r, rod, fish, dir, H, dt, aim)
 	local n = math.max(2, math.floor(H / dt + 0.5))
 	local cost = 0
 	for i = 1, n do
+		if dir == d0 and i * dt > tSwitch then
+			dir = -d0
+			if rod.SimulateLegacyPhysics then acc = 0 end
+		end
 		local target = dir * spd
 		if (bp <= lo and target < 0) or (bp >= hi and target > 0) then target = 0 end
 		vel, acc = TS:SmoothDamp(vel, target, acc, smoothT, maxA, dt)
@@ -3590,6 +3614,7 @@ local function rollout(r, rod, fish, dir, H, dt, aim)
 	return cost
 end
 
+local SWITCH_AT = { 0.05, 0.1, 0.16, 0.24, 0.34, math.huge }
 local function setDir(rod, dir)
 	if rod.CurrentInputDirection == dir then return end
 	if dir == 1 then rod:InputBegan(nil) else rod:InputEnded(nil) end
@@ -3621,10 +3646,16 @@ RunService:BindToRenderStep(REEL_STEP, Enum.RenderPriority.Input.Value, function
 			end
 			aim = S.aimOff
 		end
-		local H = lookahead() / 1000
-		local up = rollout(r, rod, fish, 1, H, step, aim)
-		local down = rollout(r, rod, fish, -1, H, step, aim)
-		setDir(rod, up < down and 1 or -1)
+		local H = math.max(lookahead() / 1000, 0.45)
+		local simDt = 1 / 30
+		local best, bestDir = math.huge, -1
+		for _, d0 in ipairs({ 1, -1 }) do
+			for _, ts in ipairs(SWITCH_AT) do
+				local c = rollout(r, rod, fish, d0, ts, H, simDt, aim)
+				if c < best then best, bestDir = c, d0 end
+			end
+		end
+		setDir(rod, bestDir)
 	end)
 	if not ok then return end
 end)
@@ -3920,7 +3951,7 @@ end
 local lastY, lastH = -1, -1
 onFrame(function()
 	if not page.Visible then return end
-	holderF.Size = UDim2.new(1, -28, 0, math.max(page.AbsoluteSize.Y - 20, 200))
+	holderF.Size = UDim2.new(1, -28, 0, math.max(page.AbsoluteSize.Y / C.S() - 20, 200))
 	-- header pills, switch, counters
 	for i, p in ipairs(pills) do
 		local sel = (i == 2) == onlySel
@@ -3933,7 +3964,7 @@ onFrame(function()
 	local t = #entries .. " fish  ·  " .. nSel .. " selected"
 	C.setText(countLbl, t)
 
-	local y, h = list.CanvasPosition.Y, list.AbsoluteSize.Y
+	local y, h = list.CanvasPosition.Y, list.AbsoluteSize.Y / C.S()
 	if dirty or y ~= lastY or h ~= lastH then
 		dirty, lastY, lastH = false, y, h
 		local first = math.floor(y / ROW_H) + 1
@@ -4436,7 +4467,7 @@ onFrame(function()
 				r.f.Size = UDim2.fromOffset(width(r.name, Enum.Font.BuilderSansMedium, 13, 37), H)
 				local a = r.s.x
 				r.track.BackgroundColor3 = Color3.fromRGB(110, 112, 120):Lerp(Color3.fromRGB(236, 237, 241), a)
-				r.knob.Position = UDim2.new(0, round(2 + (1 - a) * 0 + a * 0), 0.5, 0)
+				r.knob.Position = UDim2.new(0, round(2 + a * 9), 0.5, 0)
 				r.name.TextColor3 = Color3.fromRGB(150, 152, 160):Lerp(Color3.fromRGB(236, 237, 241), a)
 			end
 		end
@@ -4541,21 +4572,17 @@ local function shift(base, from, to)
 	local function ch(a, b, c) return math.clamp(a + (c - b), 0, 1) end
 	return Color3.new(ch(base.R, from.R, to.R), ch(base.G, from.G, to.G), ch(base.B, from.B, to.B))
 end
-local bgCv = colorValue(D0.window, 1)
-local panelCv = colorValue(D0.box, 1)
-local textCv = colorValue(D0.text, 1)
-colorOption("ui.color.bg", bgCv)
-colorOption("ui.color.panels", panelCv)
-colorOption("ui.color.text", textCv)
-colorControl(settingsMenu, "Background", bgCv)
-colorControl(settingsMenu, "Panels", panelCv)
-colorControl(settingsMenu, "Text color", textCv)
+local bgCv, panelCv, textCv = menuColors.bg, menuColors.panels, menuColors.text
 
-local PROPS = { "BackgroundColor3", "TextColor3", "ImageColor3" }
+local PROPS = { "BackgroundColor3", "TextColor3" }
+local WHITE, BLACK = Color3.new(1, 1, 1), Color3.new(0, 0, 0)
 local function recolor(map)
+	for i = #map, 1, -1 do
+		if map[i][1] == WHITE or map[i][1] == BLACK then table.remove(map, i) end
+	end
 	if #map == 0 then return end
 	for _, o in ipairs(gui:GetDescendants()) do
-		if o:IsA("GuiObject") then
+		if o:IsA("GuiObject") and not o:FindFirstChildOfClass("UIGradient") then
 			for _, p in ipairs(PROPS) do
 				local ok, v = pcall(function() return o[p] end)
 				if ok and typeof(v) == "Color3" then
@@ -4990,7 +5017,7 @@ local RU = {
 	["Walk Speed"] = "Скорость бега", ["Jump Power"] = "Сила прыжка", ["Swim Speed"] = "Турбодизель",
 	["Walk on Water"] = "Ходьба по воде", ["Send to player"] = "Отправить игроку", ["Network"] = "Сеть",
 	["Synchronization"] = "Синхронизация", ["Freeze Player"] = "Заморозка игрока", ["Auto Water Aim"] = "Автоприцел в воду",
-	["DPI scale"] = "Масштаб (DPI)", ["Background"] = "Фон", ["Panels"] = "Панели", ["Text color"] = "Цвет текста", ["Cloud"] = "Облако", ["Config code"] = "Код конфига", ["Load code"] = "Загрузить по коду",
+	["DPI scale"] = "Масштаб (DPI)", ["Accent"] = "Акцент", ["Text"] = "Текст", ["Background"] = "Фон", ["Panels"] = "Панели", ["Text color"] = "Цвет текста", ["Cloud"] = "Облако", ["Config code"] = "Код конфига", ["Load code"] = "Загрузить по коду",
 	["Accept"] = "Принять", ["Decline"] = "Отказаться", ["Config loaded"] = "Конфиг загружен", ["Code not found"] = "Код не найден",
 	["Enter a code"] = "Введи код", ["No FL users on this server"] = "На сервере нет пользователей FL",
 	["STARTER"] = "НАЧАЛЬНЫЕ", ["OPEN SEA"] = "ОТКРЫТОЕ МОРЕ", ["FAR"] = "ДАЛЬНИЕ", ["OTHER"] = "ДРУГИЕ", ["Safe Mode"] = "Безопасный режим", ["Safety"] = "Безопасность",
@@ -5474,8 +5501,8 @@ on(RunService.RenderStepped, function(dt)
 	end
 	if resizing then
 		local d = m - resizeAnchor
-		sw.t = math.clamp(resizeStart.X + d.X, MIN_SIZE.X, vp.X)
-		sh.t = math.clamp(resizeStart.Y + d.Y, MIN_SIZE.Y, vp.Y)
+		sw.t = math.clamp(resizeStart.X + d.X / C.S(), MIN_SIZE.X, vp.X)
+		sh.t = math.clamp(resizeStart.Y + d.Y / C.S(), MIN_SIZE.Y, vp.Y)
 	end
 
 	scale.t = 1
