@@ -172,7 +172,11 @@ local function spring(x, speed, eps)
 	return s
 end
 -- fn(dt) runs every frame; returning true unregisters it.
-local function onFrame(fn) frameFns[fn] = true end
+C.always = setmetatable({}, { __mode = "k" })
+local function onFrame(fn, always)
+	frameFns[fn] = true
+	if always then C.always[fn] = true end
+end
 
 ---------------------------------------------------------------- instance helpers
 
@@ -419,7 +423,7 @@ local content = new("Frame", {
 	Parent = window,
 })
 local topbar = new("Frame", { BackgroundTransparency = 1, Size = UDim2.new(1, 0, 0, HEADER_H), Active = true, Parent = content })
-local pageHost = new("Frame", {
+local pageHost = new("CanvasGroup", {
 	BackgroundTransparency = 1,
 	Position = UDim2.fromOffset(0, HEADER_H),
 	Size = UDim2.new(1, 0, 1, -HEADER_H),
@@ -990,7 +994,8 @@ local tabs, pages = {}, {}
 local current
 local tabsBottom = 0
 local indY = spring(0, 26, 0.01)
-local pageY = spring(0, 26, 0.01)
+local pageY = spring(0, 15, 0.01)
+C.pageFade = spring(0, 16, 1e-3)
 
 local snapHighlight = false
 local function selectTab(tab, instant)
@@ -1006,8 +1011,10 @@ local function selectTab(tab, instant)
 		snapHighlight = true
 		tab.active:snap(1)
 	else
-		pageY:snap(8)
+		pageY:snap(10)
 		pageY.t = 0
+		C.pageFade:snap(1)
+		C.pageFade.t = 0
 	end
 end
 
@@ -1146,6 +1153,8 @@ do
 			tab.btn.BackgroundTransparency = 1 - 0.03 * hv * (1 - a)
 		end
 		if current then current.page.Position = UDim2.fromOffset(0, round(pageY.x)) end
+		local pf = C.pageFade.x
+		pageHost.GroupTransparency = pf < 0.004 and 0 or pf * pf
 	end)
 end
 
@@ -3263,7 +3272,7 @@ function Fisch.notify(title, text, actionText, action, ttl, action2Text, action2
 			if not b.Parent then return true end
 			b.BackgroundColor3 = C.field:Lerp(C.fieldHover, st.hover.x)
 			sc.Scale = 1 - st.press.x * 0.04
-		end)
+		end, true)
 	end
 	local born = os.clock()
 	onFrame(function()
@@ -3272,7 +3281,7 @@ function Fisch.notify(title, text, actionText, action, ttl, action2Text, action2
 		timeBar.Size = UDim2.new(math.max(left, 0), -3, 0, 2)
 		card.GroupTransparency = 1 - a.x
 		if dead and a.x < 0.01 then card:Destroy(); return true end
-	end)
+	end, true)
 	return close
 end
 end)()
@@ -3301,6 +3310,8 @@ local castOn = toggleControl(g, "fish.cast", "Auto Cast", true)
 local shakeOn = toggleControl(g, "fish.shake", "Auto Shake", true)
 local reelOn = toggleControl(g, "fish.reel", "Auto Reel", true)
 local cineOn = toggleControl(g, "fish.cinematic", "Cinematic Camera", false)
+local freezeOn = toggleControl(g, "fish.freeze", "Freeze Player", false)
+local waterAimOn = toggleControl(g, "fish.wateraim", "Auto Water Aim", true)
 
 local castP = rowPanel("fish.cast", "Auto Cast")
 local castMode = choiceControl(castP, "fish.cast.mode", "Cast power", { "Perfect", "Random" }, "Perfect")
@@ -3312,7 +3323,7 @@ local lookahead = sliderControl(reelP, "fish.reel.look", "Lookahead", 80, 500, 2
 local cineP = rowPanel("fish.cinematic", "Cinematic Camera")
 local cineSpeed = sliderControl(cineP, "fish.cine.speed", "Orbit speed", 2, 40, 10, "")
 local cineDist = sliderControl(cineP, "fish.cine.dist", "Distance", 6, 40, 14, " st")
-dimRows({ "fish.equip", "fish.cast", "fish.shake", "fish.reel", "fish.cinematic" }, autoOn)
+dimRows({ "fish.equip", "fish.cast", "fish.shake", "fish.reel", "fish.cinematic", "fish.freeze", "fish.wateraim" }, autoOn)
 
 local sg = group(right, "Session")
 local setStatus = infoRow(sg, "Status")
@@ -3382,6 +3393,45 @@ local function powerOf(char)
 		bar = bar and bar:FindFirstChild("bar")
 		if bar then return n == "thunderpower" and 1 or bar.Size.Y.Scale end
 	end
+end
+
+-- Auto water aim: if you're not facing water, turn to the closest direction that has open water
+-- 12..30 studs out (where a cast lands), so the bobber always goes in.
+local aimParams = RaycastParams.new()
+aimParams.FilterType = Enum.RaycastFilterType.Exclude
+aimParams.IgnoreWater = false
+local function waterAt(p)
+	local hit = workspace:Raycast(p + Vector3.new(0, 40, 0), Vector3.new(0, -120, 0), aimParams)
+	return hit and hit.Instance == workspace.Terrain and hit.Material == Enum.Material.Water
+end
+local function aimAtWater()
+	local char = LP.Character
+	local hrp = char and char:FindFirstChild("HumanoidRootPart")
+	if not hrp then return end
+	local ignore = { char }
+	if workspace:FindFirstChild("zones") then ignore[2] = workspace.zones end
+	aimParams.FilterDescendantsInstances = ignore
+	local look = hrp.CFrame.LookVector
+	local base = math.atan2(-look.X, -look.Z)
+	for step = 0, 12 do
+		for _, sign in ipairs(step == 0 and { 1 } or { 1, -1 }) do
+			local ang = base + sign * step * math.rad(15)
+			local dir = Vector3.new(-math.sin(ang), 0, -math.cos(ang))
+			local hits = 0
+			for _, d in ipairs({ 12, 18, 24, 30 }) do
+				if waterAt(hrp.Position + dir * d) then hits += 1 end
+			end
+			if hits >= 3 then
+				if step > 0 then
+					local p = hrp.Position
+					hrp.CFrame = CFrame.lookAt(p, p + dir)
+					task.wait(0.08)
+				end
+				return true
+			end
+		end
+	end
+	return false
 end
 
 -- Hold the button, let the game's power meter climb, release at the top: the game itself
@@ -3483,6 +3533,7 @@ local loop = task.spawn(function()
 			end
 			if LP:GetAttribute("RodEquipInProgress") or LP:GetAttribute("BlockCast") then return end
 			if castOn() and os.clock() >= S.nextCast and hum:GetState() ~= Enum.HumanoidStateType.Swimming then
+				if waterAimOn() then pcall(aimAtWater) end
 				if cast(tool) then
 					S.nextCast = os.clock() + 2.5 -- the throw takes a moment to register as casted
 				else
@@ -3599,6 +3650,43 @@ onFrame(function()
 	setPerfect(tostring(S.perfect))
 	setLost(tostring(S.lost))
 end)
+
+---------------------------------------- freeze: nothing can push you while auto fish runs
+
+-- A rigid AlignPosition pins your root part where you stood (anchoring it breaks the cast: the
+-- bobber never lands). Rotation stays free, so water aim can still turn you. Released while
+-- swimming, selling or when auto fish / freeze is off.
+local FREEZE_STEP = "FischMenuFreeze" .. gui.Name
+local hold = {}
+local function release()
+	if hold.ap then hold.ap:Destroy() end
+	if hold.att then hold.att:Destroy() end
+	table.clear(hold)
+end
+RunService:BindToRenderStep(FREEZE_STEP, Enum.RenderPriority.Input.Value + 4, function()
+	local char = LP.Character
+	local hrp = char and char:FindFirstChild("HumanoidRootPart")
+	local hum = char and char:FindFirstChildOfClass("Humanoid")
+	local want = hrp and hum and hum.Health > 0 and autoOn() and freezeOn() and not Fisch.busy
+		and hum:GetState() ~= Enum.HumanoidStateType.Swimming
+	if want then
+		if hold.hrp ~= hrp or not (hold.ap and hold.ap.Parent) then
+			release()
+			hold.hrp = hrp
+			hold.att = new("Attachment", { Name = tostring(math.random(1e8, 9e8)), Parent = hrp })
+			hold.ap = new("AlignPosition", {
+				Mode = Enum.PositionAlignmentMode.OneAttachment, Attachment0 = hold.att, Position = hrp.Position,
+				RigidityEnabled = true, MaxForce = math.huge, MaxVelocity = math.huge, Parent = hrp,
+			})
+		end
+	elseif hold.ap then
+		release()
+	end
+end)
+Fisch.cleanups[#Fisch.cleanups + 1] = function()
+	pcall(RunService.UnbindFromRenderStep, RunService, FREEZE_STEP)
+	release()
+end
 
 ---------------------------------------- cinematic camera: slow orbit while auto fish runs
 
@@ -4044,7 +4132,7 @@ local function consider(part)
 	local key = part.Name .. math.floor(part.Position.X / 100) .. "," .. math.floor(part.Position.Z / 100)
 	if alertsOn() and (not told[key] or os.clock() - told[key] > 600) then
 		told[key] = os.clock()
-		Fisch.notify(part.Name .. " appeared", dist(part.Position) .. " away", "TP", function() goTo(part) end, 40)
+		Fisch.notify(part.Name .. " appeared", dist(part.Position) .. " away", "TP", function() goTo(part) end, 120)
 	end
 end
 local zones = workspace:FindFirstChild("zones")
@@ -4277,6 +4365,8 @@ end)()
 
 ---------------------------------------------------- Hotkeys indicator: every bound function, live state
 
+-- Looks like the reference: a dark rounded pill "[list icon] Hotkeys", and under it one pill per bound
+-- function with a small switch glyph and the function's name. Drag the header to move it.
 ;(function()
 local showOn = toggleControl(group(settingsLeft, "Indicators"), "ui.hotkeys", "Hotkey list", true)
 local pos = { x = 24, y = 320 }
@@ -4284,18 +4374,24 @@ options["ui.hotkeys.pos"] = {
 	save = function() return { pos.x, pos.y } end,
 	load = function(t) if type(t) == "table" and tonumber(t[1]) and tonumber(t[2]) then pos.x, pos.y = t[1], t[2] end end,
 }
-local PILL_H, GAP = 30, 6
-local host = new("Frame", { BackgroundTransparency = 1, Size = UDim2.fromOffset(220, 400), ZIndex = 150, Parent = gui })
-local function pill(w)
-	local f = new("CanvasGroup", { BackgroundColor3 = C.popup, BackgroundTransparency = 0.04, BorderSizePixel = 0, Size = UDim2.fromOffset(w, PILL_H), ZIndex = 150, Parent = host }, { corner(8) })
-	stroke(C.popupStroke, f)
+local H, GAP, R = 30, 6, 9
+local PILL = Color3.fromRGB(21, 22, 26)
+local host = new("Frame", { BackgroundTransparency = 1, Size = UDim2.fromOffset(260, 400), ZIndex = 150, Parent = gui })
+local function pill()
+	local f = new("Frame", { BackgroundColor3 = PILL, BackgroundTransparency = 0.08, BorderSizePixel = 0, Size = UDim2.fromOffset(120, H), ZIndex = 151, Parent = host }, { corner(R) })
+	new("UIStroke", { Color = Color3.fromRGB(38, 40, 46), Transparency = 0.35, Thickness = 1, Parent = f })
+	-- soft dark glow around the pill, like the reference
+	new("ImageLabel", {
+		BackgroundTransparency = 1, Image = ICON.shadow, ImageColor3 = Color3.new(0, 0, 0), ImageTransparency = 0.45,
+		ScaleType = Enum.ScaleType.Slice, SliceCenter = Rect.new(48, 48, 80, 80), SliceScale = 0.35,
+		Position = UDim2.fromOffset(-10, -8), Size = UDim2.new(1, 20, 1, 18), ZIndex = 150, Parent = f,
+	})
 	return f
 end
--- header: list icon + title, drag it to move the whole list
-local head = pill(116)
-local headIc = icon(ICON.list, 14, { Position = UDim2.fromOffset(18, PILL_H / 2), ZIndex = 151, Parent = head })
+local head = pill()
+local headIc = icon(ICON.list, 15, { Position = UDim2.fromOffset(20, H / 2), ZIndex = 152, Parent = head })
 bindAccent(headIc, function(c) headIc.ImageColor3 = c end)
-label({ Text = "Hotkeys", Font = Enum.Font.BuilderSansBold, TextSize = 13, TextColor3 = C.hi, Position = UDim2.fromOffset(34, 0), Size = UDim2.new(1, -40, 1, 0), ZIndex = 151, Parent = head })
+local headLbl = label({ Text = "Hotkeys", Font = Enum.Font.BuilderSansBold, TextSize = 14, TextColor3 = Color3.fromRGB(226, 228, 233), Position = UDim2.fromOffset(35, 0), Size = UDim2.new(1, -40, 1, 0), ZIndex = 152, Parent = head })
 local drag
 on(head.InputBegan, function(i)
 	if i.UserInputType == Enum.UserInputType.MouseButton1 then
@@ -4308,14 +4404,17 @@ on(UIS.InputEnded, function(i) if i.UserInputType == Enum.UserInputType.MouseBut
 local rows = {}
 local function row(i)
 	if rows[i] then return rows[i] end
-	local r = { f = pill(160) }
-	r.track = new("Frame", { BorderSizePixel = 0, AnchorPoint = Vector2.new(0, 0.5), Position = UDim2.fromOffset(12, PILL_H / 2), Size = UDim2.fromOffset(20, 11), ZIndex = 151, Parent = r.f }, { new("UICorner", { CornerRadius = UDim.new(1, 0) }) })
-	r.knob = new("Frame", { BorderSizePixel = 0, AnchorPoint = Vector2.new(0, 0.5), Size = UDim2.fromOffset(7, 7), ZIndex = 152, Parent = r.track }, { new("UICorner", { CornerRadius = UDim.new(1, 0) }) })
-	r.name = label({ Font = Enum.Font.BuilderSansMedium, TextSize = 12, Position = UDim2.fromOffset(40, 0), Size = UDim2.new(1, -46, 1, 0), ZIndex = 151, Parent = r.f })
-	r.key = label({ TextSize = 11, TextColor3 = C.faint, TextXAlignment = Enum.TextXAlignment.Right, AnchorPoint = Vector2.new(1, 0), Position = UDim2.new(1, -12, 0, 0), Size = UDim2.fromOffset(60, PILL_H), ZIndex = 151, Parent = r.f })
+	local r = { f = pill() }
+	-- the switch glyph: a white capsule with a dark dot
+	r.track = new("Frame", { BorderSizePixel = 0, AnchorPoint = Vector2.new(0, 0.5), Position = UDim2.fromOffset(13, H / 2), Size = UDim2.fromOffset(16, 9), ZIndex = 152, Parent = r.f }, { new("UICorner", { CornerRadius = UDim.new(1, 0) }) })
+	r.knob = new("Frame", { BorderSizePixel = 0, BackgroundColor3 = PILL, AnchorPoint = Vector2.new(0, 0.5), Size = UDim2.fromOffset(5, 5), ZIndex = 153, Parent = r.track }, { new("UICorner", { CornerRadius = UDim.new(1, 0) }) })
+	r.name = label({ Font = Enum.Font.BuilderSansMedium, TextSize = 13, Position = UDim2.fromOffset(37, 0), Size = UDim2.new(1, -42, 1, 0), ZIndex = 152, Parent = r.f })
 	r.s = spring(0, 24)
 	rows[i] = r
 	return r
+end
+local function width(lbl, font, size, left)
+	return round(left + textWidth(lbl.Text, size, font) + 14)
 end
 onFrame(function()
 	if drag then
@@ -4330,27 +4429,23 @@ onFrame(function()
 			if rec and b.key and not b.dead then
 				n += 1
 				local r = row(n)
-				local on_ = rec.get()
-				r.s.t = on_ and 1 or 0
+				r.s.t = rec.get() and 1 or 0
 				r.f.Visible = true
-				r.f.Position = UDim2.fromOffset(0, n * (PILL_H + GAP))
+				r.f.Position = UDim2.fromOffset(0, n * (H + GAP))
 				C.setText(r.name, rec.text)
-				local k = "[" .. keyName(b.key) .. "]"
-				C.setText(r.key, k)
-				local w = round(48 + textWidth(r.name.Text, 12, Enum.Font.BuilderSansMedium) + 12 + textWidth(k, 11, Enum.Font.BuilderSans) + 12)
-				r.f.Size = UDim2.fromOffset(math.max(w, 120), PILL_H)
+				r.f.Size = UDim2.fromOffset(width(r.name, Enum.Font.BuilderSansMedium, 13, 37), H)
 				local a = r.s.x
-				r.track.BackgroundColor3 = C.toggleOff:Lerp(accent, a)
-				r.knob.BackgroundColor3 = C.knobOff:Lerp(Color3.new(1, 1, 1), a)
-				r.knob.Position = UDim2.new(0, round(2 + a * 9), 0.5, 0)
-				r.name.TextColor3 = C.dim:Lerp(C.hi, a)
+				r.track.BackgroundColor3 = Color3.fromRGB(110, 112, 120):Lerp(Color3.fromRGB(236, 237, 241), a)
+				r.knob.Position = UDim2.new(0, round(2 + (1 - a) * 0 + a * 0), 0.5, 0)
+				r.name.TextColor3 = Color3.fromRGB(150, 152, 160):Lerp(Color3.fromRGB(236, 237, 241), a)
 			end
 		end
 	end
 	for i = n + 1, #rows do rows[i].f.Visible = false end
+	head.Size = UDim2.fromOffset(width(headLbl, Enum.Font.BuilderSansBold, 14, 35), H)
 	host.Visible = vis and n > 0
 	host.Position = UDim2.fromOffset(round(pos.x), round(pos.y))
-end)
+end, true)
 end)()
 
 ---------------------------------------------------- Safe Mode: yellow marker, locks, 5 clicks to turn off
@@ -4429,6 +4524,93 @@ onFrame(function()
 end)
 end)()
 
+---------------------------------------------------- Menu look: DPI scale, background / panels / text colors
+
+;(function()
+local dpi = choiceControl(settingsMenu, "ui.dpi", "DPI scale", { "70%", "100%", "125%", "150%" }, "100%")
+onFrame(function()
+	local v = (tonumber(dpi():match("%d+")) or 100) / 100
+	if C.dpi ~= v then C.dpi = v end
+end)
+
+-- three extra colors next to the menu color; each derives its darker / lighter shades the same way the
+-- defaults do, and recolors what's already on screen (exact matches of the old shade)
+local D0 = {}
+for _, k in ipairs({ "window", "side", "box", "field", "card", "popup", "fieldHover", "text", "hi" }) do D0[k] = C[k] end
+local function shift(base, from, to)
+	local function ch(a, b, c) return math.clamp(a + (c - b), 0, 1) end
+	return Color3.new(ch(base.R, from.R, to.R), ch(base.G, from.G, to.G), ch(base.B, from.B, to.B))
+end
+local bgCv = colorValue(D0.window, 1)
+local panelCv = colorValue(D0.box, 1)
+local textCv = colorValue(D0.text, 1)
+colorOption("ui.color.bg", bgCv)
+colorOption("ui.color.panels", panelCv)
+colorOption("ui.color.text", textCv)
+colorControl(settingsMenu, "Background", bgCv)
+colorControl(settingsMenu, "Panels", panelCv)
+colorControl(settingsMenu, "Text color", textCv)
+
+local PROPS = { "BackgroundColor3", "TextColor3", "ImageColor3" }
+local function recolor(map)
+	if #map == 0 then return end
+	for _, o in ipairs(gui:GetDescendants()) do
+		if o:IsA("GuiObject") then
+			for _, p in ipairs(PROPS) do
+				local ok, v = pcall(function() return o[p] end)
+				if ok and typeof(v) == "Color3" then
+					for _, m in ipairs(map) do
+						if v == m[1] then o[p] = m[2] break end
+					end
+				end
+			end
+		elseif o:IsA("UIStroke") then
+			for _, m in ipairs(map) do
+				if o.Color == m[1] then o.Color = m[2] break end
+			end
+		end
+	end
+end
+local applied = {}
+local pending = 0
+onFrame(function()
+	local bg, pn, tx = bgCv:display(), panelCv:display(), textCv:display()
+	local key = tostring(bg) .. tostring(pn) .. tostring(tx)
+	if key == applied.key then return end
+	-- wait until the picker has rested for a moment, recoloring thousands of objects per drag frame would stutter
+	if key ~= applied.pendingKey then applied.pendingKey, pending = key, os.clock() return end
+	if os.clock() - pending < 0.12 then return end
+	applied.key = key
+	local want = {
+		window = bg, side = shift(D0.side, D0.window, bg),
+		box = pn, field = shift(D0.field, D0.box, pn), card = shift(D0.card, D0.box, pn),
+		popup = shift(D0.popup, D0.box, pn), fieldHover = shift(D0.fieldHover, D0.box, pn),
+		text = tx, hi = shift(D0.hi, D0.text, tx),
+	}
+	local map = {}
+	for k, v in pairs(want) do
+		if C[k] ~= v then
+			map[#map + 1] = { C[k], v }
+			C[k] = v
+		end
+	end
+	recolor(map)
+	-- the content area is a carbon texture, not a flat color: lay the background color over it
+	if not applied.tint then
+		for _, o in ipairs(gui:GetDescendants()) do
+			if o:IsA("ImageLabel") and o.Image == ICON.carbon then
+				applied.tint = new("Frame", { BorderSizePixel = 0, BackgroundTransparency = 1, Position = o.Position, Size = o.Size, ZIndex = o.ZIndex, Parent = o.Parent })
+				break
+			end
+		end
+	end
+	if applied.tint then
+		applied.tint.BackgroundColor3 = bg
+		applied.tint.BackgroundTransparency = bg == D0.window and 1 or 0.3
+	end
+end)
+end)()
+
 ---------------------------------------------------- FL network: who runs the script, badges, cloud configs
 
 ;(function()
@@ -4457,7 +4639,7 @@ end
 local net = { users = {} } -- userId (string) -> name, everyone on this server running the script
 Fisch.net = net
 local ng = group(settingsRight, "Network")
-local badgesOn = toggleControl(ng, "net.badges", "FL Badges", true)
+local badgesOn = toggleControl(ng, "net.badges", "Synchronization", true)
 local ICON_FL = ICON.fl
 
 ---------------------------------------- presence (every 5 s) + incoming config offers
@@ -4620,7 +4802,48 @@ task.spawn(function()
 end)
 RunService:BindToRenderStep("FischMenuTags" .. gui.Name, Enum.RenderPriority.Last.Value, function() pcall(nametags) end)
 
+---------------------------------------- pets: a little FL cube floats next to every other script user
+
+-- Only other players get one on your screen (yours shows on theirs, since they run the script too).
+local petFolder = new("Folder", { Name = tostring(math.random(1e8, 9e8)), Parent = workspace })
+local pets = {}
+local function makePet()
+	local p = new("Part", {
+		Size = Vector3.new(1.15, 1.15, 1.15), Anchored = true, CanCollide = false, CanQuery = false, CanTouch = false,
+		CastShadow = false, Material = Enum.Material.SmoothPlastic, Color = Color3.fromRGB(11, 17, 27), Parent = petFolder,
+	})
+	for _, face in ipairs({ Enum.NormalId.Front, Enum.NormalId.Back, Enum.NormalId.Left, Enum.NormalId.Right, Enum.NormalId.Top }) do
+		new("Decal", { Texture = ICON_FL, Face = face, Parent = p })
+	end
+	return { part = p, t = math.random() * 10 }
+end
+local PET_STEP = "FischMenuPets" .. gui.Name
+RunService:BindToRenderStep(PET_STEP, Enum.RenderPriority.Last.Value, function(dt)
+	for _, pl in ipairs(Players_:GetPlayers()) do
+		local char = pl.Character
+		local hrp = char and char:FindFirstChild("HumanoidRootPart")
+		local want = hrp and badgesOn() and isUser(pl) and (pl ~= LP or Fisch.petSelfTest)
+		local pet = pets[pl]
+		if want then
+			if not (pet and pet.part.Parent) then pet = makePet(); pets[pl] = pet end
+			pet.t += dt
+			local t = pet.t
+			local goal = hrp.CFrame * CFrame.new(2.4, 1.1 + math.sin(t * 2.2) * 0.3, 1.6)
+			local pos = pet.pos and pet.pos:Lerp(goal.Position, 1 - math.exp(-dt * 7)) or goal.Position
+			pet.pos = pos
+			local look = hrp.CFrame.LookVector
+			pet.part.CFrame = CFrame.lookAt(pos, pos + Vector3.new(look.X, 0, look.Z)) * CFrame.Angles(math.sin(t * 1.6) * 0.12, 0, math.sin(t * 1.3) * 0.1)
+		elseif pet then
+			pet.part:Destroy()
+			pets[pl] = nil
+		end
+	end
+	for pl, pet in pairs(pets) do if not pl.Parent then pet.part:Destroy(); pets[pl] = nil end end
+end)
+
 Fisch.cleanups[#Fisch.cleanups + 1] = function()
+	pcall(RunService.UnbindFromRenderStep, RunService, PET_STEP)
+	petFolder:Destroy()
 	pcall(RunService.UnbindFromRenderStep, RunService, "FischMenuTags" .. gui.Name)
 	pcall(function() TCS.OnIncomingMessage = prevCb end)
 	if chatConn then chatConn:Disconnect() end
@@ -4766,7 +4989,8 @@ local RU = {
 	["Hotkeys"] = "Хоткеи",
 	["Walk Speed"] = "Скорость бега", ["Jump Power"] = "Сила прыжка", ["Swim Speed"] = "Турбодизель",
 	["Walk on Water"] = "Ходьба по воде", ["Send to player"] = "Отправить игроку", ["Network"] = "Сеть",
-	["FL Badges"] = "Значки FL", ["Cloud"] = "Облако", ["Config code"] = "Код конфига", ["Load code"] = "Загрузить по коду",
+	["Synchronization"] = "Синхронизация", ["Freeze Player"] = "Заморозка игрока", ["Auto Water Aim"] = "Автоприцел в воду",
+	["DPI scale"] = "Масштаб (DPI)", ["Background"] = "Фон", ["Panels"] = "Панели", ["Text color"] = "Цвет текста", ["Cloud"] = "Облако", ["Config code"] = "Код конфига", ["Load code"] = "Загрузить по коду",
 	["Accept"] = "Принять", ["Decline"] = "Отказаться", ["Config loaded"] = "Конфиг загружен", ["Code not found"] = "Код не найден",
 	["Enter a code"] = "Введи код", ["No FL users on this server"] = "На сервере нет пользователей FL",
 	["STARTER"] = "НАЧАЛЬНЫЕ", ["OPEN SEA"] = "ОТКРЫТОЕ МОРЕ", ["FAR"] = "ДАЛЬНИЕ", ["OTHER"] = "ДРУГИЕ", ["Safe Mode"] = "Безопасный режим", ["Safety"] = "Безопасность",
@@ -4922,7 +5146,13 @@ local D = {
 	["Walk on Water"] = { "Water holds you like ground; if you're already swimming you're lifted onto the surface.", "Вода держит тебя как земля; если уже плывёшь — поднимает на поверхность.", "On / Off", "Вкл / Выкл" },
 	["Anti AFK"] = { "Keeps you from ever being kicked or marked idle: a harmless input every minute you don't touch anything. Doesn't move the camera or click.", "Никогда не даст кикнуть или пометить тебя АФК: безобидный ввод раз в минуту, пока ты ничего не трогаешь. Камеру не двигает и ничего не нажимает.", "On / Off, on by default", "Вкл / Выкл, по умолчанию вкл" },
 	["Safe Mode"] = { "Locks fly, speed, jump, swim speed, water walk and auto sell; teleports work but only once every 5 s. Click 5 times in a row to turn it off, once to turn it back on.", "Блокирует полёт, скорость, прыжок, турбодизель, ходьбу по воде и автопродажу; телепорты работают, но не чаще раза в 5 секунд. Выключается 5 нажатиями подряд, включается одним.", "On / Off, on by default", "Вкл / Выкл, по умолчанию вкл" },
-	["FL Badges"] = { "Shows the FL badge next to everyone on this server who runs the script: in the player list, chat and over their head.", "Показывает значок FL у всех на сервере, кто сидит со скриптом: в списке игроков, в чате и над головой.", "On / Off", "Вкл / Выкл" },
+	["Synchronization"] = { "Connects you with everyone on this server who runs the script: FL badge in the player list, chat and over their head, a little FL pet next to them, config sending.", "Связывает тебя со всеми на сервере, у кого скрипт: значок FL в списке игроков, в чате и над головой, маленький FL-пет рядом с ними, отправка конфигов.", "On / Off", "Вкл / Выкл" },
+	["Freeze Player"] = { "While auto fish runs you're held in place: nothing can push you, fishing still works. Released while swimming or selling.", "Пока работает автофиш, тебя держит на месте: ничто не толкнёт, рыбалка работает. Отпускает в воде и при продаже.", "On / Off", "Вкл / Выкл" },
+	["Auto Water Aim"] = { "Before each cast turns you to the nearest direction with open water, so the bobber always lands in it.", "Перед каждым забросом поворачивает тебя к ближайшему направлению с водой, чтобы поплавок всегда попадал в неё.", "On / Off", "Вкл / Выкл" },
+	["DPI scale"] = { "Size of the whole menu.", "Размер всего меню.", "70% / 100% / 125% / 150%", "70% / 100% / 125% / 150%" },
+	["Background"] = { "Window background color.", "Цвет фона окна.", "", "" },
+	["Panels"] = { "Color of boxes, fields and popups.", "Цвет блоков, полей и всплывающих окон.", "", "" },
+	["Text color"] = { "Main text color of the menu.", "Основной цвет текста меню.", "", "" },
 	["Config code"] = { "A short code someone gave you (Share in a config's menu makes one).", "Короткий код, который тебе дали (его делает «Поделиться» в меню конфига).", "", "" },
 	["Load code"] = { "Downloads the config by code, saves it as a new config and loads it.", "Скачивает конфиг по коду, сохраняет как новый и загружает.", "", "" },
 	["Fly speed"] = { "Flying speed.", "Скорость полёта.", "10 – 250, default 70", "10 – 250, по умолчанию 70" },
@@ -5256,7 +5486,7 @@ on(RunService.RenderStepped, function(dt)
 	holder.Size = UDim2.fromOffset(w + 2 * PAD, h + 2 * PAD)
 	holder.Position = UDim2.fromOffset(round(px.x) + w / 2, round(py.x) + h / 2 + round(alpha.x * 8)) -- slides in by whole pixels
 	holder.Rotation = math.abs(tilt.x) < 0.01 and 0 or tilt.x
-	holderScale.Scale = scale.x
+	holderScale.Scale = scale.x * (C.dpi or 1)
 	holder.GroupTransparency = alpha.x
 	holder.Visible = open or alpha.x < 0.995
 	setBlur(holder.Visible and (1 - alpha.x) or 0)
@@ -5272,8 +5502,9 @@ on(RunService.RenderStepped, function(dt)
 	local gc = C.dim:Lerp(C.text, math.max(gripSt.hover.x, resizing and 1 or 0))
 	for _, d in ipairs(gripDots) do d.BackgroundColor3 = gc end
 
+	local shown = holder.Visible
 	for fn in pairs(frameFns) do
-		if fn(dt) == true then frameFns[fn] = nil end
+		if (shown or C.always[fn]) and fn(dt) == true then frameFns[fn] = nil end
 	end
 
 	setSink(wheelTarget() ~= nil)
@@ -5298,6 +5529,11 @@ api.Gui, api.Pages, api.Toggle, api.Configs = gui, pages, setOpen, Configs
 function api.Move(x, y)
 	px:snap(x)
 	py:snap(y)
+end
+function api.Option(id, v) -- set any saved option from outside (testing)
+	local o = options[id]
+	if o then o.load(v) end
+	return o and o.save()
 end
 function api.Set(id, v) -- flip a toggle from outside (testing)
 	local r = functions[id]
