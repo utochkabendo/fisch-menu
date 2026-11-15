@@ -3941,7 +3941,7 @@ end)()
 ---------------------------------------------------- Player: fly
 
 ;(function()
-local left = columns(pages.Player)
+local left, pright = columns(pages.Player)
 local mg = group(left, "Movement")
 local flyOn = toggleControl(mg, "move.fly", "Fly", false)
 local flySpeed = sliderControl(rowPanel("move.fly", "Fly"), "move.fly.speed", "Fly speed", 10, 250, 70, "")
@@ -4044,6 +4044,38 @@ local function surfaceBelow(hrp, from, dist)
 	local hit = workspace:Raycast(from, Vector3.new(0, -dist, 0), rp)
 	if hit and hit.Instance == workspace.Terrain and hit.Material == Enum.Material.Water then return hit.Position end
 end
+
+---------------------------------------- anti AFK
+
+-- Roblox raises Idled after 2 min without input (kick at 20), and the game reports it to the server
+-- (events.idleReport). A zero-distance mouse move every ~50 s of real idleness counts as input for
+-- both, without moving the camera or clicking anything. Idled itself, if it still comes, gets a
+-- VirtualUser click as a backup.
+local afkOn = toggleControl(group(pright, "Utility"), "misc.antiafk", "Anti AFK", true)
+local VIM_ = game:GetService("VirtualInputManager")
+local lastInput = os.clock()
+on(UIS.InputBegan, function() lastInput = os.clock() end)
+on(UIS.InputChanged, function() lastInput = os.clock() end)
+local function nudge()
+	local m = UIS:GetMouseLocation()
+	pcall(VIM_.SendMouseMoveEvent, VIM_, m.X, m.Y, game)
+	lastInput = os.clock()
+end
+task.spawn(function()
+	while gui.Parent do
+		task.wait(5)
+		if afkOn() and os.clock() - lastInput > 45 + math.random() * 15 then nudge() end
+	end
+end)
+on(LP.Idled, function()
+	if not afkOn() then return end
+	nudge()
+	pcall(function()
+		local VU = game:GetService("VirtualUser")
+		VU:CaptureController()
+		VU:ClickButton2(Vector2.new())
+	end)
+end)
 
 local MOVE_STEP = "FischMenuMove" .. gui.Name
 RunService:BindToRenderStep(MOVE_STEP, Enum.RenderPriority.Input.Value + 3, function()
@@ -4226,7 +4258,7 @@ local RU = {
 	["Hotkey list"] = "Список хоткеев", ["Language"] = "Язык", ["Function info"] = "Инфо о функциях",
 	["Hotkeys"] = "Хоткеи",
 	["Walk Speed"] = "Скорость бега", ["Jump Power"] = "Сила прыжка", ["Swim Speed"] = "Скорость плавания",
-	["Walk on Water"] = "Ходьба по воде", ["Speed"] = "Скорость", ["Power"] = "Сила",
+	["Walk on Water"] = "Ходьба по воде", ["Anti AFK"] = "Анти-АФК", ["Utility"] = "Утилиты", ["Speed"] = "Скорость", ["Power"] = "Сила",
 	-- choices, pills, states
 	["Random"] = "Случайно", ["Centered"] = "По центру", ["Legit"] = "Легит", ["All"] = "Все", ["Selected"] = "Выбранные",
 	["Off"] = "Выключен", ["Busy"] = "Занят", ["Reeling"] = "Вытягивает", ["Shaking"] = "Шейк", ["No rod"] = "Нет удочки",
@@ -4366,6 +4398,7 @@ local D = {
 	["Jump Power"] = { "How high you jump.", "Насколько высоко ты прыгаешь.", "20 – 300, default 80", "20 – 300, по умолчанию 80" },
 	["Swim Speed"] = { "Your speed while swimming.", "Скорость, пока ты плывёшь.", "16 – 150, default 45", "16 – 150, по умолчанию 45" },
 	["Walk on Water"] = { "Water holds you like ground; if you're already swimming you're lifted onto the surface.", "Вода держит тебя как земля; если уже плывёшь — поднимает на поверхность.", "On / Off", "Вкл / Выкл" },
+	["Anti AFK"] = { "Keeps you from ever being kicked or marked idle: a harmless input every minute you don't touch anything. Doesn't move the camera or click.", "Никогда не даст кикнуть или пометить тебя АФК: безобидный ввод раз в минуту, пока ты ничего не трогаешь. Камеру не двигает и ничего не нажимает.", "On / Off, on by default", "Вкл / Выкл, по умолчанию вкл" },
 	["Fly speed"] = { "Flying speed.", "Скорость полёта.", "10 – 250, default 70", "10 – 250, по умолчанию 70" },
 	["Menu key"] = { "Key that opens and closes the menu.", "Клавиша открытия и закрытия меню.", "default Insert", "по умолчанию Insert" },
 	["Menu color"] = { "Accent color of the menu.", "Акцентный цвет меню.", "", "" },
