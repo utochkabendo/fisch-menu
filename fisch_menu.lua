@@ -31,6 +31,8 @@ local ASSET_DATA = {
 	rain = "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAtklEQVR42u3TQQqDQAwF0PxRsQzY5UAZ4gFc9UY9gLfxBr1RVx7AoRRmWyiIOOmm9gZaoXmrrOaHTEKklFLq32EpRAQANgkVEQIgu5nAoa7rk4jYGOOLiNbuDM45C+A1DMMj995z27aXpmnO0zQ953lOa6ZnWWaKoqj6vr91XXfNiYgAGGvtEUCVUiJjzCrhy9uffTPfL2Bmz8yuLMtNtnAcRwkhxBDCfV9nuGnwXs5QKaXUz70Bn0c9xiWF10sAAAAASUVORK5CYII=",
 	ring = "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAC3klEQVR42sWXzUtVYRDGn7n3VlzCRUUmEtLGCKWVmzbtkiioRdQ6gqRFBP4H+ne4iFoKGi37pl0g7RRTaVOLyijBumh+3PtrM4fG13u9x6PhgcP5emfmmXnnPDMjHfBhRQWBLbJmxn8HAJQklSRhZvXkW9n1Ncyssa8A3NtSNOoGO/xxzcxWk/WWB4jlMF7ODAOnJd2UdFHSOUldvqwmaU7SO0mTZjadyhbd57Jfu4GHwDLtjw3gBXAh27Y0X3Zr/DLwpYmhdeCnn7UWQIYLgQjGh5oofg7cAfqAY372ADeAx8BaAAAwBlimczfGB11BpnABuJJDvh945jKrfh31b5W2v5mj7QK+AZuuYAo4HtZUwlrz+3L00j0H+OPXS9HBdt4/cqFN4GMwXskTwaBnImzdPFDNQLdkNs/4GtBwwcG8xptE8iTwA6i7rmsto5AZAIYD6tdtw9YaRKZv1HU1gKc7AcjCNhkA3HZPKgUAZFHoDYn8GahuqyUhmarAnC9eAXpDDShUsIDDwExIyL6os5RUs6qkU/5qRdL3TFfRamtm65K++vMRSd2xDDTzjP0o1zvUnC3OpAA2vLBI0mFJR/domKRqbkr6tQ2AmQGUzOy3pFn/1iFpwJOlyF9gvq2dkvr99ZKkeb9vpBHI7t+Hd7dcSZEcyEBf9UjiJbvmztKs2xFw3gtJw7P27K6Kyb/sLwOHgA+B1O7tSGoBxNvABS8DxZby/noJCdWBJeBESypOAAx4HcgIZCwyXLP6nhFWoPShEEWA+7lYNTDicCAkgHGguwnbbQHjxDOaVMKJXVF6ADGW9ASLwIg3I5VEpge4C0wnMlPetOTvirIa7/cjLdqtWeCNn1Mt2rLx2EcU4fFS6AtnyH8sAg/S3CpKZZWwt9eBJ8Anb0pTo688+TrzNqN5B5NyMpRUJZ1J5oIFM1tuJbPn0Sybjpy6621Gt3reWdH2MJhaIt8oOqAe6PEXrtme0Z1ewWwAAAAASUVORK5CYII=",
 	rod = "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACmElEQVR42t2XP2sUURTFf3d2s8bgvxgECxsbLUwlphREBAvt7QwKGyNapI5a+Q1EYohgLYF0NnapBBGsLPwGIYVRwWiSnd1jkbMwDju7m3F3BR8sd5b33j3nzTvvvDvwvzdJFUnxr8Cj0/NIgNuAkq5IOjZSEpKqjkvab+8knZKUDJ2EpDHHOwbfdbza1sRQBec4I+mHpB1JLUmrkg51Ak8GCR4RTUkzwFvgMFAFAvgYEbt+HjyBDPhZg0869zcPmSiamwwAPDH4JLBqcIB1YNbP6VAISEocp7zyS+7aAm4CG+2hAyfg4xQR0QJeAzNAC/gK3IiIbeB4rzzVvwRvSloBrgF7wDZwPSI+eEzaK1dSErwSES2D1w1eA+oGH48I9ZOvzBZUIyKVtGDwHYPPRcSaXbAxFG/PWGzd7vbL8V7OgtuGdNn9T7L9pdwt8382Z7HL+eQHIdCTkYV2xGPPA0uZPX8ZEfNO3Czzdqu9lA4sAvMGnLDFBrAWEXNebbNAdJGL/RHIWOsi8DTX3QLeA3UbkbooPu3lhIVVjKSjkjYlpf61MvFy0Z5Kqmau5IfWwGrRVdxNAzVgDKjYSrOvc9xE1UEz2dVOOZ4ssuSki8dvAZue1LDwKsB34FNmO/IF6ANJZ7za1oEuI68qsb8vA+ecpOZfA1iIiA1bsXJbcR94DryKiKbzy8T7Mpv2+V3x3qWOzyQ9ljSdvQU7nPtbkho2qNuSPnv+m67lWK6KfZRzuXqnK7hAuKcl7enPti3pojGSwntd0pikF570M2exNas76aM2uCtp3TVhKmm2iHie/WSO+XJp/96fNy3pQl+VcLtedyn9RdJS5kzHQauk7Gq7vbWiBCfyuihbrpUBT0b+Hdftg3IU7TfS9rqmKcc4wgAAAABJRU5ErkJggg==",
+	puzzle = "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACXUlEQVR42uWXP2sUYRDGf7N3JEHQgBrBJpWFgghCtFawE2wsxSZfQBBJq2Cfj6CttYWFkIBahGibxj4RTrAIWuTf3s9mVpfl7rK55ALiwLLs7rzv+8zMM38W/neJoy5QAygAIqI8VbRqpwkmAU3eA2oREX11DrgO/IqILxWQiHCSlhd5X1R7/pV36vlaaCbndvVh7eCDvFTX1Gm1mAiIjPOM+lXtq/s1ILt5fzyII22kOOTwburMAvPJmU5jvcDNPLx7VC8UI6yOiDiIiDIiesBG9XkAiT+m3m5EWHGmjXQHpkYyWr2V1h8Aa8BCDYDpjR6wo95NQBsR8b3KmnHiHepsMryN9BvPvRoninEZ/zI321fLvEZJpVMRdFu93KZQNRFW7r0DlOnS4jCy1nS6ue4ccKN6pw4lZ3fIhnsZ33LM6irwI3tFWQ9xs2IWJ9WkGmsDuK++UVfV5+rZzJBoU3JXaxXvpGRdvdDkRcHkpJ/uL4Fd4Daw3Dx3kgCK5FEHmEpAD4DZiCgrL0wSwPF7wQmGYC/Pegtsq50qG7qnZFwH+Aw8rYFjHACmRVUXjCHFLIAXwDXgEvABWI6InyOnp1oargxIw37LXlCV7YUhA20rDkw12m5l1TdgCbgHLALr+b4/oJxfVDvqVFWKD50ba83odVqxk1PPnrqpzjcHFvV9NqGd1CvTc1eP3BGruU69om41XLuUOjNp2XQ+LwwIy7O2I1oMilPW7DngUXa2AF4Bm42BJTJcT4AzucWniFgZayAZRZZxxvhj/ZgkiLoLy2EkyuH1z+Op/7L90/IbZPr4wAaQZgsAAAAASUVORK5CYII=",
+	pin = "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABmUlEQVR42u1VS0oDQRB91RPXkhi8QTaKG48QcOPWI3mFZOUZ3AbEGwiCILj1AFm4ciHzeW5eQxOSmZ6eHhG0YOiarq7f66pq4K+TpSiRLKTbaMsBoJnVo0ZL0khaqnwQAiSdmTXirwBcA7iQ+BXAxswed8/mytxpnZHc8DBtSM5CnVywO5Jzkk9yVJEstYY8dWYuHcuZ/YMcfLUg4GUPWVBQtYPkUoZLdpM/swxtHCIXWaQ3ANgndul0FnpXAL6Sz2TIIjvLpBPaSApgdHKR8jfBykj4KZ1OHy7CGADc9xzbJh30rJ2oNqxaOqDK2oYHBlFDst7jvJYs7yDaQWGhPvfOPPmgSpKLrKM4CGKidbXnKjy/Cs+O8hSTnJLc7iBRam/a90mOhsnMCKAwsw8AawA+y1r8WrJCZzEmCsckb0l+CoE77eUrvLYgAn6ru7+MeXj20WRAECfBcJqmZp7UKrrjKtiqU+/91z9G/wG0Ua2vGfLiuQE65wBO9X+UGkBKGzZquXcAz8r+RXvNj94fySJl+IwxEZPH7zfwlkxKy+oFnwAAAABJRU5ErkJggg==",
 	lock = "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACOklEQVR42u2WsW4TQRCG//8cWxgpQhFVmiAhoZSkIg/AC1DkCXiAPABKhUSDlBdI7yISNRVClIGKNiFVJChAMgFLCXLs+2jm0Mrc2bk70wAjjXZudnZnbvef2ZH+079ObrIIyCRlkkj2yW3nfzxioNNkrvUJAJZk2zmwKWlH0mZMH0t6Yfs4TgfbLPOvnch7wDm/0zmwV7amtXMgA24Dh+EsLwmg0B2GbbaUIICVGHfDwY8Yj4CnwUczc7vp2rYBZMGvgEk4OCixO4i5SdhmgYd2zmPcAC7CwRnQCwe9GfksbC6AO+keVbQoQkdq3ZPUD92J7bHtPMZfsqSTsOlLuhtr5/pYdEe2PQEmie4UWJPUkTQNXSGfSnoYuq7taZPaMHv8j4EPwDSQPgK+Bg+Di+9R2OTAp0hZ186GImrgUUma1aXntatkEsDLcDyeCSRPMqJAfj4T5CT4M7BaVZyqMFCU0ZtRrrOS8t2R9C7kBxUAt6RucKMsmFbokLRve9v2tqT90JXZ58kP1Qbg6+Q4UxwMgW4BsJCHMzap7VrVFTSpVLmkG5K2bBev3lboavcDWcPnuy9pAKwGwAZJoaqVcistuqh126M42vWmHdaiAOaBpwM8SzKiyR4LA+iV3Gt6DU8WdFhECrouBooFb8JmUsJXki6Dr0rmx7HPe0nfgezabVrSBd0C3tKcPgL35z3LnheEbQLlO5I2rgm04i+/SRrY/lLs1aoZbdvUNG7LI4hOQ//TpbbnfyX9BIud+pjnNfhrAAAAAElFTkSuQmCC",
 	head = "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACHUlEQVR42sWXu4oUQRSG/9PTK8iiqKhgsIiRCuoLGAgmJgYiaqYvsMk+gi8gpqZGJsZippFMLHhLzAzEbNnAcbrrMzklRe9YU30ZPVAMXdN1zn9uf5+S/rPY0IPAn7Nmxj8B4EZnkjCzNtmvJFWSgpmFjYQKmHWejwIngOO59yaJADAzsxY4I+mOpHuSLkk6Jmkp6ZOkt5JemNmXmJ4xqVEnvAIeAN/IywJ4vKpOxhp/mhhZAg3QAsFX4/tRXgMnARsMIuYS2EsMt2siEDwKAC+Bqm9NdD2/mHgXKJcI4tGQwky9f55430daX5+9W8pTEV8EzgEHSZ77SuO/t3NRqDJ71yVtSwoDGRNft3ItX2W44VqiaCjLmqSr/hxKAWik4a5kqTkHYDERgKY3AC/EjyO/mDGC85ytVZs4h++O9DzqflWc0qT/7yetNKQNYwu+cQ6oivrfV+0E0gA/OzTbh4iWwI1iJky83+0oew/86gEisuYT11fn7NYr2mUu6aakHUkXJH2VdCDpmaTTBYUZ/7sMbElqp5qI7nbym/si4jR+at1cUP/lS2iJJ+bR+dGzLRcllX8IQHeoTMaxrU0MvFVPSmUAEU0GoHavKAR7pCQKJQCCF9EHSft+L2jcyKrVuN65pH2gGj0dJyPaQ+B7ARfMgfPp2dE3I/ckAGclXcmkopX0zswawCa5G3Qj0ffuOOnl1BWvAxIm9XyT8hvis440IPe4YwAAAABJRU5ErkJggg==",
 	skull = "iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAACnElEQVR42sWXv24UQQzGP+8d6AQkISflPRANtFDyDihSeirKVKTjFdJen5ZISCRdgIIiCIl0CAhCSEciioSQ7P5oPMha7e2/HDDSaHY9HtvjsT/PSP+5WRdmwCRlvg7vSU6iFWbG3C0FBn+D11ruWmYGkEm6K+mepNuSbjrbsaQ3knYkvTSzIq67zK6z8L0G7NPc9oG1Khm9lANjYDsoKIBz4KLUz30utW1g3MsIwLyPgdcu8BeQt/BA7rz42nGS10V5BlwF9oLyri2t2XNZWSsjUgQD6yVBubs6b9h95Elr11tlR7IQWAGmLqhwobFdVCiv4ilcxhRYiTpSKwdHsvCBpLGkItAPPc0O/T+mFzN45DLGLjPqqHX/JEQ7wBNgwecW/D+5PG/gSdkxaTyGkHq7wZVbVQgHbHXk2a1KyawFQm4CA2BoZjkwdCWbHXkqMyCbofhj6YwvXUpcZj38A0MfV1u6N0V5myNYjTq6pGFVgG1UpOFGTaDOTMM2QHTm42fghY9J8AfgVTC0zHPWCYhqoPi0tNsk+DFwawZcn/aC4ppiFCtfAXwDFp3/Xcj5i4CK3YvRjHL8LIBOAqenwBKwDDwKRib4ft67HFcYcQ04CvcBPLCOvH8vFSSAO41RL2nYbAMmaRRwIV1GxyXeopTjN3xtLZ40usbvdJTWZCVjFG7Lfwxqcx/scjapMu5Lui9pEq7jE6e97XrV72PA1Mx2JB2EuQOnTSveDHMxwDxeCkkDB5RRUDRy2iDEwpW5GOCBdCLpazpnM8uD+y3QUnwUkj6FOOlngAeRmdlPSQ/d7Sc+fSLpyHui/ZD0RdKamb0HMjMr5vEsS0VqCCz598hBaBkYOW0RuN6q6FzmlfRP34Y170QrH1ef9+BvFakQVyxwKl8AAAAASUVORK5CYII=",
@@ -107,6 +109,7 @@ local NAV = {
 	{ tab = "Collection", icon = "list" },
 	{ tab = "Teleport", icon = "globe" },
 	{ tab = "Player", icon = "person" },
+	{ tab = "Extensions", icon = "puzzle" },
 }
 
 local function rgb(r, g, b) return Color3.fromRGB(r, g, b) end
@@ -428,7 +431,7 @@ local content = new("Frame", {
 	Parent = window,
 })
 local topbar = new("Frame", { BackgroundTransparency = 1, Size = UDim2.new(1, 0, 0, HEADER_H), Active = true, Parent = content })
-local pageHost = new("CanvasGroup", {
+local pageHost = new("Frame", {
 	BackgroundTransparency = 1,
 	Position = UDim2.fromOffset(0, HEADER_H),
 	Size = UDim2.new(1, 0, 1, -HEADER_H),
@@ -501,7 +504,8 @@ local function setBlur(k) -- k: how much of the window is shown, 0..1
 			Size = Vector3.new(1, 1, 0.001), Parent = camNow,
 		}, { glassMesh })
 	end
-	local enable = k > 0.01 and not weak
+	local extra = C.blurWant and C.blurWant() or false
+	local enable = (k > 0.01 or extra) and not weak
 	if not enable and next(mutedDof) then
 		for e in pairs(mutedDof) do
 			if e.Parent then e.Enabled = true end
@@ -510,8 +514,8 @@ local function setBlur(k) -- k: how much of the window is shown, 0..1
 	end
 	if blurDof.Parent ~= Lighting then blurDof.Parent = Lighting end
 	if blurDof.Enabled ~= enable then blurDof.Enabled = enable end
-	blurDof.NearIntensity = enable and k or 0
-	glass.Transparency = enable and 0.98 or 1
+	blurDof.NearIntensity = enable and math.max(k, extra and 1 or 0) or 0
+	glass.Transparency = (enable and k > 0.01) and 0.98 or 1
 	if enable then muteOtherDof() end
 end
 -- Runs right after the camera script each frame, so the glass never trails the camera.
@@ -539,6 +543,7 @@ RunService:BindToRenderStep(GLASS_STEP, Enum.RenderPriority.Last.Value + 5000, f
 	if right.Magnitude < 1e-6 or down.Magnitude < 1e-6 then return end
 	glass.CFrame = CFrame.fromMatrix(tl + right / 2 + down / 2, right.Unit, -down.Unit)
 	glassMesh.Scale = Vector3.new(right.Magnitude, down.Magnitude, 0)
+	if C.glassExtra then pcall(C.glassExtra, cam, at, o) end
 end) end)
 
 ---------------------------------------------------------------- close button & resize grip
@@ -1159,7 +1164,16 @@ do
 		end
 		if current then current.page.Position = UDim2.fromOffset(0, round(pageY.x)) end
 		local pf = C.pageFade.x
-		pageHost.GroupTransparency = pf < 0.004 and 0 or pf * pf * (3 - 2 * pf)
+		if not C.pageFader then
+			C.pageFader = new("CanvasGroup", { BackgroundTransparency = 1, Size = UDim2.fromScale(1, 1), Parent = pageHost })
+		end
+		-- the page sits in a CanvasGroup only while it fades in: at rest it renders directly (sharp text)
+		if current then
+			local fading = pf > 0.004
+			local want = fading and C.pageFader or pageHost
+			if current.page.Parent ~= want then current.page.Parent = want end
+			C.pageFader.GroupTransparency = fading and pf * pf * (3 - 2 * pf) or 0
+		end
 	end)
 end
 
@@ -2062,6 +2076,8 @@ local function itemRow(box, text)
 			lbl.Position = UDim2.new()
 		end
 	end)
+	C.rowRight = C.rowRight or setmetatable({}, { __mode = "k" })
+	C.rowRight[r] = function(w) rightW = w end
 	return r, function(w) rightW = w end, st
 end
 
@@ -3253,6 +3269,48 @@ local noteHost = new("Frame", {
 	Size = UDim2.fromOffset(300, 420), ZIndex = 200, Parent = gui,
 }, { new("UIListLayout", { Padding = UDim.new(0, 8), SortOrder = Enum.SortOrder.LayoutOrder }) })
 local noteN = 0
+-- Frosted cards: each visible card gets its own glass pane (same trick as the sidebar), and the blur stays
+-- on while any card is up, even with the menu closed.
+Fisch.cards = setmetatable({}, { __mode = "k" })
+local glassParts = {}
+function Fisch.dropGlass(card)
+	local g = glassParts[card]
+	if g then g:Destroy(); glassParts[card] = nil end
+end
+C.blurWant = function()
+	for card in pairs(Fisch.cards) do
+		if card.Parent and card.GroupTransparency < 0.95 then return true end
+	end
+	return false
+end
+C.glassExtra = function(cam, at, o)
+	local used = {}
+	for card in pairs(Fisch.cards) do
+		if card.Parent and card.GroupTransparency < 0.95 then
+			local g = glassParts[card]
+			if not (g and g.Parent == cam) then
+				if g then g:Destroy() end
+				g = new("Part", {
+					Material = Enum.Material.Glass, Color = Color3.new(0, 0, 0), Transparency = 0.98,
+					Anchored = true, CanCollide = false, CanQuery = false, CanTouch = false, CastShadow = false,
+					Size = Vector3.new(1, 1, 0.001), Parent = cam,
+				}, { new("SpecialMesh", { MeshType = Enum.MeshType.Brick, Offset = Vector3.new(0, 0, -1e-6) }) })
+				glassParts[card] = g
+			end
+			local p0 = card.AbsolutePosition - o + Vector2.new(3, 3)
+			local p1 = p0 + card.AbsoluteSize - Vector2.new(6, 6)
+			local tl, tr, bl = at(p0.X, p0.Y), at(p1.X, p0.Y), at(p0.X, p1.Y)
+			local rv, dv = tr - tl, bl - tl
+			if rv.Magnitude > 1e-6 and dv.Magnitude > 1e-6 then
+				g.CFrame = CFrame.fromMatrix(tl + rv / 2 + dv / 2, rv.Unit, -dv.Unit)
+				g:FindFirstChildOfClass("SpecialMesh").Scale = Vector3.new(rv.Magnitude, dv.Magnitude, 0)
+			end
+			used[card] = true
+		end
+	end
+	for card in pairs(glassParts) do if not used[card] then Fisch.dropGlass(card) end end
+end
+Fisch.cleanups[#Fisch.cleanups + 1] = function() for card in pairs(glassParts) do Fisch.dropGlass(card) end end
 -- Card with up to two buttons (the first is the main one, accent colored); a thin bar along the
 -- bottom shows how long it stays.
 function Fisch.notify(title, text, actionText, action, ttl, action2Text, action2)
@@ -3263,9 +3321,10 @@ function Fisch.notify(title, text, actionText, action, ttl, action2Text, action2
 	if action2Text then btns[#btns + 1] = { action2Text, action2, false } end
 	local textW = 16 + #btns * 72 + 8
 	local card = new("CanvasGroup", {
-		BackgroundColor3 = C.popup, BorderSizePixel = 0, Size = UDim2.fromOffset(300, 64), GroupTransparency = 1,
+		BackgroundColor3 = C.popup, BackgroundTransparency = 0.28, BorderSizePixel = 0, Size = UDim2.fromOffset(300, 64), GroupTransparency = 1,
 		LayoutOrder = -noteN, ZIndex = 200, Parent = noteHost,
 	}, { corner(10) })
+	Fisch.cards[card] = true
 	stroke(C.popupStroke, card)
 	local bar = new("Frame", { BorderSizePixel = 0, Size = UDim2.new(0, 3, 1, 0), ZIndex = 201, Parent = card })
 	bindAccent(bar, function(c) bar.BackgroundColor3 = c end)
@@ -3304,7 +3363,12 @@ function Fisch.notify(title, text, actionText, action, ttl, action2Text, action2
 		if left <= 0 then close() end
 		timeBar.Size = UDim2.new(math.max(left, 0), -3, 0, 2)
 		card.GroupTransparency = 1 - a.x
-		if dead and a.x < 0.01 then card:Destroy(); return true end
+		if dead and a.x < 0.01 then
+			Fisch.cards[card] = nil
+			Fisch.dropGlass(card)
+			card:Destroy()
+			return true
+		end
 	end, true)
 	return close
 end
@@ -3344,6 +3408,7 @@ local shakeDelay = sliderControl(rowPanel("fish.shake", "Auto Shake"), "fish.sha
 local reelP = rowPanel("fish.reel", "Auto Reel")
 local reelMode = choiceControl(reelP, "fish.reel.mode", "Mode", { "Centered", "Legit", "Rage" }, "Centered")
 local lookahead = sliderControl(reelP, "fish.reel.look", "Lookahead", 80, 500, 220, " ms")
+local avoidOn = toggleControl(reelP, "fish.reel.avoid", "Avoid threats", true)
 local cineP = rowPanel("fish.cinematic", "Cinematic Camera")
 local cineSpeed = sliderControl(cineP, "fish.cine.speed", "Orbit speed", 2, 40, 10, "")
 local cineDist = sliderControl(cineP, "fish.cine.dist", "Distance", 6, 40, 14, " st")
@@ -3353,6 +3418,107 @@ local sg = group(right, "Session")
 local setStatus = infoRow(sg, "Status")
 local stats = statsRow(sg, { "Caught", "Perfect", "Lost" })
 local setCaught, setPerfect, setLost = stats[1], stats[2], stats[3]
+
+---------------------------------------- Discord: a rich message per catch to your webhook
+
+local hookG = group(right, "Discord")
+local hookOn = toggleControl(hookG, "fish.webhook", "Catch log", false)
+local hookP = rowPanel("fish.webhook", "Catch log")
+local hookUrl = ""
+options["fish.webhook.url"] = { save = function() return hookUrl end, load = function(v) if type(v) == "string" then hookUrl = v end end }
+do
+	local r, setR = itemRow(hookP, "Webhook URL")
+	setR(132)
+	local field = new("Frame", { BackgroundColor3 = C.field, BorderSizePixel = 0, AnchorPoint = Vector2.new(1, 0.5), Position = UDim2.new(1, -12, 0.5, 0), Size = UDim2.fromOffset(120, 26), Parent = r }, { corner(6) })
+	stroke(C.fieldStroke, field)
+	local box = new("TextBox", {
+		Text = "", PlaceholderText = "paste link", PlaceholderColor3 = C.faint, ClearTextOnFocus = false, TextTruncate = Enum.TextTruncate.AtEnd,
+		Font = Enum.Font.BuilderSans, TextSize = 12, TextColor3 = C.hi, TextXAlignment = Enum.TextXAlignment.Left, BackgroundTransparency = 1,
+		Position = UDim2.fromOffset(8, 0), Size = UDim2.new(1, -16, 1, 0), Parent = field,
+	})
+	on(box.FocusLost, function() hookUrl = box.Text:gsub("%s", "") end)
+	onFrame(function() if not box:IsFocused() and box.Text ~= hookUrl then box.Text = hookUrl end end)
+end
+local hookMin = choiceControl(hookP, "fish.webhook.min", "Min rarity", { "Any", "Uncommon", "Rare", "Legendary", "Mythical", "Exotic", "Secret" }, "Any")
+local hookSkipTrash = toggleControl(hookP, "fish.webhook.trash", "Skip trash", true)
+
+local FL = require(game:GetService("ReplicatedStorage").shared.modules.library.fish)
+local RL = require(game:GetService("ReplicatedStorage").shared.modules.library.rarities)
+local HttpS = game:GetService("HttpService")
+local rarityOrder = {}
+for i, n in ipairs(RL.OrderedRarityNames or {}) do rarityOrder[n] = i end
+local hookQueue = {}
+local function validHook(u) return u:match("^https://[%w%.]*discord%.com/api/webhooks/") or u:match("^https://[%w%.]*discordapp%.com/api/webhooks/") end
+task.spawn(function()
+	while gui.Parent do
+		local job = table.remove(hookQueue, 1)
+		if job then
+			pcall(request, { Url = job.url, Method = "POST", Headers = { ["Content-Type"] = "application/json" }, Body = HttpS:JSONEncode(job.body) })
+			task.wait(1.2) -- Discord allows ~5 per 2 s per webhook
+		else
+			task.wait(0.3)
+		end
+	end
+end)
+local thumbCache = {}
+local function thumb(assetId)
+	if not assetId then return nil end
+	if thumbCache[assetId] ~= nil then return thumbCache[assetId] or nil end
+	local ok, res = pcall(request, { Url = "https://thumbnails.roblox.com/v1/assets?assetIds=" .. assetId .. "&size=420x420&format=Png", Method = "GET" })
+	local url = false
+	if ok and res and res.Body then
+		local ok2, t = pcall(HttpS.JSONDecode, HttpS, res.Body)
+		if ok2 and t and t.data and t.data[1] then url = t.data[1].imageUrl or false end
+	end
+	thumbCache[assetId] = url
+	return url or nil
+end
+local function zoneName()
+	local ok, t = pcall(function() return HttpS:JSONDecode(LP:GetAttribute("ServerLuckPreview")) end)
+	return ok and t and t.ZoneName or LP:GetAttribute("LastIsland") or "?"
+end
+local function sendCatch(it, test)
+	if not validHook(hookUrl) then if test then toast("Paste a Discord webhook link first") end return end
+	local d = FL[it.name] or {}
+	local rar = d.Rarity or "?"
+	if not test then
+		if hookSkipTrash() and (rar == "Trash" or d.NonFish) then return end
+		local minR = hookMin()
+		if minR ~= "Any" and (rarityOrder[rar] or 0) < (rarityOrder[minR] or 0) then return end
+	end
+	local col = RL.StaticColors and RL.StaticColors[rar]
+	local colInt = typeof(col) == "Color3" and (math.floor(col.R * 255) * 65536 + math.floor(col.G * 255) * 256 + math.floor(col.B * 255)) or 6331125
+	local sub = it.sub or {}
+	local fields = {
+		{ name = "Weight", value = string.format("%.2f kg", tonumber(sub.Weight) or 0), inline = true },
+		{ name = "Rarity", value = rar, inline = true },
+		{ name = "Mutation", value = tostring(sub.Mutation or "None"), inline = true },
+		{ name = "Base price", value = d.Price and ("C$ " .. tostring(d.Price)) or "?", inline = true },
+		{ name = "Perfect", value = (Fisch.S and Fisch.S.lastPerfect) and "Yes" or "No", inline = true },
+		{ name = "Zone", value = tostring(zoneName()), inline = true },
+		{ name = "Session", value = string.format("%d caught · %d perfect · %d lost", Fisch.S and Fisch.S.caught or 0, Fisch.S and Fisch.S.perfect or 0, Fisch.S and Fisch.S.lost or 0), inline = false },
+	}
+	local id = d.Icon and tostring(d.Icon):match("%d+")
+	table.insert(hookQueue, { url = hookUrl, body = {
+		username = "FalloLose",
+		embeds = { {
+			title = (test and "Test · " or "") .. "Caught " .. tostring(it.name),
+			description = d.Description and tostring(d.Description):sub(1, 200) or nil,
+			color = colInt,
+			fields = fields,
+			thumbnail = id and thumb(id) and { url = thumb(id) } or nil,
+			footer = { text = "FalloLose · " .. LP.Name },
+			timestamp = DateTime.now():ToIsoDate(),
+		} },
+	} })
+end
+Fisch.onCatch = function(it)
+	if hookOn() then task.spawn(sendCatch, it, false) end
+end
+buttonRow(hookP, "Send test", function()
+	sendCatch({ name = "Megalodon", sub = { Weight = 4321.5, Mutation = "Shiny" } }, true)
+	if validHook(hookUrl) then toast("Test sent") end
+end)
 
 local sellG = group(right, "Auto Sell")
 local sellOn = toggleControl(sellG, "fish.sell", "Auto Sell", false)
@@ -3366,6 +3532,7 @@ end, function() return Fisch.sellableCount() .. " sellable" end, Fisch.isSafe)
 
 local S = { caught = 0, perfect = 0, lost = 0, status = "Idle", nextCast = 0, holding = false, pressedDir = false,
 	aimOff = 0, aimUntil = 0, lastPerfect = false }
+Fisch.S = S
 
 local function rodTool()
 	local char = LP.Character
@@ -3616,11 +3783,44 @@ local function rollout(r, rod, fish, d0, tSwitch, H, dt, aim)
 		-- leaving the bar costs far more than being off-center inside it
 		local out = math.max(math.abs(e) - half * 0.8, 0)
 		cost += (e * e + out * out * 40) * (0.5 + i / n)
+		-- incoming spears / beams / projectiles: keep the bar out from under them
+		for _, t in ipairs(S.threats) do
+			if math.abs(bp - t.x) < half + t.w then cost += 0.35 end
+		end
 	end
 	return cost
 end
 
 local SWITCH_AT = { 0.05, 0.1, 0.16, 0.24, 0.34, math.huge }
+-- Threats: boss passives (Bellona, Hades, Herald, Oppressor...) drop spears, beams and projectiles at a spot
+-- of the reel and hurt you if the bar is under it when they land. Anything that shows up in the reel UI
+-- after it started (not the bar, the fish or the progress) counts as one, at its horizontal position.
+S.threats = {}
+local function scanThreats(r)
+	local T = S.threats
+	table.clear(T)
+	if not avoidOn() then return end
+	local reel = r.reel
+	if S.threatReel ~= r then
+		S.threatReel = r
+		S.known = setmetatable({}, { __mode = "k" })
+		for _, d in ipairs(reel:GetDescendants()) do S.known[d] = true end
+		return
+	end
+	local bar = r.reel_bar
+	local bx, bw = bar.AbsolutePosition.X, bar.AbsoluteSize.X
+	if bw < 1 then return end
+	local fishF = bar:FindFirstChild("fish")
+	for _, d in ipairs(reel:GetDescendants()) do
+		if not S.known[d] and d:IsA("GuiObject") and not d:IsA("TextLabel") and d.Visible and d.AbsoluteSize.X > 1
+			and d.AbsoluteSize.X < bw * 0.6
+			and not d:IsDescendantOf(r.reel_playerbar) and not d:IsDescendantOf(r.reel_progress)
+			and not (fishF and (d == fishF or d:IsDescendantOf(fishF))) then
+			local cx = (d.AbsolutePosition.X + d.AbsoluteSize.X / 2 - bx) / bw
+			if cx > -0.05 and cx < 1.05 then T[#T + 1] = { x = cx, w = math.min(d.AbsoluteSize.X / bw / 2, 0.2) } end
+		end
+	end
+end
 local function setDir(rod, dir)
 	if rod.CurrentInputDirection == dir then return end
 	if dir == 1 then rod:InputBegan(nil) else rod:InputEnded(nil) end
@@ -3643,6 +3843,7 @@ RunService:BindToRenderStep(REEL_STEP, Enum.RenderPriority.Input.Value, function
 	local ok = pcall(function()
 		local mult = LP:GetAttribute("MinigameSpeedMulti") or 1
 		local step = math.clamp(dt * mult, 1 / 240, 1 / 20)
+		scanThreats(r)
 		if reelMode() == "Rage" then
 			-- The bar is pinned onto the fish every frame and given the fish's own velocity, so the game's
 			-- bar tick moves it along with the fish: it can't leave the bar, whatever the rod. The bar never
@@ -3651,6 +3852,21 @@ RunService:BindToRenderStep(REEL_STEP, Enum.RenderPriority.Input.Value, function
 			local lo, hi = r.minBarPosition + half, r.maxBarPosition - half
 			local fv = fish.CurrentVelocity or 0
 			local want = math.clamp(r.fishPosition + fv * step, lo, hi)
+			-- with threats around, slide the bar along the fish (fish still inside) to where nothing lands
+			if #S.threats > 0 then
+				local best, bc = math.huge, want
+				for k = -4, 4 do
+					local cand = math.clamp(r.fishPosition + fv * step + k / 4 * half * 0.85, lo, hi)
+					local over = 0
+					for _, t in ipairs(S.threats) do
+						local gap = math.abs(cand - t.x) - (half + t.w)
+						if gap < 0 then over -= gap end
+					end
+					local score = over * 10 + math.abs(cand - want)
+					if score < best then best, bc = score, cand end
+				end
+				want = bc
+			end
 			setDir(rod, fv >= 0 and 1 or -1)
 			r.barPosition = want
 			rod.CurrentVelocity = fv
@@ -4036,6 +4252,7 @@ task.spawn(function()
 			for id, it in pairs(Fisch.inventory()) do
 				if not seen[id] then
 					seen[id] = true
+					if Fisch.isFish(it) and Fisch.onCatch then pcall(Fisch.onCatch, it) end
 					if autoFav() and Fisch.isFish(it) and not it.sub.Favourited and Fisch.protects(it) then
 						Fisch.favourite(id, true)
 						toast(string.format("Favourited %s  %.1f kg", it.name, tonumber(it.sub.Weight) or 0))
@@ -4047,10 +4264,14 @@ task.spawn(function()
 end)
 end)()
 
----------------------------------------------------- Teleport: islands, key NPCs, any NPC, rare fish
+---------------------------------------------------- Teleport: favourites, nearest, players, locations, NPCs, rare fish
 
 ;(function()
-local F = require(game:GetService("ReplicatedStorage").shared.modules.library.fish)
+local RS_ = game:GetService("ReplicatedStorage")
+local F = require(RS_.shared.modules.library.fish)
+local HttpService_ = game:GetService("HttpService")
+local Players_ = game:GetService("Players")
+local TCS_ = game:GetService("TextChatService")
 local left, right = columns(pages.Teleport)
 
 local function dist(p)
@@ -4058,34 +4279,6 @@ local function dist(p)
 	return me and string.format("%d st", (p - me).Magnitude) or ""
 end
 
--- quick: nearest of each service NPC type
-local q = group(left, "Nearest")
-local function nearestRow(text, ty)
-	buttonRow(q, text, function()
-		local e = Fisch.nearest(ty)
-		if e then Fisch.tpNpc(e) else toast("No " .. text:lower() .. " seen yet, visit an island first") end
-	end, function()
-		local e, d = Fisch.nearest(ty)
-		return e and string.format("%s  %d st", e.rec.name, d) or "not seen yet"
-	end)
-end
-nearestRow("Merchant", "Merchant")
-nearestRow("Appraiser", "Appraiser")
-nearestRow("Inn Keeper", "InnKeeper")
-nearestRow("Angler", "Angler")
-buttonRow(q, "Save this spot", function()
-	local char = LP.Character
-	local hrp = char and char:FindFirstChild("HumanoidRootPart")
-	if hrp then Fisch.home = hrp.CFrame; toast("Spot saved") end
-end)
-buttonRow(q, "Back to saved spot", function()
-	if Fisch.home then Fisch.back(Fisch.home) else toast("No spot saved") end
-end, function() return Fisch.home and dist(Fisch.home.Position) or "none" end)
-
--- islands (approximate centers; the teleport finds the ground or water under them)
--- Every Sea 1 location. Coordinates from the Fisch wiki / map guides, each checked in game by streaming
--- the area in and finding ground (or the cave floor) under it. 5th value: how far above the point the
--- landing search starts (caves and interiors search just above the point, not from the sky).
 local ISLANDS = {
 	-- starter
 	{ "Moosewood", 400, 135, 250 }, { "Moosewood Docks", 360, 133, 264 }, { "Shady Bazaar", 693, 134, 320, 6 },
@@ -4127,58 +4320,246 @@ local REGIONS = {
 	{ "Underground", { "Vertigo", "The Depths", "Crystal Cove", "Keeper's Altar", "Brine Pool", "Luminescent Cavern", "Atlantis", "Wrath of Olympus" } },
 }
 local UNDERWATER = { Atlantis = true }
+
+
 local byName = {}
 for _, d in ipairs(ISLANDS) do byName[d[1]] = d end
-local isl = group(left, "Islands")
-pickList(isl, function()
-	local out = {}
-	for _, reg in ipairs(REGIONS) do
-		out[#out + 1] = { text = reg[1]:upper(), header = true }
-		for _, n in ipairs(reg[2]) do
-			local d = byName[n]
-			if d then
-				local p = Vector3.new(d[2], d[3], d[4])
-				out[#out + 1] = {
-					text = d[1], sub = UNDERWATER[d[1]] and "underwater" or dist(p), dot = locColor(d[1]),
-					action = function() Fisch.tp(p, nil, d[5]) end,
-				}
-			end
-		end
-	end
-	return out
-end, true, 300)
-
--- every NPC the game keeps loaded, plus every one seen before (remembered in npcs.json)
--- NPCs grouped under the island they stand on (nearest island), in that island's color
-local ng = group(right, "NPCs")
-pickList(ng, function()
-	local me = Fisch.myPos()
-	local groups, order = {}, {}
-	for _, e in ipairs(Fisch.npcList()) do
-		local p = Vector3.new(e.rec.x, e.rec.y, e.rec.z)
-		local best, bd = "Other", math.huge
-		for _, d in ipairs(ISLANDS) do
-			if d[3] < 0 or d[3] > 1000 then continue end
+local function tpTo(d) Fisch.tp(Vector3.new(d[2], d[3], d[4]), nil, d[5]) end
+local function surfaceIsland(p)
+	local best, bd = nil, math.huge
+	for _, d in ipairs(ISLANDS) do
+		if d[3] > 0 and d[3] < 1000 then
 			local dd = (Vector3.new(d[2], p.Y, d[4]) - p).Magnitude
 			if dd < bd then best, bd = d[1], dd end
 		end
-		if bd > 900 then best = "Other" end
-		best = best:gsub(" Docks?$", ""):gsub(" Dock$", "")
-		if not groups[best] then groups[best] = {}; order[#order + 1] = best end
-		local dm = me and (p - me).Magnitude or 0
-		table.insert(groups[best], { text = e.rec.name, sub = string.format("%d st", dm), d = dm, action = function() Fisch.tpNpc(e) end })
 	end
-	local function nearest(g) local m = math.huge for _, it in ipairs(groups[g]) do m = math.min(m, it.d) end return m end
-	table.sort(order, function(a, b) return nearest(a) < nearest(b) end)
+	return bd < 900 and best:gsub(" Docks?$", "") or nil
+end
+
+-- rows in the menu's own style, reused for lists that change (players, NPCs, rare fish)
+local function poolRows(box, getItems, emptyText, maxN)
+	local rows = {}
+	local function row(i)
+		if rows[i] then return rows[i] end
+		local r, setR, st = itemRow(box, "")
+		setR(150)
+		local lbl
+		for _, d in ipairs(r:GetDescendants()) do if d:IsA("TextLabel") then lbl = d break end end
+		local sub = label({
+			Text = "", TextSize = 12, TextColor3 = C.faint, TextXAlignment = Enum.TextXAlignment.Right,
+			AnchorPoint = Vector2.new(1, 0.5), Position = UDim2.new(1, -30, 0.5, 0), Size = UDim2.fromOffset(130, 20), Parent = r,
+		})
+		local chev = icon(ICON.chevron, 11, { Position = UDim2.new(1, -16, 0.5, 0), Rotation = -90, ImageColor3 = C.dim, Parent = r })
+		local o = { r = r, lbl = lbl, sub = sub, chev = chev, st = st }
+		on(r.Activated, function() if o.item and o.item.action then task.spawn(o.item.action) end end)
+		rows[i] = o
+		return o
+	end
+	local nextAt = 0
+	onFrame(function()
+		for _, o in ipairs(rows) do
+			if o.r.Visible then o.chev.ImageColor3 = C.dim:Lerp(C.hi, o.st.hover.x) end
+		end
+		if os.clock() < nextAt then return end
+		nextAt = os.clock() + 0.5
+		local ok, items = pcall(getItems)
+		if not ok then items = {} end
+		local k = 0
+		for _, it in ipairs(items) do
+			k += 1
+			if maxN and k > maxN then k = maxN break end
+			local o = row(k)
+			o.item = it
+			C.setText(o.lbl, it.text)
+			C.setText(o.sub, it.sub or "")
+			o.lbl.TextColor3 = C.text
+			o.chev.Visible = true
+			o.r.Visible = true
+		end
+		if k == 0 then
+			local o = row(1)
+			o.item = nil
+			C.setText(o.lbl, emptyText)
+			C.setText(o.sub, "")
+			o.lbl.TextColor3 = C.faint
+			o.chev.Visible = false
+			o.r.Visible = true
+			k = 1
+		end
+		for i = k + 1, #rows do rows[i].r.Visible = false; rows[i].item = nil end
+	end)
+end
+
+---------------------------------------- favourites: a grid of pinned locations at the top
+
+local FAV_FILE = ROOT .. "/tp_favorites.json"
+local favs = {}
+pcall(function()
+	local t = HttpService_:JSONDecode(readfile(FAV_FILE))
+	if type(t) == "table" then for _, n in ipairs(t) do if type(n) == "string" then favs[#favs + 1] = n end end end
+end)
+local favDirty = true
+local function isFav(n) return table.find(favs, n) ~= nil end
+local function toggleFav(n)
+	local i = table.find(favs, n)
+	if i then table.remove(favs, i) else favs[#favs + 1] = n end
+	pcall(writefile, FAV_FILE, HttpService_:JSONEncode(favs))
+	favDirty = true
+end
+local favBox = group(left, "Favorites")
+local favWrap = favBox.Parent
+local grid = new("Frame", { BackgroundTransparency = 1, Size = UDim2.new(1, 0, 0, 0), AutomaticSize = Enum.AutomaticSize.Y, Parent = favBox }, {
+	new("UIGridLayout", { CellSize = UDim2.new(0.5, -5, 0, 32), CellPadding = UDim2.fromOffset(6, 6), SortOrder = Enum.SortOrder.LayoutOrder }),
+	new("UIPadding", { PaddingTop = UDim.new(0, 8), PaddingBottom = UDim.new(0, 8), PaddingLeft = UDim.new(0, 8), PaddingRight = UDim.new(0, 8) }),
+})
+local tiles = {}
+local function rebuildFav()
+	for _, t in ipairs(tiles) do t:Destroy() end
+	table.clear(tiles)
+	for i, n in ipairs(favs) do
+		local d = byName[n]
+		if d then
+			local b, s, sc = fieldButton({ LayoutOrder = i, Parent = grid })
+			label({ Text = n, TextSize = 12, TextTruncate = Enum.TextTruncate.AtEnd, Position = UDim2.fromOffset(10, 0), Size = UDim2.new(1, -30, 1, 0), Parent = b })
+			local pin = icon(ICON.pin, 11, { Position = UDim2.new(1, -13, 0.5, 0), Parent = b })
+			bindAccent(pin, function(c) pin.ImageColor3 = c end)
+			local st = hoverable(b)
+			on(b.Activated, function() tpTo(d) end)
+			on(b.MouseButton2Click, function()
+				contextAtMouse({ { icon = ICON.pin, text = "Unpin", fn = function() toggleFav(n) end } }, b)
+			end)
+			onFrame(function()
+				if not b.Parent then return true end
+				b.BackgroundColor3 = C.field:Lerp(C.fieldHover, st.hover.x)
+				s.Color = C.fieldStroke:Lerp(C.dim, st.hover.x * 0.4)
+				sc.Scale = 1 - st.press.x * 0.03
+			end)
+			tiles[#tiles + 1] = b
+		end
+	end
+	favWrap.Visible = #tiles > 0
+end
+onFrame(function()
+	if favDirty then favDirty = false; rebuildFav() end
+end)
+
+---------------------------------------- nearest service NPCs + saved spot
+
+local q = group(left, "Nearest")
+local function nearestRow(text, ty)
+	buttonRow(q, text, function()
+		local e = Fisch.nearest(ty)
+		if e then Fisch.tpNpc(e) else toast("No " .. text:lower() .. " seen yet, visit an island first") end
+	end, function()
+		local e, d = Fisch.nearest(ty)
+		return e and string.format("%s  %d st", e.rec.name, d) or "not seen yet"
+	end)
+end
+nearestRow("Merchant", "Merchant")
+nearestRow("Appraiser", "Appraiser")
+nearestRow("Inn Keeper", "InnKeeper")
+nearestRow("Angler", "Angler")
+buttonRow(q, "Save this spot", function()
+	local char = LP.Character
+	local hrp = char and char:FindFirstChild("HumanoidRootPart")
+	if hrp then Fisch.home = hrp.CFrame; toast("Spot saved") end
+end)
+buttonRow(q, "Back to saved spot", function()
+	if Fisch.home then Fisch.back(Fisch.home) else toast("No spot saved") end
+end, function() return Fisch.home and dist(Fisch.home.Position) or "none" end)
+
+---------------------------------------- other players
+
+local pg = group(left, "Players")
+poolRows(pg, function()
 	local out = {}
-	for _, g in ipairs(order) do
-		local col = locColor(g)
-		out[#out + 1] = { text = g:upper(), header = true, color = col }
-		table.sort(groups[g], function(a, b) return a.d < b.d end)
-		for _, it in ipairs(groups[g]) do it.dot = col; out[#out + 1] = it end
+	local me = Fisch.myPos()
+	for _, p in ipairs(Players_:GetPlayers()) do
+		local hrp = p ~= LP and p.Character and p.Character:FindFirstChild("HumanoidRootPart")
+		if hrp then
+			local pos = hrp.Position
+			local d = me and (pos - me).Magnitude or 0
+			out[#out + 1] = { text = p.DisplayName, sub = string.format("%d st", d), d = d, action = function()
+				local h = p.Character and p.Character:FindFirstChild("HumanoidRootPart")
+				if h then Fisch.tp(h.Position + h.CFrame.RightVector * 3, h.Position, 8) end
+			end }
+		end
 	end
+	table.sort(out, function(a, b) return a.d < b.d end)
 	return out
-end, true, 230, "No NPCs found")
+end, "No other players", 30)
+
+---------------------------------------- locations: search, regions, right click to pin
+
+local lg = group(right, "Locations")
+do
+	local n = boxRows[lg] or 0
+	boxRows[lg] = n + 1
+	local srow = new("Frame", { BackgroundTransparency = 1, Size = UDim2.new(1, 0, 0, 46), LayoutOrder = (n + 1) * 100, Parent = lg })
+	local field = new("Frame", { BackgroundColor3 = C.field, BorderSizePixel = 0, Position = UDim2.fromOffset(10, 8), Size = UDim2.new(1, -20, 0, 30), Parent = srow }, { corner(6) })
+	local fs = stroke(C.fieldStroke, field)
+	icon(ICON.search, 14, { Position = UDim2.fromOffset(16, 15), ImageColor3 = C.faint, Parent = field })
+	local box = new("TextBox", {
+		Text = "", PlaceholderText = "Search", PlaceholderColor3 = C.faint, ClearTextOnFocus = false,
+		Font = Enum.Font.BuilderSans, TextSize = 13, TextColor3 = C.hi, TextXAlignment = Enum.TextXAlignment.Left,
+		BackgroundTransparency = 1, Position = UDim2.fromOffset(31, 0), Size = UDim2.new(1, -38, 1, 0), Parent = field,
+	})
+	local entries = {}
+	for _, reg in ipairs(REGIONS) do
+		local hn = boxRows[lg] or 0
+		boxRows[lg] = hn + 1
+		local head = new("Frame", { BackgroundTransparency = 1, Size = UDim2.new(1, 0, 0, 26), LayoutOrder = (hn + 1) * 100, Parent = lg })
+		new("Frame", { BackgroundColor3 = C.rowLine, BorderSizePixel = 0, Size = UDim2.new(1, 0, 0, 1), Parent = head })
+		label({ Text = reg[1]:upper(), Font = Enum.Font.BuilderSansBold, TextSize = 10, TextColor3 = C.section, Position = UDim2.fromOffset(14, 4), Size = UDim2.new(1, -28, 1, -4), Parent = head })
+		local group_ = { head = head, rows = {} }
+		for _, name in ipairs(reg[2]) do
+			local d = byName[name]
+			if d then
+				local p = Vector3.new(d[2], d[3], d[4])
+				local r = buttonRow(lg, name, function() tpTo(d) end, function()
+					return UNDERWATER[name] and "underwater" or dist(p)
+				end)
+				on(r.MouseButton2Click, function()
+					contextAtMouse({ { icon = ICON.pin, text = isFav(name) and "Unpin" or "Pin to favorites", fn = function() toggleFav(name) end } }, r)
+				end)
+				group_.rows[#group_.rows + 1] = { r = r, l = name:lower() }
+			end
+		end
+		entries[#entries + 1] = group_
+	end
+	local lastQ
+	onFrame(function()
+		fs.Color = C.fieldStroke:Lerp(C.dim, box:IsFocused() and 0.5 or 0)
+		local qy = box.Text:lower()
+		if qy == lastQ then return end
+		lastQ = qy
+		for _, g in ipairs(entries) do
+			local any = false
+			for _, e in ipairs(g.rows) do
+				local vis = qy == "" or e.l:find(qy, 1, true) ~= nil
+				e.r.Visible = vis
+				any = any or vis
+			end
+			g.head.Visible = any
+		end
+	end)
+end
+
+---------------------------------------- NPCs (nearest first)
+
+local ng = group(right, "NPCs")
+poolRows(ng, function()
+	local me = Fisch.myPos()
+	local out = {}
+	for _, e in ipairs(Fisch.npcList()) do
+		local p = Vector3.new(e.rec.x, e.rec.y, e.rec.z)
+		local d = me and (p - me).Magnitude or 0
+		local isl = surfaceIsland(p)
+		out[#out + 1] = { text = e.rec.name, sub = isl and string.format("%s · %d st", isl, d) or string.format("%d st", d), d = d, action = function() Fisch.tpNpc(e) end }
+	end
+	table.sort(out, function(a, b) return a.d < b.d end)
+	return out
+end, "No NPCs found", 40)
 
 ---------------------------------------- rare fish tracker
 
@@ -4186,9 +4567,12 @@ local rg = group(right, "Rare Fish")
 local alertsOn = toggleControl(rg, "rare.alerts", "Alerts", true)
 local WORDS = { "megalodon", "kraken", "whale", "shark", "orca", "isonade", "leviathan", "scylla", "moby", "narwhal", "nessie", "serpent", "phantom", "colossal" }
 local TIERS = { Mythical = true, Exotic = true, Secret = true, Apex = true, ["Divine Secret"] = true, Relic = true, Limited = true }
-local function isRare(name)
+local function wordOf(name)
 	local l = name:lower()
-	for _, w in ipairs(WORDS) do if l:find(w, 1, true) then return true end end
+	for _, w in ipairs(WORDS) do if l:find(w, 1, true) then return w end end
+end
+local function isRare(name)
+	if wordOf(name) then return true end
 	local base = name:gsub(" Default$", ""):gsub(" Pool$", "")
 	local d = F[base]
 	return type(d) == "table" and TIERS[d.Rarity] == true
@@ -4200,33 +4584,63 @@ local function goTo(part)
 	local top = part.Position + Vector3.new(0, part.Size.Y / 2, 0)
 	Fisch.tp(Vector3.new(top.X, part.Position.Y, top.Z), nil, part.Size.Y / 2 + 60)
 end
+local fz = workspace:FindFirstChild("zones") and workspace.zones:FindFirstChild("fishing")
+local function findZone(word)
+	if not fz then return nil end
+	for _, p in ipairs(fz:GetChildren()) do
+		if p:IsA("BasePart") and p.Name:lower():find(word, 1, true) then return p end
+	end
+end
 local function consider(part)
 	if not part:IsA("BasePart") or not isRare(part.Name) then return end
 	active[part] = part.Name
+	local w = wordOf(part.Name)
 	local key = part.Name .. math.floor(part.Position.X / 100) .. "," .. math.floor(part.Position.Z / 100)
+	-- already announced from the event chat a moment ago: no second card
+	if w and told["chat:" .. w] and os.clock() - told["chat:" .. w] < 600 then told[key] = os.clock() end
 	if alertsOn() and (not told[key] or os.clock() - told[key] > 600) then
 		told[key] = os.clock()
 		Fisch.notify(part.Name .. " appeared", dist(part.Position) .. " away", "TP", function() goTo(part) end, 120)
 	end
 end
-local zones = workspace:FindFirstChild("zones")
-local fz = zones and zones:FindFirstChild("fishing")
 if fz then
 	for _, p in ipairs(fz:GetChildren()) do task.spawn(consider, p) end
-	on(fz.ChildAdded, function(p) task.wait(0.2); consider(p) end)
+	on(fz.ChildAdded, function(p) task.defer(consider, p) end)
 	on(fz.ChildRemoved, function(p) active[p] = nil end)
+	-- zone parts can stream in late or be renamed after spawning: re-check every few seconds too
+	task.spawn(function()
+		while gui.Parent do
+			task.wait(3)
+			for _, p in ipairs(fz:GetChildren()) do if not active[p] then pcall(consider, p) end end
+		end
+	end)
 end
-pickList(rg, function()
+-- The server announces events in chat as soon as they start, long before the zone streams in around
+-- you: alert from the announcement right away.
+on(TCS_.MessageReceived, function(msg)
+	if not alertsOn() then return end
+	local text = tostring(msg.Text or ""):gsub("<[^>]->", "")
+	local w = wordOf(text)
+	if not w or (msg.TextSource and msg.TextSource.UserId ~= 0 and not (msg.TextChannel and msg.TextChannel.Name == "Events")) then return end
+	local key = "chat:" .. w
+	if told[key] and os.clock() - told[key] < 120 then return end
+	told[key] = os.clock()
+	Fisch.notify((w:gsub("^%l", string.upper)) .. " event", text:sub(1, 70), "TP", function()
+		local part = findZone(w)
+		if part then goTo(part) else toast("Location not loaded yet") end
+	end, 120)
+end)
+poolRows(rg, function()
 	local out = {}
 	for part, name in pairs(active) do
 		if part.Parent then
-			out[#out + 1] = { text = name, sub = dist(part.Position), color = Color3.fromRGB(240, 200, 120), action = function() goTo(part) end }
+			out[#out + 1] = { text = name, sub = dist(part.Position), action = function() goTo(part) end }
 		else
 			active[part] = nil
 		end
 	end
 	return out
-end, false, 110, "None active right now")
+end, "None active right now", 10)
 end)()
 
 ---------------------------------------------------- Player: fly
@@ -4611,15 +5025,9 @@ on(r.Activated, function()
 	end
 end)
 
--- yellow marker in the window header while it's on
-local badge = label({
-	Text = "SAFE MODE", Font = Enum.Font.BuilderSansBold, TextSize = 11, TextColor3 = YELLOW, TextXAlignment = Enum.TextXAlignment.Right,
-	AnchorPoint = Vector2.new(1, 0.5), Position = UDim2.new(1, -50, 0.5, 0), Size = UDim2.fromOffset(160, 14), ZIndex = 20, Parent = topbar,
-})
 onFrame(function()
 	if os.clock() - lastClick > 2.5 then clicks = 0 end
 	local on_ = Fisch.safe
-	badge.Visible = on_ and (Fisch.searchW or 0) < 1
 	local t
 	if not on_ then t = "Off"
 	elseif clicks > 0 then t = (5 - clicks) .. " more clicks"
@@ -4721,21 +5129,7 @@ local MPS = game:GetService("MarketplaceService")
 -- logo block over the sidebar
 local logo = new("Frame", { BackgroundTransparency = 1, Size = UDim2.new(0, SIDE_W, 0, HEADER_H), ZIndex = 5, Parent = sidebar })
 new("ImageLabel", { BackgroundTransparency = 1, Image = ICON.fl, AnchorPoint = Vector2.new(0, 0.5), Position = UDim2.new(0, 14, 0.5, 0), Size = UDim2.fromOffset(30, 30), ZIndex = 5, Parent = logo }, { corner(5) })
-label({ Text = "FalloLose", Font = Enum.Font.BuilderSansBold, TextSize = 15, TextColor3 = C.hi, Position = UDim2.fromOffset(52, 9), Size = UDim2.new(1, -58, 0, 16), ZIndex = 5, Parent = logo })
-local placeLbl = label({ Text = "Fisch", TextSize = 11, TextColor3 = C.dim, Position = UDim2.fromOffset(52, 26), Size = UDim2.new(1, -58, 0, 13), TextTruncate = Enum.TextTruncate.AtEnd, ZIndex = 5, Parent = logo })
-task.spawn(function()
-	local name = game.GameId == 5750914919 and "Fisch" or nil
-	if not name then
-		local ok, info = pcall(MPS.GetProductInfo, MPS, game.PlaceId)
-		name = ok and info and info.Name or "Roblox"
-	end
-	local world
-	pcall(function()
-		local W = require(game:GetService("ReplicatedStorage").shared.modules.Worlds)
-		world = W.Places[game.PlaceId] or W.DefaultPlace
-	end)
-	placeLbl.Text = world and (name .. "  ·  " .. world) or name
-end)
+label({ Text = "FalloLose", Font = Enum.Font.BuilderSansBold, TextSize = 15, TextColor3 = C.hi, AnchorPoint = Vector2.new(0, 0.5), Position = UDim2.new(0, 52, 0.5, 0), Size = UDim2.new(1, -58, 0, 18), ZIndex = 5, Parent = logo })
 -- a line under the whole header row
 new("Frame", { BackgroundColor3 = C.divider, BorderSizePixel = 0, Position = UDim2.fromOffset(0, HEADER_H), Size = UDim2.new(1, 0, 0, 1), ZIndex = 3, Parent = window })
 
@@ -4913,8 +5307,6 @@ local head = new("Frame", { BackgroundTransparency = 1, Position = UDim2.fromOff
 local bigAv = new("ImageLabel", { BackgroundColor3 = C.field, BorderSizePixel = 0, Position = UDim2.fromOffset(12, 9), Size = UDim2.fromOffset(30, 30), Parent = head }, { new("UICorner", { CornerRadius = UDim.new(1, 0) }) })
 label({ Text = LP.DisplayName, Font = Enum.Font.BuilderSansBold, TextSize = 13, TextColor3 = C.hi, Position = UDim2.fromOffset(50, 9), Size = UDim2.new(1, -60, 0, 15), TextTruncate = Enum.TextTruncate.AtEnd, Parent = head })
 label({ Text = "@" .. LP.Name, TextSize = 11, TextColor3 = C.dim, Position = UDim2.fromOffset(50, 25), Size = UDim2.new(1, -120, 0, 13), TextTruncate = Enum.TextTruncate.AtEnd, Parent = head })
-local brand = label({ Text = "FalloLose", Font = Enum.Font.BuilderSansMedium, TextSize = 11, TextXAlignment = Enum.TextXAlignment.Right, AnchorPoint = Vector2.new(1, 0), Position = UDim2.new(1, -12, 0, 25), Size = UDim2.fromOffset(70, 13), Parent = head })
-bindAccent(brand, function(c) brand.TextColor3 = c end)
 new("Frame", { BackgroundColor3 = C.divider, BorderSizePixel = 0, Position = UDim2.new(0, 10, 0, HEAD), Size = UDim2.new(1, -20, 0, 1), Parent = head })
 -- the panel lays its body out under a 38px title; ours is HEAD tall, a spacer evens the height out
 pp.body.Position = UDim2.fromOffset(8, HEAD + 6)
@@ -4948,6 +5340,25 @@ onFrame(function()
 	local a = math.max(st.hover.x, pp.open and 1 or 0)
 	btn.BackgroundTransparency = 1 - 0.05 * a
 	chev.ImageColor3 = C.dim:Lerp(C.hi, a)
+	if not pp.open or not C.rowRight then return end
+	-- each label may run right up to the leftmost control on its row
+	local k = C.S()
+	for row in pairs(C.rows) do
+		local setR = C.rowRight[row]
+		if setR and row:IsDescendantOf(pp.inner) then
+			local rx = row.AbsolutePosition.X + row.AbsoluteSize.X
+			local minX = rx
+			for _, c in ipairs(row:GetChildren()) do
+				if c:IsA("GuiObject") and c.Visible and not c.ClipsDescendants and c.Size.Y.Offset ~= 1
+					and c.AbsolutePosition.X > row.AbsolutePosition.X + 40 * k then
+					local x = c.AbsolutePosition.X
+					if c:IsA("TextLabel") then x = c.AbsolutePosition.X + c.AbsoluteSize.X - c.TextBounds.X end
+					if x < minX then minX = x end
+				end
+			end
+			setR((rx - minX) / k + 8)
+		end
+	end
 end)
 
 -- order and icons of the rows, like the reference
@@ -4973,6 +5384,98 @@ task.defer(function()
 			end
 		end
 	end
+end)
+end)()
+
+---------------------------------------------------- DPI-safe scrolling: canvas heights measured by hand
+
+-- AutomaticCanvasSize is wrong under a UIScale (too short at 70 %, too long at 125 %): every scrolling
+-- frame of the menu gets its canvas height measured in unscaled units instead.
+;(function()
+local tracked = setmetatable({}, { __mode = "k" })
+local function track(o)
+	if o:IsA("ScrollingFrame") and o.AutomaticCanvasSize == Enum.AutomaticSize.Y then tracked[o] = true end
+end
+for _, o in ipairs(gui:GetDescendants()) do track(o) end
+on(gui.DescendantAdded, function(o) task.defer(track, o) end)
+onFrame(function()
+	local k = C.S()
+	for sf in pairs(tracked) do
+		if sf.Parent and sf.Visible then
+			if sf.AutomaticCanvasSize ~= Enum.AutomaticSize.None then sf.AutomaticCanvasSize = Enum.AutomaticSize.None end
+			local pad = sf:FindFirstChildOfClass("UIPadding")
+			local top, bottom = pad and pad.PaddingTop.Offset or 0, pad and pad.PaddingBottom.Offset or 0
+			local lay = sf:FindFirstChildOfClass("UIListLayout")
+			local h
+			if lay then
+				h = lay.AbsoluteContentSize.Y / k + top + bottom
+			else
+				h = 0
+				for _, c in ipairs(sf:GetChildren()) do
+					if c:IsA("GuiObject") and c.Visible then
+						local b = (c.AbsolutePosition.Y - sf.AbsolutePosition.Y) / k + sf.CanvasPosition.Y + c.AbsoluteSize.Y / k
+						if b > h then h = b end
+					end
+				end
+				h += bottom
+			end
+			local want = math.ceil(h)
+			if sf.CanvasSize.Y.Offset ~= want or sf.CanvasSize.Y.Scale ~= 0 then sf.CanvasSize = UDim2.fromOffset(0, want) end
+		end
+	end
+end)
+end)()
+
+---------------------------------------------------- Extensions: waifus peeking over the header
+
+;(function()
+local REPO = "https://raw.githubusercontent.com/utochkabendo/fisch-menu/main/waifus/"
+-- front: drawn over the header (paws hang over its edge); line: share of the height above the window top
+local WAIFUS = {
+	Astolfo = { w = 408, front = false, line = 0.86 },
+	Felix = { w = 415, front = false, line = 0.86 },
+	Horse = { w = 433, front = true, line = 0.81 },
+	Pig = { w = 418, front = true, line = 0.79 },
+}
+local left = columns(pages.Extensions)
+local g = group(left, "Waifu")
+local pick = choiceControl(g, "ext.waifu", "Waifu", { "Off", "Astolfo", "Felix", "Horse", "Pig" }, "Off")
+local posV = sliderControl(g, "ext.waifu.pos", "Position", 0, 100, 72, "%")
+local sizeV = sliderControl(g, "ext.waifu.size", "Size", 60, 160, 100, "%")
+local img = new("ImageLabel", { Name = "Waifu", BackgroundTransparency = 1, AnchorPoint = Vector2.new(0.5, 0), Visible = false, ScaleType = Enum.ScaleType.Fit, Parent = window })
+local assets, loading = {}, {}
+local function asset(name)
+	if assets[name] then return assets[name] end
+	if loading[name] then return nil end
+	loading[name] = true
+	task.spawn(function()
+		local path = ROOT .. "/waifus/" .. name .. ".png"
+		if not isfolder(ROOT .. "/waifus") then makefolder(ROOT .. "/waifus") end
+		if not isfile(path) then
+			local ok, res = pcall(request, { Url = REPO .. name .. ".png", Method = "GET" })
+			if ok and res and res.StatusCode == 200 and res.Body and #res.Body > 1000 then writefile(path, res.Body) end
+		end
+		if isfile(path) then
+			local ok, id = pcall(getcustomasset, path)
+			if ok then assets[name] = id end
+		end
+		loading[name] = nil
+	end)
+	return nil
+end
+onFrame(function()
+	local name = pick()
+	local cfg = WAIFUS[name]
+	if not cfg then img.Visible = false return end
+	local id = asset(name)
+	if not id then img.Visible = false return end
+	local h = round(150 * sizeV() / 100)
+	local w = round(h * cfg.w / 420)
+	if img.Image ~= id then img.Image = id end
+	img.Size = UDim2.fromOffset(w, h)
+	img.Position = UDim2.new(posV() / 100, 0, 0, -round(h * cfg.line))
+	img.ZIndex = cfg.front and 10 or 0
+	img.Visible = true
 end)
 end)()
 
@@ -5345,7 +5848,13 @@ local RU = {
 	["Hotkey list"] = "Список хоткеев", ["Language"] = "Язык", ["Function info"] = "Инфо о функциях",
 	["Hotkeys"] = "Хоткеи",
 	["Walk Speed"] = "Скорость бега", ["Jump Power"] = "Сила прыжка", ["Swim Speed"] = "Турбодизель",
-	["Walk on Water"] = "Ходьба по воде", ["Fullbright"] = "Фуллбрайт", ["Send to player"] = "Отправить игроку", ["Network"] = "Сеть",
+	["Walk on Water"] = "Ходьба по воде", ["Favorites"] = "Избранное", ["Players"] = "Игроки", ["Locations"] = "Локации",
+	["Pin to favorites"] = "В избранное", ["Unpin"] = "Убрать из избранного", ["No other players"] = "Других игроков нет",
+	["Avoid threats"] = "Избегать угроз", ["Discord"] = "Discord", ["Catch log"] = "Лог уловов", ["Webhook URL"] = "Ссылка вебхука",
+	["Min rarity"] = "Мин. редкость", ["Any"] = "Любая", ["Skip trash"] = "Без мусора", ["Send test"] = "Отправить тест",
+	["Test sent"] = "Тест отправлен", ["Paste a Discord webhook link first"] = "Сначала вставь ссылку вебхука Discord",
+	["Extensions"] = "Расширения", ["Waifu"] = "Вайфу", ["Position"] = "Позиция", ["Size"] = "Размер",
+	["Location not loaded yet"] = "Локация ещё не прогрузилась", ["paste link"] = "вставь ссылку", ["Fullbright"] = "Фуллбрайт", ["Send to player"] = "Отправить игроку", ["Network"] = "Сеть",
 	["Synchronization"] = "Синхронизация", ["Freeze Player"] = "Заморозка игрока", ["Auto Water Aim"] = "Автоприцел в воду",
 	["DPI scale"] = "Масштаб (DPI)", ["Menu scale"] = "Масштаб меню", ["Cloud config code"] = "Код облачного конфига", ["Load"] = "Загрузить", ["Accent"] = "Акцент", ["Text"] = "Текст", ["Background"] = "Фон", ["Panels"] = "Панели", ["Text color"] = "Цвет текста", ["Cloud"] = "Облако", ["Config code"] = "Код конфига", ["Load code"] = "Загрузить по коду",
 	["Accept"] = "Принять", ["Decline"] = "Отказаться", ["Config loaded"] = "Конфиг загружен", ["Code not found"] = "Код не найден",
@@ -5391,6 +5900,9 @@ local PATTERNS = {
 	{ "^(.-)  (%d+) st$", "%1  %2 ст" },
 	{ "^Favourited (.+)  ([%d.]+) kg$", "В избранное: %1  %2 кг" },
 	{ "^(.+) appeared$", "Появилась: %1" },
+	{ "^(.+) event$", "Событие: %1" },
+	{ "^(.-)  ·  (%d+) st$", "%1  ·  %2 ст" },
+	{ "^(.+) · (%d+) st$", "%1 · %2 ст" },
 	{ "^Sell failed: (.+)$", "Продажа не удалась: %1" },
 	{ "^Auto sell: (.+)$", "Автопродажа: %1" },
 	{ "^No .+ seen yet, visit an island first$", "Ещё не встречался, сначала посети его остров" },
@@ -5512,6 +6024,9 @@ local D = {
 	["Text color"] = { "Main text color of the menu.", "Основной цвет текста меню.", "", "" },
 	["Config code"] = { "A short code someone gave you (Share in a config's menu makes one).", "Короткий код, который тебе дали (его делает «Поделиться» в меню конфига).", "", "" },
 	["Load code"] = { "Downloads the config by code, saves it as a new config and loads it.", "Скачивает конфиг по коду, сохраняет как новый и загружает.", "", "" },
+	["Avoid threats"] = { "Boss fish throw spears, beams and arrows into the reel: the bar steers out from under them while keeping the fish.", "Боссы кидают в полоску копья, лучи и стрелы: полоска уходит из-под них, не упуская рыбу.", "On / Off", "Вкл / Выкл" },
+	["Catch log"] = { "Sends a message with every catch to your Discord webhook: fish, weight, rarity, mutation, zone, session stats.", "Шлёт в твой Discord-вебхук сообщение о каждом улове: рыба, вес, редкость, мутация, зона, статистика сессии.", "On / Off", "Вкл / Выкл" },
+	["Waifu"] = { "Puts a waifu on top of the menu, peeking over the header.", "Сажает вайфу на меню: выглядывает из-за шапки.", "Off / Astolfo / Felix / Horse / Pig", "Выкл / Astolfo / Felix / Horse / Pig" },
 	["Fly speed"] = { "Flying speed.", "Скорость полёта.", "10 – 250, default 70", "10 – 250, по умолчанию 70" },
 	["Menu key"] = { "Key that opens and closes the menu.", "Клавиша открытия и закрытия меню.", "default Insert", "по умолчанию Insert" },
 	["Menu color"] = { "Accent color of the menu.", "Акцентный цвет меню.", "", "" },
@@ -5845,6 +6360,16 @@ on(RunService.RenderStepped, function(dt)
 	holder.Rotation = math.abs(tilt.x) < 0.01 and 0 or tilt.x
 	holderScale.Scale = scale.x * (C.dpi or 1)
 	holder.GroupTransparency = alpha.x
+	if not C.rest then
+		C.restScale = new("UIScale", {})
+		C.rest = new("Frame", { AnchorPoint = Vector2.new(0.5, 0.5), BackgroundTransparency = 1, ZIndex = 2, Parent = gui }, { C.restScale })
+	end
+	C.rest.Size, C.rest.Position, C.rest.Rotation = holder.Size, holder.Position, holder.Rotation
+	C.restScale.Scale = holderScale.Scale
+	C.rest.Visible = holder.Visible
+	local atRest = open and alpha.x < 0.002
+	local wantParent = atRest and C.rest or holder
+	if window.Parent ~= wantParent then window.Parent = wantParent end
 	holder.Visible = open or alpha.x < 0.995
 	setBlur(holder.Visible and (1 - alpha.x) or 0)
 
